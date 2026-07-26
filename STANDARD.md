@@ -9,32 +9,8 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-*v1.3 — **the charter file is now `AGENTS.md`, not `CLAUDE.md`.** A Workspace charter file should not be
-named after one model vendor, and `AGENTS.md` is a published open format with broad multi-vendor
-adoption. **This renames an artifact named throughout v1.2 — if you adopted v1.2, this is the one
-change that touches files you already created.** SOP-1 step 4 gains the runtime auto-load rule:
-`AGENTS.md` is canonical, add a vendor-named pointer file only if your runtime auto-loads a
-different name, and that pointer may add but never restate. New §15 records which runtimes load
-which filename, deliberately **non-normative and outside the artifact table** — a roster of vendor
-filenames in normative text would produce Workspaces holding six charter files for one runtime, which is
-C1b's over-application failure committed by this document about itself. Also new: `CITATIONS.md`,
-the source list behind the Standard, with per-entry confidence and the claims that have no external
-citation.*
-
-*v1.2 — C7b corrected: the success-signal example chained to an exit code, reproducing the failure
-C7 forbids. Now three terms (work → assert → signal), with a portable-shell note: `&&` is a parse
-error in Windows PowerShell 5.1. R25 restated shell-agnostically — it named an operator the default
-Windows shell cannot parse, so a correct Windows Workspace failed the criterion by construction.
-Found in review and independently reproduced before the ruling. The PowerShell replacement then
-went wrong twice more before it was right — `$LASTEXITCODE` reads stale after a function, and
-`-ErrorAction Stop` is discarded by simple functions — both caught by measurement, both left
-documented in C7b rather than tidied away.*
-
-*v1.1 — second research pass folded in. Added: instruction-file provenance and over-application
-(C1a/C1b), the factory/product split (C6), heartbeat and absence-of-signal monitoring (C7a/C7b),
-single-threaded writes (C12a/C12b), superseded-not-edited decision records, the rebuild drill, and
-a rubric regrouped into six scoreable layers. Two claims were **rejected during verification** —
-see §14.*
+**Upgrading from v1.2?** The charter file is now `AGENTS.md`, not `CLAUDE.md` — that is the one
+change touching files you already created. Full history in [CHANGELOG.md](CHANGELOG.md).
 
 A practical standard for setting up and operating Clairvoyance Workspaces where AI Staff do
 sustained work. It exists because most Workspace problems are not intelligence problems — they

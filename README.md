@@ -70,6 +70,10 @@ counter-evidence, and a section listing what was rejected during verification.
 Every source behind the Standard, with a confidence mark per entry, the claims that have **no**
 external citation, and the places the Standard overreaches what its sources actually measured.
 
+**You already adopted an earlier version** → [CHANGELOG.md](CHANGELOG.md)
+**Current release: v1.3.** Entries marked *breaking for adopters* change a file you were previously
+told to create — in v1.3, `CLAUDE.md` became `AGENTS.md`.
+
 **You want a Staff member built for this work** →
 [Workspace Architect](runbooks/architect-build-runbook.md) ·
 [Clairvoyance Engineer](runbooks/engineer-build-runbook.md)
