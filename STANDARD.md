@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.2 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.3 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).
@@ -8,6 +8,18 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 **If you want Staff to *implement* this rather than read it**, do not point them here. Point them at
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
+
+*v1.3 — **the charter file is now `AGENTS.md`, not `CLAUDE.md`.** A Workspace charter file should not be
+named after one model vendor, and `AGENTS.md` is a published open format with broad multi-vendor
+adoption. **This renames an artifact named throughout v1.2 — if you adopted v1.2, this is the one
+change that touches files you already created.** SOP-1 step 4 gains the runtime auto-load rule:
+`AGENTS.md` is canonical, add a vendor-named pointer file only if your runtime auto-loads a
+different name, and that pointer may add but never restate. New §15 records which runtimes load
+which filename, deliberately **non-normative and outside the artifact table** — a roster of vendor
+filenames in normative text would produce Workspaces holding six charter files for one runtime, which is
+C1b's over-application failure committed by this document about itself. Also new: `CITATIONS.md`,
+the source list behind the Standard, with per-entry confidence and the claims that have no external
+citation.*
 
 *v1.2 — C7b corrected: the success-signal example chained to an exit code, reproducing the failure
 C7 forbids. Now three terms (work → assert → signal), with a portable-shell note: `&&` is a parse
@@ -361,7 +373,7 @@ your Workspace.** If the trigger has not fired, not having the file is the corre
 | Artifact | Purpose | Create it when… |
 |---|---|---|
 | `library.md` | IF-line router. Entry point. **Never a stub.** | …there is more than one place a Staff member might need to go. This is the first file and nearly always earned. |
-| `CLAUDE.md` | Charter: role, authority, policies, escalation. | …someone other than you will work here, or authority over decisions is not obvious. |
+| `AGENTS.md` | Charter: role, authority, policies, escalation. | …someone other than you will work here, or authority over decisions is not obvious. |
 | `README.md` | Layout and conventions, for humans. | …the directory layout is not self-evident, or humans other than you open it. |
 | `docs/REBUILD.md` | Rebuild-from-zero guide. | …there is a process someone would otherwise have to reconstruct by reading code. |
 | `docs/DECISIONS.md` | Shared record incl. **rejected alternatives**. | …a decision has been made that would be expensive to revisit. In practice: immediately. |
@@ -391,9 +403,34 @@ around either.
    output there.
 3. **Write `README.md`** — layout, one line per directory, plus any storage-residency rule.
    *Trigger: the layout is not self-evident, or humans other than you will open it.*
-4. **Write `CLAUDE.md`** — role and scope; who holds authority and over what; escalation path;
+4. **Write `AGENTS.md`** — role and scope; who holds authority and over what; escalation path;
    the team and their lanes; hard constraints. Short enough to be read every session. **Directive,
    not descriptive** (C1). *Trigger: someone other than you works here, or authority is not obvious.*
+   **On the name, and on runtime auto-loading.** `AGENTS.md` is deliberately vendor-neutral — a
+   Workspace charter file should not be named after one model vendor, and the file outlives whichever
+   tool you are using this year. It is also a published open format with broad multi-vendor
+   adoption, not a local convention.
+
+   But most agent runtimes **auto-load a file of their own choosing** into context at session
+   start, and they do not all choose the same name. If yours does not read `AGENTS.md`, your
+   charter file is silently not loaded — the worst failure mode available, because nothing reports it.
+   The rule, in three parts:
+
+   1. **`AGENTS.md` is canonical.** All substance lives there.
+   2. **If — and only if — your runtime auto-loads a different filename**, add that file as a
+      *pointer*: include or import `AGENTS.md` using whatever include mechanism the runtime
+      provides, or a one-line "read `AGENTS.md` first" if it has none.
+   3. **The pointer file may add, never restate.** Genuinely runtime-specific lines are fine —
+      tool invocations, hook paths, review commands. The moment it repeats a policy that also
+      lives in `AGENTS.md`, you have two charter files, and the copy will drift.
+
+   **Do not create pointer files for runtimes you do not use.** By C1b, a named file is a file
+   agents will create and reach for; a Workspace carrying five vendor charter files for one runtime is
+   the over-application failure, not thoroughness. Add the one your runtime actually loads.
+
+   *A dated, non-normative list of which tools load which filename is in §15. It is a snapshot of a
+   fast-moving ecosystem — verify it against your runtime's current documentation rather than
+   trusting it, and treat its absence of a tool as "not checked", not "does not exist".*
 5. **Create `library.md` with at least one real route.** If nothing is worth routing, the Workspace
    is not ready for Staff. Never leave template text in place (C2).
 6. **Create `docs/DECISIONS.md` and `docs/STATUS.md`.** *Trigger for DECISIONS: a choice has been
@@ -407,7 +444,7 @@ around either.
    data, published output, or shared configuration.*
 
 **Definition of done:** a Staff member who has never seen this Workspace can read `library.md` and
-`CLAUDE.md` and correctly answer — what is this for, who decides, where does output go, what am I
+`AGENTS.md` and correctly answer — what is this for, who decides, where does output go, what am I
 not allowed to do.
 
 ---
@@ -596,7 +633,7 @@ improvement.
 |---|---|---|
 | R1 | Entry-point router exists **and contains real routes** | All |
 | R2 | Router covers every process doc | All |
-| R3 | Charter doc exists (role, authority, escalation) | Project, Pipeline |
+| R3 | Charter FILE exists (role, authority, escalation) | Project, Pipeline |
 | R4 | No policy authored in more than one place | All |
 | R5 | Agent-facing instruction files are **hand-authored, not generated** (C1a) | All |
 | R6 | Instruction files contain **no rules the toolchain already enforces deterministically** | Project, Pipeline *with tooling* |
@@ -768,8 +805,70 @@ and C1a are written to survive both results.
 
 ---
 
+## 15. Appendix — runtime auto-load filenames (non-normative)
+
+> **Non-normative. Stale on sight. Verified 2026-07-25.**
+> This is a dated snapshot of a fast-moving ecosystem, kept out of §6's artifact table on purpose:
+> that table lists artifacts an agent should *create when a trigger fires*, and by **C1b** a named
+> file is a file agents will create. A roster of six vendor filenames in the normative text would
+> produce Workspaces holding six charter files for one runtime — the exact over-application this
+> Standard documents.
+>
+> **The first line of defence is audience, not placement.** This document is `Audience: human`;
+> agents never read it, they read the compact working copy derived via the Implementation Runbook.
+> C1b's mechanism is *agents create what is named for them*, so a roster is safe **here** and
+> dangerous **there**. ⚠️ **Do not migrate this table into the agent-facing derive doc, a Criteria
+> Card, or an `AGENTS.md`** — that reintroduces exactly the failure this placement avoids.
+>
+> **What this table is for:** determining *which case you are in*, so SOP-1 step 4 is actionable.
+> Without it, "add a pointer file only if your runtime auto-loads a different name" asks a reader
+> to go research five vendors before they can act — and the realistic outcome is that they skip the
+> step, which is the silent-charter-not-loaded failure. **It is a lookup, not a list of files to
+> create.**
+
+Most agent runtimes load a file into context automatically at session start. They do not agree on
+the name. `AGENTS.md` is the open, multi-vendor format and is the canonical charter file under this
+Standard; anything else is a pointer to it.
+
+| Runtime | Auto-loaded file | Confidence |
+|---|---|---|
+| OpenAI Codex | `AGENTS.md` | High — the format originates here |
+| Claude Code | `CLAUDE.md` (hierarchical: user → project → parent dirs → subdirectory on demand) | High |
+| Gemini CLI | `GEMINI.md`, configurable | Medium-high |
+| GitHub Copilot | `.github/copilot-instructions.md` | Medium-high |
+| Cursor | `.cursor/rules/*.mdc` (legacy `.cursorrules`) | Medium |
+
+**Confidence is marked because it is not uniform, and an unmarked list would imply verification
+that did not happen.** Entries are marked from documentation and usage at the date above, not from
+a test of each runtime.
+
+**Deliberately absent:** xAI / Grok, and every runtime not listed. Absence here means **not
+verified**, never "has no such file." Naming a filename we had not confirmed would be worse than
+omitting it — a reader would create it, and by C1b, act on it.
+
+**Example of the pointer pattern.** Claude Code supports importing another file from within its
+charter, so the vendor file can stay one line of substance plus what is genuinely runtime-specific:
+
+```markdown
+# CLAUDE.md
+@AGENTS.md
+
+## Claude Code specifics
+- Hooks live in .claude/settings.json; do not hand-edit settings.local.json.
+```
+
+*The `@path` import is a real, current Claude Code feature — but import syntax is a vendor detail
+and is the most likely thing on this page to change, so confirm it against current documentation
+before relying on it.* Where a runtime offers no include
+mechanism, a one-line "read `AGENTS.md` first, it is the charter file" is sufficient; the point is one
+source of truth, not the elegance of the include.
+
+---
+
 *Derived from surveys of five production Workspaces and content-verified published
-research. Adapt freely.*
+research. Adapt freely.* **Every source behind that claim is listed in
+[CITATIONS.md](CITATIONS.md)** — with a confidence mark per entry, the claims that have **no**
+external citation, and the places this document overreaches what its sources actually measured.
 
 Companion: [Workspace Architect Build Runbook](runbooks/architect-build-runbook.md) — creates a Staff member who can plan and
 build Workspaces to this Standard.

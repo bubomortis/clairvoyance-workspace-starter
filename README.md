@@ -20,7 +20,7 @@ full and follow §2. Observe these rules:
 1. CHECK WHAT IS ALREADY HERE, BEFORE DERIVING ANYTHING. Search this instance for
    existing workspace guidance under ANY name — a criteria card, a workspace standard
    or SOP, house conventions, an earlier or adapted copy of this Standard, rules
-   already living in library.md or CLAUDE.md, or conventions recorded in a README,
+   already living in library.md or AGENTS.md, or conventions recorded in a README,
    decision record or pinned note. Tell me what you searched and where, so I can judge
    whether "nothing found" is trustworthy.
 
@@ -65,6 +65,10 @@ setup, and apply it. You approve; you do not have to study anything.
 **You want to understand, challenge, or extend it** → [STANDARD.md](STANDARD.md)
 The canon. 12 principles, 6 procedures, a 34-criterion rubric — with the evidence, the
 counter-evidence, and a section listing what was rejected during verification.
+
+**You want to check the evidence** → [CITATIONS.md](CITATIONS.md)
+Every source behind the Standard, with a confidence mark per entry, the claims that have **no**
+external citation, and the places the Standard overreaches what its sources actually measured.
 
 **You want a Staff member built for this work** →
 [Workspace Architect](runbooks/architect-build-runbook.md) ·

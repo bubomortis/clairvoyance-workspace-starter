@@ -1,0 +1,258 @@
+# Workspace Standard — Citation List
+
+**Audience: human.** A reader checking the Standard's evidence, or extending it.
+**Status:** Free to copy, adapt, and share.
+
+Sources actually used in [STANDARD.md](STANDARD.md), including SOP-1 through SOP-6.
+Compiled 2026-07-25.
+
+## How this was built, and what to distrust
+
+**The Standard contains zero URLs.** It is `Audience: human` and states its evidence in prose
+without linking it. So this list is a **reconstruction**, not an extraction: each claim in the
+Standard was matched back to the maintainer's local research corpus — not published — by its
+distinctive figures and phrasing.
+
+Confidence is marked per entry:
+
+- **● high** — a unique number or verbatim phrase in the Standard matches exactly one source
+  (e.g. "33.0% / 28.3% / 25.5%", "container fallacy", "Decision Shadow").
+- **○ medium** — topical match only, no unique figure. The source is on-point and in the corpus,
+  but another source could have supplied the same sentence.
+
+**Liveness** is from `livecheck.tsv` (a real `curl` fetch with a browser User-Agent, run
+2026-07-25): **99 of 107 corpus URLs return 200.** Do *not* use the DEAD verdicts in
+`results-verify-CLAUDEs-citations.md` — that pass returned 39 dead-link verdicts, most of which
+are live, and it is the same failure the Standard describes in §14 and C7. Its *content* verdicts
+(real titles, authors, dates for arXiv IDs) did check out against the live fetch and are used here.
+
+Corpus totals for scale: **107 unique URLs researched, ~30 actually used.** The gap is the point —
+most of what was gathered did not survive verification.
+
+---
+
+## 1. The Charter (C1–C12)
+
+### C1 — Entry point must be directive, not descriptive
+
+1. ● **Gloaguen, T. et al. — "Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for
+   Coding Agents?"** arXiv:2602.11988, 12 Feb 2026. `https://arxiv.org/abs/2602.11988`
+   *Supplies:* the >20% inference-cost increase, no general improvement in task success, and the
+   load-bearing breakdown — instructions followed, repository overviews not.
+
+### C1a — Do not auto-generate your instruction file
+
+2. ● **Shepard, A. & Albrecht, J. — "Probe-and-Refine Tuning of Repository Guidance for Coding
+   Agents."** arXiv:2606.20512, 18 Jun 2026. `https://arxiv.org/pdf/2606.20512`
+   *Supplies:* 33.0% tuned vs 28.3% static generated vs 25.5% unguided, p<0.001 both contrasts.
+3. ● arXiv:2602.11988 (above) — the "generated measured worse than no file" framing.
+
+> ⚠️ **Known defect, still live as of v1.3 — not fixed, only recorded.** Neither source has a
+> hand-authored arm. They measure **tuning**, not **authorship**. C1a's advice to "write yours by
+> hand" and R5's "hand-authored, not generated" both overreach these citations. When arguing from
+> these, argue tuning.
+
+### C1b — Anything you name will be over-applied
+
+4. ● **Galster, M. et al. — "Harness Engineering for Agentic AI Coding Tools: An Exploratory
+   Study."** arXiv:2602.14690, 16 Feb 2026. `https://arxiv.org/pdf/2602.14690`
+   *Supplies:* 1.6 uses per instance when mentioned vs <0.01 when not (the ~160× figure);
+   2.5 vs <0.05 for repository-specific tools. Study covers 2,853 repos.
+   *Note:* this figure was verified **in full text, not the abstract** — see §14 of the Standard.
+
+### C2 — An empty scaffold is worse than none
+
+5. ● **Solozobov, O. — "Decision Evidence Maturity Model for Agentic AI: A Property-Level Method
+   Specification."** arXiv:2605.04093, 29 Apr 2026. `https://arxiv.org/pdf/2605.04093`
+   *Supplies:* the **container fallacy** — equating presence of an evidence container with
+   sufficiency. Source of "score contents, never existence."
+
+### C3 — Route, don't recite
+
+6. ○ **Sun, Y. et al. — "Don't Retrieve, Navigate: Distilling Enterprise Knowledge into Navigable
+   Agent Skills for QA and RAG."** arXiv:2604.14572, 16 Apr 2026. `https://arxiv.org/pdf/2604.14572`
+   *Supplies:* navigable hierarchical skill directories over retrieval.
+   *Caveat:* C3's actual stated warrant is "independently nominated as best practice by two
+   surveyed teams" — this citation supports the shape, but C3 is primarily **survey-derived**.
+
+### C4 — Attention is a budget
+
+7. ● **Chroma Research — "Context Rot: How Increasing Input Tokens Impacts LLM Performance."**
+   Jul 2025. `https://research.trychroma.com/context-rot`
+   Companion toolkit: `https://github.com/chroma-core/context-rot`
+8. ○ **`abhishekray07/claude-md-templates` — `principles.md`.** Community repo (~194 stars).
+   `https://github.com/abhishekray07/claude-md-templates/blob/main/principles.md`
+   *Supplies:* the ~50 system-prompt instructions / ~150–200 reliable-adherence ceiling / degrades
+   uniformly-not-selectively claim, and the 11 rule files (~6,200 tokens) → ~93,000 tokens = 46%
+   of a 200K window across 30 tool calls (traced to `anthropics/claude-code` issue #32057).
+   *Caveat:* the Standard correctly labels this **community-tier**. Attribution of the figure to
+   this specific repo is inferred from the verification record, not confirmed line-by-line.
+9. ○ **Anthropic — "Effective context engineering for AI agents."** 29 Sep 2025.
+   `https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents`
+
+### C6 — Durable and scratch separable at a glance
+
+10. ● **Van Clief, J. & McDermott, D. — "Interpretable Context Methodology: Folder Structure as
+    Agent Architecture."** arXiv:2603.16021, 17 Mar 2026. `https://arxiv.org/html/2603.16021v1`
+    *Supplies:* the **factory vs. product** split (Layer 3 reference stable across runs / Layer 4
+    working artifacts unique to each run). The corpus called this "the single most directly
+    reusable structure found."
+
+### C9 — Decisions are the asset
+
+11. ● **Stetsenko, I. — "Lore: Repurposing Git Commit Messages as a Structured Knowledge Protocol
+    for AI Coding Agents."** arXiv:2603.15566, 16 Mar 2026. `https://arxiv.org/pdf/2603.15566`
+    *Supplies:* the **Decision Shadow** — constraints, rejected alternatives and forward-looking
+    context discarded by the diff.
+    *The Standard already flags this correctly:* the concept is sound, the protocol proposal is
+    unvalidated.
+
+### C10 — Independent review beats self-review
+
+The best-cited section in the Standard — three independent results plus two panel caveats.
+
+12. ● **"Improving LLM Output Quality by Separating Production and Review Sessions"
+    (Cross-Context Review).** arXiv:2603.12123, 12 Mar 2026. `https://arxiv.org/pdf/2603.12123`
+    *Supplies:* F1 28.6% fresh-session vs 24.6% same-session, p=0.008; and that reviewing twice in
+    the same session did not beat once — the "context separation itself" finding.
+    *Also supplies* the "absolute review performance is poor / ~29% F1" honest caveat.
+13. ● **Chen, K.-Y. et al. — "The Self-Correction Illusion: LLMs Correct Others but Not
+    Themselves."** arXiv:2606.05976, 4 Jun 2026. `https://arxiv.org/pdf/2606.05976`
+    *Supplies:* 23–93 percentage-point correction lift from relabelling voice alone — the
+    role-label-artifact / addressability mechanism.
+14. ● **Wataoka, K. et al. — "Self-Preference Bias in LLM-as-a-Judge."** arXiv:2410.21819,
+    29 Oct 2024. `https://arxiv.org/html/2410.21819v1`
+    *Supplies:* the bias is **familiarity, not vanity** — judges over-reward low-perplexity text,
+    so panels penalise correct-but-unusual answers.
+15. ● **Zhao, J. et al. — "CARE: Confounder-Aware Aggregation for Reliable LLM Evaluation."**
+    arXiv:2603.00039, 9 Feb 2026. `https://arxiv.org/pdf/2603.00039`
+    *Supplies:* shared latent confounders induce correlated errors across vendors — the
+    "if your panel always agrees, you paid three times for one verdict" warrant.
+16. ○ **Zhu, Z. et al. — "CyclicJudge: Mitigating Judge Bias Efficiently in LLM-based
+    Evaluation."** arXiv:2603.01865, 2 Mar 2026. `https://arxiv.org/pdf/2603.01865`
+17. ○ **Gubitosa, B. (CodeRabbit) — "Code context: The evidence behind trustworthy AI code
+    review."** 24 Jun 2026. `https://www.coderabbit.ai/guides/code-context`
+    *Supplies:* the industry-convergence quote, "a clean-context reviewer catches bugs the coder
+    can't see."
+    ⚠️ **Vendor with a direct interest** — CodeRabbit sells independent AI review and the article's
+    thesis is that self-review fails. Cite only for convergence, never as evidence.
+
+### C12 — More agents is not more capability
+
+18. ● **Tran, D. & Kiela, D. — "Single-Agent LLMs Outperform Multi-Agent Systems on Multi-Hop
+    Reasoning Under Equal Thinking Token Budgets."** arXiv:2604.02460, 2 Apr 2026.
+    `https://arxiv.org/pdf/2604.02460`
+    *Supplies:* the equal-token-budget result and the confound in reported multi-agent gains.
+19. ● **Cognition — "Don't Build Multi-Agents."** 2025. `https://cognition.com/blog/dont-build-multi-agents`
+20. ● **Cognition — "Multi-Agents: What's Actually Working."** Apr 2026.
+    `https://cognition.com/blog/multi-agents-working`
+    *Supplies (C12a):* the revised position — writes single-threaded, extra agents contribute
+    intelligence rather than actions. **19 is superseded by 20; the Standard cites the pair
+    deliberately** to show the position moved.
+21. ● **Anthropic — "How we built our multi-agent research system."** Jun 2025.
+    `https://www.anthropic.com/engineering/multi-agent-research-system`
+    *Supplies (C12b):* the vendor's own stated boundary — shared-context and high-dependency
+    domains are a poor fit, naming coding explicitly.
+
+---
+
+## 2. The SOPs
+
+The SOPs are **substantially thinner on external citation than the Charter**, and lean on the
+five-Workspace survey. This is not a gap to be filled by finding more citations; it is what the
+evidence actually looks like.
+
+### SOP-2 (documenting a process) and SOP-4 (automation and health signals)
+
+22. ● **Google — SRE Workbook, Ch. 11 "Being On-Call."** 2018. `https://sre.google/workbook/on-call/`
+    *Supplies:* the alert↔playbook pairing invariant; "a deterministic runbook is a bug report
+    against your automation"; staleness rate bounded by deploy rate; keep entries general so they
+    change slowly.
+    *Flagged as older, retained deliberately* — still definitional, no successor has displaced it.
+    ⚠️ **The source itself calls playbook granularity "a contentious topic."** Also a **terminology
+    conflict**: SRE uses "playbook" for the alert-response doc; ITSM/DR sources invert it.
+23. ○ **Sérié, E. — "OxyMake: A Formally-Specified, Content-Addressable Workflow Engine."**
+    arXiv:2606.20989, 18 Jun 2026. `https://arxiv.org/pdf/2606.20989`
+    *Supplies:* docs-as-tests, executable examples that fail the build (SOP-2 step 2).
+
+### SOP-6 (pipeline Workspaces)
+
+24. ● arXiv:2603.16021 (entry 10) — **this is the "one published paper" SOP-6 refers to.**
+    SOP-6 is otherwise an explicitly labelled **local convention**; a deliberate search found no
+    spec, standard, or controlled study for queue-folder / directory-as-state-machine patterns in
+    agent workspaces.
+
+### Rubric — scored per layer, never as a total
+
+25. ● **Octopus Deploy — "DevOps Uses A Capability Model, Not A Maturity Model."** Mar 2023.
+    `https://octopus.com/blog/devops-uses-capability-not-maturity`
+    *Supplies:* the capability-checklist-not-maturity-ladder decision — why the rubric refuses a
+    total score and refuses to rank Workspaces against each other.
+26. ○ **Google Cloud / DORA — State of AI-assisted Software Development 2025.**
+    `https://dora.dev/dora-report-2025` · announcement:
+    `https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report`
+27. ○ arXiv:2605.04093 (entry 5) — per-dimension scoring as what makes a rubric actionable.
+
+### General reference
+
+28. ○ **AGENTS.md specification.** Living spec, undated. `https://agents.md/`
+    Now stewarded by the Agentic AI Foundation (Linux Foundation); 60k+ repos.
+
+---
+
+## 3. Claims in the Standard with **no** external citation
+
+Listed because a citation list that hides its gaps is doing the thing C2 warns about.
+
+| Claim | Basis |
+|---|---|
+| **C5** — one authored home per rule | Survey (one team re-authored policy across 5–7 docs until two contradicted) |
+| **C7** — green is a claim, not a fact | Survey: four independent instances in one round, including this project's own citation check |
+| **C7a** — absence of signal is the alert | GitLab 2017 data-loss incident — public and well-documented, but **not in the research corpus**; no URL was carried |
+| **C7b** — PowerShell 5.1 `&&`, `-ErrorAction`, `$LASTEXITCODE` traps | Local, reproduced in-house |
+| **C8** — record execution mode | **Explicitly labelled a local extension.** A deliberate search found no authoritative source. Internal incident evidence only |
+| **C11** — address by stable ID | Survey: one sync tool duplicated a backup tree |
+| **SOP-1, SOP-3, SOP-5** and most of **SOP-4** | Survey of five production Workspaces |
+
+The corpus's own **thin-evidence flag** belongs here too: "runbook-as-code" and "intelligent
+runbook execution" as categories are dominated by vendor marketing, with no independent measurement
+that executable runbooks reduce MTTR versus well-maintained static ones. The Standard correctly
+does not claim it.
+
+---
+
+## 4. Rejected during verification — do not resurrect
+
+29. ❌ **Jha, S. et al. — "Think Locally, Explain Globally: Graph-Guided LLM Investigations."**
+    arXiv:2601.17915. `https://arxiv.org/pdf/2601.17915`
+    Widely quoted as the source of a multi-agent failure distribution (step repetition ~15.7%,
+    termination blindness ~12.4%, ~28% together). **The paper is about graph-guided investigation
+    of operational data.** The distribution is not in it. Excluded from the Standard.
+30. ⚠️ **Cemri, M. et al. — "Why Do Multi-Agent LLM Systems Fail?" (MAST).** arXiv:2503.13657,
+    17 Mar 2025. `https://arxiv.org/abs/2503.13657`
+    The taxonomy is real and well-grounded; its **authors state category percentages are
+    dataset-dependent.** Cite the taxonomy, never a precise split.
+31. ❌ **`watchflow.io/blog/why-cron-jobs-fail-silently`** — hard 404, one of only 8 genuinely dead
+    URLs in the corpus. The argument it supported is independently sourced and survives.
+
+Six further arXiv IDs in the corpus were mapped to claims unrelated to their actual contents
+(2310.01798, 2405.14092, 2605.07395 and others). Three of those papers were **re-used correctly**
+elsewhere in this list after re-verification — 2410.21819 and 2603.12123 among them — which is why
+the entries above cite them for what they actually say, not what the corpus originally claimed.
+
+---
+
+## Two headline studies genuinely disagree
+
+Recorded in the Standard's §14 and worth carrying here: one study measured **efficiency** on
+focused changes and found context files produced less runtime and fewer output tokens;
+arXiv:2602.11988 measured **correctness** and found success rates fell while cost rose >20%. The
+reconciliation the Standard offers is that context files **reduce wandering without improving the
+destination.** C1 and C1a are written to survive both results. Anyone citing one alone is giving
+you half the picture.
+
+---
+
+*Corpus, verification passes and the live-check script are held in the maintainer's local research
+corpus and are not published — `citations.csv`, `livecheck.tsv`, `check-urls.sh`, and the two
+model-specific notes.*

@@ -62,7 +62,7 @@ Search for existing guidance under **any** name:
 
 - a note or file serving as criteria, workspace standard, house rules, conventions, or an SOP
 - an earlier, adapted, renamed or partially-edited copy of this Standard
-- governance already encoded in `library.md`, `CLAUDE.md`, or the equivalent entry-point file
+- governance already encoded in `library.md`, `AGENTS.md`, or the equivalent entry-point file
 - per-Workspace conventions living in a README, a decision record, or a pinned note
 
 **If you find nothing:** say so explicitly, then derive the Card as below.
@@ -162,7 +162,7 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
 
 - **Do not create artifacts whose trigger has not fired.** Absence is the correct state, and the
   person least equipped to push back is the one most likely to accept a scaffold they will never use.
-- **Do not auto-generate instruction files** (`CLAUDE.md`, `library.md`) from a template. Hand-author
+- **Do not auto-generate instruction files** (`AGENTS.md`, `library.md`) from a template. Hand-author
   them. This is the one place the research is unambiguous.
 - **Do not report success you have not verified** by opening the file and reading it.
 - **Do not apply this to a scratch or two-day Workspace.** Say it does not need it.
