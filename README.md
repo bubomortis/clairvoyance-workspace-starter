@@ -63,7 +63,7 @@ Hand it to a Staff member. They read the Standard, derive a compact working copy
 setup, and apply it. You approve; you do not have to study anything.
 
 **You want to understand, challenge, or extend it** → [STANDARD.md](STANDARD.md)
-The canon. 12 principles, 6 procedures, a 34-criterion rubric — with the evidence, the
+The canon. 16 principles, 7 procedures, a 34-criterion rubric plus 5 external-tool criteria — with the evidence, the
 counter-evidence, and a section listing what was rejected during verification.
 
 **You want to check the evidence** → [CITATIONS.md](CITATIONS.md)

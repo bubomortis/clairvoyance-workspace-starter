@@ -23,7 +23,7 @@ Confidence is marked per entry:
 **Liveness** is from `livecheck.tsv` (a real `curl` fetch with a browser User-Agent, run
 2026-07-25): **99 of 107 corpus URLs return 200.** Do *not* use the DEAD verdicts in
 `results-verify-CLAUDEs-citations.md` — that pass returned 39 dead-link verdicts, most of which
-are live, and it is the same failure the Standard describes in §14 and C7. Its *content* verdicts
+are live, and it is the same failure the Standard describes in §15 and C7. Its *content* verdicts
 (real titles, authors, dates for arXiv IDs) did check out against the live fetch and are used here.
 
 Corpus totals for scale: **107 unique URLs researched, ~30 actually used.** The gap is the point —
@@ -58,7 +58,7 @@ most of what was gathered did not survive verification.
    Study."** arXiv:2602.14690, 16 Feb 2026. `https://arxiv.org/pdf/2602.14690`
    *Supplies:* 1.6 uses per instance when mentioned vs <0.01 when not (the ~160× figure);
    2.5 vs <0.05 for repository-specific tools. Study covers 2,853 repos.
-   *Note:* this figure was verified **in full text, not the abstract** — see §14 of the Standard.
+   *Note:* this figure was verified **in full text, not the abstract** — see §15 of the Standard.
 
 ### C2 — An empty scaffold is worse than none
 
@@ -156,6 +156,114 @@ The best-cited section in the Standard — three independent results plus two pa
 
 ---
 
+## 1a. v1.4 — External tools and declining a rule (C13–C16, SOP-7)
+
+**Compiled 2026-07-27 from a two-model research pass — the same question put independently to
+two models — then verified by reading every source below at its primary location. The raw
+responses, the liveness check and the model-by-model comparison are kept in the project's
+research corpus and are not reproduced here; the verdicts and the rejections are.**
+
+⚠️ **Different method from §1 and §2, and stronger.** Those sections were reconstructed by matching
+the Standard's phrasing back to a research corpus. **These entries were read.** Where a source was
+paywalled, offline or returned a 404 it is listed under *rejected* rather than cited — the v1.4 pass
+produced eleven citable sources and seven rejections, and the rejections are the more useful half.
+
+### C15 — Elevated code resolves by absolute path (best-supported material in the Standard)
+
+1. ● **CWE-426 — Untrusted Search Path.** MITRE. `https://cwe.mitre.org/data/definitions/426.html`
+   *Supplies:* the vulnerability class for bare-name resolution under privilege — *"searches for
+   critical resources using an externally-supplied search path that can point to resources that are
+   not under the product's direct control."*
+2. ● **CWE-732 — Incorrect Permission Assignment for Critical Resource.** MITRE.
+   `https://cwe.mitre.org/data/definitions/732.html`
+   *Supplies:* the writable-target half — *"specifies permissions for a security-critical resource
+   in a way that allows that resource to be read or modified by unintended actors."*
+   ⚠️ **Use this, not CWE-427, for the "an absolute path is not sufficient" argument.** Both models
+   returned CWE-427 *Uncontrolled Search Path Element* and both were loose: CWE-427 describes a
+   **search path containing** an attacker-controlled location, whereas C15 claims **no search path is
+   needed at all**. CWE-427 remains correct for the resolution-order half only. *This was the one
+   citation both models agreed on and both got wrong — agreement is a signal about confidence, not
+   about fit.*
+3. ● **IEEE Std 1003.1 / The Open Group Base Specifications — `unlink`.**
+   `https://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html`
+   *Supplies:* the POSIX inversion, verbatim — *"**[EACCES]** Search permission is denied for a
+   component of the path prefix, or **write permission is denied on the directory containing the
+   directory entry to be removed.**"* The entry's own mode and owner are not a factor. `S_ISVTX`
+   appears separately under *Directory Protection* — the sticky-bit caveat.
+4. ● **The Open Group — `rename`.**
+   `https://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html`
+   *Supplies:* the same for `rename` — *"one of the directories containing old or new denies write
+   permissions."*
+5. ● **[MS-ADTS] §6.1.3.4 — Blocking Implicit Owner Rights.** Microsoft.
+   `https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/fb7c101d-ec8b-4fbf-bca8-7d7c2d747d0c`
+   *Supplies:* why ownership is decisive — *"The Owner of a security descriptor is implicitly granted
+   READ_CONTROL and **WRITE_DAC** rights by default."*
+   ⚠️ **State it as a default, not an absolute:** the same page records those implicit rights being
+   blocked when `BlockOwnerImplicitRights` is set.
+6. ● **`sudoers(5)`.** `https://man7.org/linux/man-pages/man5/sudoers.5.html`
+   *Supplies:* the elevated-contexts note — and argues C15 independently. `secure_path` exists *"to
+   help protect scripts and programs that execute other commands without first setting PATH to a safe
+   value … a user with limited privileges may be able to run arbitrary commands by manipulating the
+   PATH if the command being run executes other commands **without using a fully-qualified path
+   name**."*
+   ⚠️ Also the source of the *"where configured"* qualifier: this page says the option is **disabled
+   by default**, while sudo 1.9.16 release material says it is enabled by default. Version- and
+   distribution-dependent — do not state it flatly.
+7. ○ **`systemd.exec(5)`.** `https://man7.org/linux/man-pages/man5/systemd.exec.5.html`
+   *Supplies:* that units carry their own resolution path — `ExecSearchPath=` *"overrides `$PATH` if
+   `$PATH` is not supplied by the user through `Environment=`…"*
+
+### C16 and SOP-3's `Revisit if:` — risk acceptance
+
+8. ● **NIST SP 800-53 Rev. 5, RA-7 *Risk Response*.**
+   `https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf`
+   *Supplies:* two things, one of them a limit on our own claim.
+   **(a)** Acceptance requires *"accepting risk with appropriate **justification or rationale**"* —
+   **and nothing further. No revisit condition, no review date, no trigger.** So `Revisit if:` is a
+   **local extension**, in the same position as C8, and must not be presented as established practice.
+   **(b)** *"Risk response addresses the need to determine an appropriate response to risk **before**
+   generating a plan of action and milestones entry … **if the risk response is to mitigate the
+   risk**, and the mitigation cannot be completed immediately, a plan of action and milestones entry
+   is generated."* ⇒ **The POA&M is a remediation instrument. An accepted risk does not generate one**
+   — so the date-based federal artifact is not the acceptance artifact and does not bind §14.
+9. ● **NIST SP 800-37 Rev. 2**, Appendix F (reauthorization).
+   `https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-37r2.pdf`
+   *Supplies:* directional support for *event over date* — *"In general, reauthorization actions may
+   be time-driven or event-driven. However, under ongoing authorization, reauthorization is **in most
+   instances, an event-driven action** … in response to an event that results in security and privacy
+   risk above the level of risk previously accepted."*
+   ⚠️ **Directional, not mandatory.** 800-37r2 treats both modes as legitimate. Argue the direction of
+   travel; do not claim a requirement.
+10. ○ **NIST SP 800-137**, §3.2.2 Event-Driven Assessments.
+    `https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-137.pdf`
+    *Supplies:* that trigger criteria should be written down — expected output is *"**Documented
+    criteria and thresholds** for event-driven assessments/authorizations."*
+    ⚠️ **Does not support the third-party-observable test.** That refinement is ours alone.
+
+### §12 anti-pattern — *unfixed generator*
+
+11. ● **ISO 9001 Auditing Practices Group — *Review of Nonconformity, Correction and Corrective
+    Action*, 2015.** `https://committee.iso.org/files/live/sites/tc176/files/documents/ISO%209001%20Auditing%20Practices%20Group%20docs/Auditing%20General/APG-ReviewNonconformity2015.pdf`
+    *Supplies:* the distinction the anti-pattern rests on. Response to a nonconformity has three
+    parts — *"correction, analysis of cause, and corrective action"* — and *"for software, **it is
+    inadvisable to implement a correction until the cause is known**."* Fixing the artifact is the
+    *correction*; fixing the spec that generates it is the *corrective action*.
+
+### Rejected during the v1.4 pass — do not resurrect
+
+| Source | Why rejected |
+|---|---|
+| **CWE-427** for the writable-target claim | Adjacent, not identical. Correct for resolution order only |
+| **OMB M-02-01** (POA&M) | The page self-declares *"historical material … **not current OMB guidance**."* RA-7 carries the point and is current |
+| **NTIA / CISA SBOM minimum elements** | Supply-chain **transparency**, not tool **discovery**. No support for SOP-7's discoverability claim |
+| **Google SRE Book** — `sre.google/sre-book/documentation/` | **404.** It was the sole source offered for "recorded decisions" and "derived docs go stale" |
+| **`google.com/search?q=…`** | A search query returned as a citation |
+| **ISO/IEC 27005** | Cited as :2022, URL resolves to :2018, paywalled catalogue listing with no normative text. One model marked its inability to read it; the other did not |
+| **`csf.tools`** RA-7 mirror | 403, and third-party where an authoritative source exists |
+| **CSRC `/pubs/…/final` landing pages** | Do not contain the quoted passages — cite the `nvlpubs` PDFs |
+
+---
+
 ## 2. The SOPs
 
 The SOPs are **substantially thinner on external citation than the Charter**, and lean on the
@@ -244,7 +352,7 @@ the entries above cite them for what they actually say, not what the corpus orig
 
 ## Two headline studies genuinely disagree
 
-Recorded in the Standard's §14 and worth carrying here: one study measured **efficiency** on
+Recorded in the Standard's §15 and worth carrying here: one study measured **efficiency** on
 focused changes and found context files produced less runtime and fewer output tokens;
 arXiv:2602.11988 measured **correctness** and found success rates fell while cost rose >20%. The
 reconciliation the Standard offers is that context files **reduce wandering without improving the

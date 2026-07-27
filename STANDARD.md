@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.3 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.4 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).
@@ -9,8 +9,9 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-**Upgrading from v1.2?** The charter file is now `AGENTS.md`, not `CLAUDE.md` — that is the one
-change touching files you already created. Full history in [CHANGELOG.md](CHANGELOG.md).
+**Upgrading from v1.3?** Nothing you already created needs renaming. v1.4 adds four Charter
+criteria, a seventh SOP, and one rubric verdict — and renumbers the sections after SOP-7.
+Full history in [CHANGELOG.md](CHANGELOG.md).
 
 A practical standard for setting up and operating Clairvoyance Workspaces where AI Staff do
 sustained work. It exists because most Workspace problems are not intelligence problems — they
@@ -18,15 +19,15 @@ are *memory, orientation and verification* problems, and those are fixable with 
 
 **Three parts:**
 
-1. **The Charter** — 12 principles, for judgment no procedure covers.
-2. **The SOPs** — 6 procedures for the repeatable work.
-3. **The Rubric** — 34 checkable criteria, in six scoreable layers.
+1. **The Charter** — 16 principles, for judgment no procedure covers.
+2. **The SOPs** — 7 procedures for the repeatable work.
+3. **The Rubric** — 34 checkable criteria in six scoreable layers, plus 5 external-tool criteria.
 
 > **How to read this.** Internalise the Charter. Follow the SOPs. Score against the Rubric.
 > If an SOP conflicts with the Charter, the Charter wins and the SOP is wrong.
 
 > **This is a floor, not a ceiling.** Every rule here has a cost. A two-file Workspace you
-> actually use beats a fully compliant one you abandon. §13 covers when to deliberately ignore
+> actually use beats a fully compliant one you abandon. §14 covers when to deliberately ignore
 > this document.
 
 ---
@@ -336,6 +337,354 @@ claim, believe the limit.
 
 ---
 
+### C13 — Tools are resolved, not vendored
+
+**A Workspace should not carry a copy of a tool the machine already has. It should resolve the
+tool by name and let the environment answer.**
+
+This sounds obvious and is violated constantly, because vendoring is locally rational: a copy
+inside the Workspace is guaranteed present, guaranteed the right version, and needs no
+coordination. The costs land elsewhere and later.
+
+**The evidence.** On the audited machine, two independent Workspaces vendored tools that were
+already installed and already on `PATH`. Verified by full SHA-256 rather than by name and version:
+
+| Tool | Vendored | On PATH | Match |
+|---|---|---|---|
+| `ffmpeg.exe` | `ad8f211bc894755e…` | `ad8f211bc894755e…` | identical |
+| `ffprobe.exe` | `9df3b0b5275e8309…` | `9df3b0b5275e8309…` | identical |
+| `rclone.exe` | `3ac0dba3a883555f…` | `3ac0dba3a883555f…` | identical |
+| `pandoc.exe` | `098af4570d89423c…` | `098af4570d89423c…` | identical |
+
+Creation dates settle the direction: the `PATH` copies predate the vendored ones by three to
+twenty-four days. **~795 MB of byte-identical duplication** — measured across the four vendored tools in a single
+Workspace — **created after a discoverable copy already existed.** *(Not to be confused with the
+~6 GB figure in SOP-7 §6, which is a different scope: total retained archive volume across the
+backup's full retention set, not on-disk duplication.)*
+
+**Why this is a Charter principle and not an SOP step:** the second-order costs are what hurt.
+A vendored copy is invisible to every other Workspace, so the *next* project duplicates it too.
+It drifts from the system copy silently. And it invites the anti-pattern in C14.
+
+---
+
+### C14 — Never resolve a binary through another Workspace's private directory
+
+**If a tool is not discoverable, the correct response is to fail loudly and say so — not to reach
+sideways into a neighbour.**
+
+Observed on the audited machine:
+
+```bash
+RCLONE_BIN="${RCLONE_BIN:-D:/…/Workspaces/<OtherWorkspace>/bin/rclone.exe}"
+```
+
+One Workspace's publish flow defaulted to a binary inside a *different* Workspace's private `bin`.
+The tool it needed **was on `PATH`, byte-identical**; the author had been handed a path by
+precedent and never searched.
+
+**Footprint, stated by composition — the headline count misleads in both directions:**
+**one live script** (2 occurrences), plus three frozen version snapshots, six documents, and **six
+permission-allowlist entries** — **20 references across 11 files.** A reader told "eight references
+across four files" pictures four live consumers; there is one. **The allowlist entries earn their
+mention: they are how a hardcode survives review, because each one silently ratifies the path.**
+
+**Why it matters:** the dependency is invisible from both ends. The owner of the borrowed directory
+does not know they have a consumer — in the audit, they reported the file as having "zero
+references" because they measured from inside their own tree. And it breaks the moment the
+neighbouring Workspace is renamed, archived, cleaned, or relocated, at run time, in a scheduled
+job, quietly.
+
+**The rule to write down:** never a sibling-Workspace path at any tier of a resolver. Failing with
+*"install X or set X_BIN"* is strictly better than silently succeeding against a neighbour's copy.
+
+### ⚠️ The routing-index form is worse than the code form — it *manufactures* the failure
+
+A **documentation** route saying *"use `<tool>` at `E:\…\<OtherWorkspace>\bin\<tool>.exe`, invoke by
+full path"* is not a record of Mode A. **It is a Mode A generator.**
+
+It produces the failure on a schedule, for every future author, **through the one file staff are
+told to read *before* they go looking** — converting a one-time lapse into a standing instruction to
+repeat it. A hardcode in one script is an author's mistake; the same path in a routing index is
+**institutional**. Audit indexes for these, not just code.
+
+### The narrow, self-closing exception — because a rule with no legitimate path gets ignored
+
+C14 stated absolutely would have made **the most compliant Workspace in the audit its first
+violation**: that Workspace routes to a neighbour's `yt-dlp` because the tool is genuinely on no
+`PATH` and no alternative exists today. A rule that brands a correct, unavoidable choice as a
+violation teaches readers the rule is aspirational.
+
+⚠️ **Read that case prospectively, not as a certificate.** It is the kind of dependency that must
+remain permissible — *the need is legitimate* — but the artifact as it stands **does not satisfy the
+conditions below**, and saying otherwise would hand adopters a worked example that fails the rule it
+illustrates. Measured against the four: unreachability holds in substance (`where.exe` confirms it);
+it **is** registered in the manifest as a labelled coupling, never as a resolvable path — **condition
+3 is met** — while the reference itself carries none of the proof, the do-not-copy warning or the
+recovery instruction that conditions 1, 2 and 4 require *beside it*, and is in fact headed
+*"Retrieval recipe"*, framed for reuse.
+
+**One of four — and the three failures all have the same single cause: the borrower's reference was
+never amended.** That is worth stating plainly rather than as a score, because it tells an adopter
+the outstanding work is one edit to one file, not four separate obligations. The exception exists
+because the *need* is legitimate, not because the current artifact is compliant — and the gap
+between those two is the work the conditions name.
+
+⚠️ **Note what the lender/borrower split looks like here, because it is the C14 harm in miniature:**
+the *lending* side is fully discharged and the *borrowing* side is untouched. That is the same
+"invisible from both ends" asymmetry the prohibition opens with — the owner of the borrowed
+directory has done the visible thing, and the consumer who actually depends on it has not.
+
+This matters more than it looks, because the permitted case and the condemned one are near-verbatim.
+The routing-index anti-pattern above condemns a doc route reading *"use `<tool>` at
+`E:\…\<OtherWorkspace>\bin\<tool>.exe`, invoke by full path"* as **institutional Mode A**. The live
+artifact here reads *"the pipeline uses a bundled `yt-dlp.exe` (not on global PATH — invoke by full
+path)."* **Nothing in the wording distinguishes them.** What separates a Mode A generator from a
+legitimate exception is not how the sentence reads — it is whether the four conditions are carried
+alongside it. A reader who cannot tell which rule governs is looking at an artifact that has not yet
+been amended.
+
+**So a sibling-Workspace reference is permitted only when ALL of the following hold.** Note that
+they are discharged in **two different places**: condition 3 is satisfied in the tools manifest,
+the rest must be satisfied **at the reference itself**. A scorer checking one artifact will find
+half a compliant exception and conclude it is compliant.
+
+1. the tool is **provably not otherwise reachable, and that proof is written down beside the
+   reference as the test that cancels the exception — stating what a reader must do when it flips.** Proven by a `PATH` query and a **direct
+   listing of the shared tools directory** — *not* by absence from the manifest, which SOP-7 §5
+   shows can omit exactly the undiscoverable tools this test is about.
+
+   > 🔑 **The proof and the expiry are the same command.** `where.exe <tool>` returning nothing is
+   > what justifies the exception; the same query returning a hit is what voids it. Writing it down
+   > once does both jobs — and a recorded, runnable test is what SOP-7 §1 requires instead of a
+   > date, because *"provisional pending X"* rots into permanence when nobody can tell whether X
+   > has happened. An unrecorded proof decays exactly the same way: it was performed once, by
+   > someone, at a time nobody wrote down.
+
+2. it carries **"do not treat this as a pattern to copy"**, so it does not propagate; and
+3. it is **registered in the tools manifest as a known coupling** — in a coupling/exception field,
+   **never as the tool's resolvable canonical `path`**, and labelled so that no reader and no
+   generator can treat it as a route (per SOP-7 §5: record the `PATH` resolution as canonical and
+   list anything else separately, labelled). This makes the dependency visible from the lender's
+   side too — the side that otherwise measures "zero references" and concludes nothing depends on
+   it — without turning the discovery artifact into the thing that propagates the coupling; and
+4. **its absence fails loudly and by name** — no fallback, no degradation to a default, and the
+   failure identifies the exception and the recovery rather than just the missing file. State this
+   as a *property*, because the two artifact classes satisfy it differently:
+   - a **resolver** — anything with a default, fallback, or env-overridable path such as
+     `RCLONE_BIN="${RCLONE_BIN:-…}"` — must implement it explicitly: *"yt-dlp resolved via
+     `<Workspace>\bin` per the C14 exception; that path no longer exists — install yt-dlp on `PATH`
+     or set `YTDLP_BIN`"*;
+   - a **literal non-resolving invocation** — an absolute path in a documented recipe or a direct
+     call — already fails loudly when absent, because the shell does it. What it lacks is the
+     *naming*: `"The system cannot find the path specified"` tells the reader nothing about the
+     exception or the recovery. So the recipe must **carry the recovery instruction beside the
+     command.**
+
+   ⚠️ **Do not write this condition as "fails at run time."** A routing index or a documented recipe
+   has no run time — and those are exactly the artifacts C14 and T2 govern. A condition phrased for
+   resolvers gives the routing-index case no passing state at all, which is a rule that cannot be
+   followed rather than a rule that is strict.
+
+That makes the exception **visible and self-closing** rather than silent, which is the whole thesis.
+It also stops the exception being the thing that quietly voids the rule: *there will always be a tool
+that has not moved yet*, and a rule with no legitimate path for it gets ignored rather than followed.
+
+⚠️ **Note what this clause is:** the permissive half of a rule, added late — precisely the shape this
+document warns about twice elsewhere.
+
+**This clause was four conditions, became five under adversarial review, and is four again — and
+the round trip is worth more than the text.** The original four were all documentation and
+registration controls. C14's "Why it matters" names *two* harms — invisibility to the lender, and
+quiet breakage when the neighbour is renamed or moved. Mapping each condition to a harm showed that
+every one of them addressed the first, and **nothing addressed the second**: the exception made the
+coupling legible to readers and self-closing over time while leaving the failure exactly as the
+prohibition describes it. C14's own headline had already stated the missing condition — *fail
+loudly* — and the conjunction did not carry it. That became the loud-failure condition, and a second
+review then found that the registration condition, as first written, instructed the very act SOP-7
+SOP-7 §5 catches as a Mode A generator.
+
+**Then the count came back down.** Two of the five turned out to be one: the `PATH` query that
+proves unreachability *is* the runnable test that cancels the exception. Merging them removed no
+coverage, because **the harm map did not change** — and by the rule stated below, a condition that
+maps to no additional harm is decoration, however diligent it looks. *Adding conditions is how a
+clause is strengthened; noticing two of them are the same artifact is how it is finished.*
+
+> 🔑 **Do not ask whether an exception is strict enough; that question is answerable with confidence
+> in either direction. Enumerate the harms the prohibition names, map each condition to a harm, and
+> look for a harm with no condition mapped to it — that is the gap. A condition mapping to no harm
+> is decoration.** A conjunction feels rigorous because it is long, and four conditions against a
+> two-part harm can still be four answers to the same half. **Counting conditions measures effort;
+> mapping them measures coverage.**
+
+---
+
+### C15 — Anything running elevated resolves binaries by absolute path, never by PATH
+
+**A privileged process must not let a writable directory decide which executable it runs.**
+
+This is the finding that most justifies the whole exercise, and it was latent for weeks.
+
+A nightly backup running as SYSTEM contained:
+
+```powershell
+try { $rr = ((& rclone listremotes 2>$null) -join ', ') } catch { $rr = '(n/a)' }
+try { $ol = ((& ollama list 2>$null) -join ', ') }        catch { $ol = '(n/a)' }
+```
+
+Bare names, full `PATH` resolution, under SYSTEM. The directory proposed for shared tools sat under
+a root carrying `Authenticated Users: Modify` inherited from the volume root. **Machine `PATH` +
+that ACL + those two lines = any authenticated user plants an executable and the 03:00 job runs it
+as SYSTEM.**
+
+**The subtle part, and the transferable lesson:** the defect was *dormant*, and dormant for the
+exact reason this Standard section exists to remove. The tools lived only in the user's `PATH`, and
+SYSTEM cannot see user `PATH`, so both calls failed into their `catch`. **Improving discoverability
+at machine scope would not have added a vulnerability — it would have armed one.**
+
+The recovery document those lines produce had read `(n/a)` in **every archive sampled** — and the
+code path that produced it was **unconditional**, so there is no run in which it could have
+differed. A second defect, invisible until someone opened an archive.
+
+*(Note the form of that claim. "Every archive ever generated" would be an extrapolation dressed as a
+measurement — two archives were actually opened. **A verified sample plus a structural argument is
+both honest and stronger than an unverifiable universal**, because the structural half is what
+actually establishes the universal.)*
+
+⇒ Two rules.
+
+**1. Elevated code resolves by absolute path — into a directory where write is granted ONLY to
+SYSTEM and Administrators, ownership is held by SYSTEM or Administrators, verified against the
+EFFECTIVE DACL including inherited ACEs, with no parent in the path granting Full Control to a
+wider principal.**
+
+That is deliberately long. Each clause is a way the short version fails:
+
+- **State it positively, not as "unprivileged users cannot write."** That is a **denylist** — a
+  negative over an open set of principals. To check it you must enumerate everyone and confirm none
+  has write, and **any ACE added later silently violates it with no signal.** The positive form is
+  checkable against a fixed list in one read. *(This Standard argues elsewhere that allowlists beat
+  denylists; it should apply that reasoning to itself.)*
+- **Ownership is decisive and is the clause most often missed.** An owner holds implicit
+  `WRITE_DAC` and can re-grant themselves anything, so **a perfect DACL owned by an unprivileged
+  account is not a control at all.** Verified on the audited machine: the hardened tools directory
+  was owned by `BUILTIN\Administrators`; its sibling holding the tool manifest was owned by a normal
+  user *and* carried an inherited `Authenticated Users: Modify` — failing on **two** counts, not one.
+- **Inheritance is how the original defect arrived.** The `Authenticated Users: Modify` ACE was
+  **inherited from the volume root** — nobody granted it on that directory, and it looks
+  unremarkable in isolation. So check the *effective* DACL, and **break inheritance when hardening.**
+- **The parent chain matters, though less than it first appears.** A parent granting only Modify does
+  **not** permit renaming or replacing a hardened child: Modify excludes `FILE_DELETE_CHILD`, and
+  deleting the child requires `DELETE` on the child itself, which Read+Execute does not grant. But a
+  parent granting **Full Control** to a wider principal *would* allow exactly that swap.
+
+⚠️ **"Absolute path" alone is necessary and NOT sufficient, and the incomplete version of this rule
+is the more dangerous one, because it reads as satisfied.** An absolute path pointing into a
+user-writable directory passes the rule as usually stated while remaining **fully exploitable** —
+the attacker no longer has to win a `PATH` race, they simply overwrite the file at the path you
+carefully specified. The `PATH` lookup was never the vulnerability. **Writability of the resolved
+target is.**
+
+So the check has two halves, and the second is the one that gets forgotten:
+
+- Is the path absolute? *(the easy half)*
+- **Can any unprivileged process write to that file, or to any directory on the way to it?**
+  *(the half that decides whether the rule did anything)*
+
+Harden the target directory — break inheritance, remove write for ordinary users — **at creation**,
+and treat an unhardened tool directory as equivalent to a `PATH` lookup. On the audited machine
+the shared tools directory qualifies *because it was explicitly hardened*; its sibling `bin\`, which
+inherited `Authenticated Users: Modify` from the volume root, would **not** — and `bin\` is where
+the tool manifest lives.
+
+### The same rule on POSIX — and one clause is *stricter* there, not weaker
+
+The rule above is stated in Windows vocabulary because that is where it was measured. The property
+is platform-independent; the mechanism is not, and translating it word-for-word gets one clause
+backwards.
+
+**The equivalent check:** resolve by absolute path, then require that the target file **and every
+directory on the path to it** are owned by `root` (or the dedicated admin account that owns tooling)
+with **no group-write and no other-write bit anywhere on the chain**. `0755 root:root` passes;
+`0775 root:staff` does not, and neither does a correct binary under a `0777` parent.
+
+Clause by clause, against the Windows form:
+
+- **Ownership is decisive for the identical reason.** An owner can `chmod` at will, so a perfect mode
+  on a file owned by an unprivileged account is not a control — the same substance as `WRITE_DAC`.
+- **Inheritance HAS a POSIX analogue and you must check it.** Mode bits are not the whole permission
+  set. Linux **default ACLs** (`setfacl -d -m …`) are inherited by every entry created beneath a
+  directory — the same mechanism as Windows inheritance with different syntax — and macOS ACLs carry
+  explicit `file_inherit` / `directory_inherit` flags, deliberately modelled on the NFSv4 scheme.
+  **A `+` at the end of the mode string in `ls -l` means an ACL is present and the mode bits are not
+  the answer.** Enumerate with `getfacl <path>` on Linux or `ls -le <path>` on macOS, **on every
+  component of the chain**.
+- 🔑 **The parent chain is STRICTER on POSIX, and this is the clause that inverts.** The Windows
+  analysis concludes a parent granting only Modify cannot replace a hardened child, because Modify
+  excludes `FILE_DELETE_CHILD`. **POSIX has no such protection: write *and search* permission on a
+  directory authorises `unlink` and `rename` of any entry it contains, and the entry's own mode and
+  owner are never consulted.** A perfectly hardened `root:root 0755` binary sitting in a
+  group-writable directory can be deleted and replaced by anyone in that group. The sticky bit
+  (`chmod +t`) narrows removal to **the entry's owner, the directory's owner, or a privileged
+  process** — note the middle one: a shared tools directory is often owned by an admin-ish
+  non-`root` account, and that account can still replace `root`'s binary. Worth setting; **a
+  mitigation, not a substitute for correct ownership up the chain.**
+- **Resolve symlinks before you judge the path.** A symlink inside a writable directory silently
+  redirects the absolute path you specified — the `PATH`-race attack, reintroduced through a path you
+  believed was pinned. Check the target as `realpath` returns it, not as written.
+
+**On Linux, one command answers most of the chain:** `namei -l /path/to/tool` prints owner and mode
+for every component and follows symlinks to the target. Two limits worth stating, because a check
+believed complete is worse than one known partial: **`namei` is `util-linux` and is not present on
+macOS by default** — there, walk the chain with `ls -lde` per component — and **it does not surface
+ACLs**, so it never answers the inheritance question above on its own.
+
+⚠️ **Elevated contexts carry their own `PATH` regardless.** `cron` runs with a minimal `PATH`,
+`systemd` units with whatever `Environment=` supplies, and `sudo` substitutes `secure_path` from
+`sudoers` **where that option is configured** — which is a hardening default, **not** a reason to
+resolve by bare name. `secure_path` constrains *which* directories are searched; it does not
+validate that they are safe, so a writable entry in it leaves bare-name resolution exploitable — and
+it applies to `sudo` only, not to setuid binaries, `cron`, or `systemd` units. The rule is unchanged:
+absolute path, verified target, on every platform.
+
+**2. When you make something discoverable, audit what becomes reachable that was not reachable
+before.**
+
+---
+
+---
+
+### C16 — A control you will not maintain is worse than one you declined
+
+**Adopting a control is a commitment to keep it true. Where you will not make that commitment,
+decline deliberately and say so.**
+
+A half-implemented control reads as coverage to everyone who comes after, including you. The
+mechanism is C7's, one level up: a status signal from a process that does not actually check is
+worse than no signal **because it suppresses investigation** — and a control *believed* to be in
+place suppresses investigation of that exposure in exactly the same way. Declining leaves your
+picture of your own exposure accurate, which is worth more than a control you will not maintain.
+
+Recording the decline is what prevents this, not what causes it.
+
+⚠️ **And if the half-measure is already installed, recording the decline is not enough — remove
+it.** Paperwork does not un-mislead an artifact. A control left half-configured in the tree goes
+on reading as coverage to whoever finds it next, whatever the decision log says; the decline is
+only honest once the thing it declines is gone.
+
+⚠️ **This is a comparison against the half-measure, not against doing it properly.** If full
+implementation is genuinely on the table, that is the option to price first and this criterion
+does not apply to you. And the question is never **only** *"is this a real risk?"* — almost
+everything a rubric surfaces is, and that answer alone settles nothing in either direction. It is
+*"what does this cost, what does it buy, and what would change the answer?"*
+
+*Claim status, following the provenance-note pattern C8 applies to itself: the failure mode is
+argued from C7's mechanism and from one recorded instance, not from a survey. Adopt it because
+the reasoning holds.*
+
+
+---
+
 ## 3. Artifacts, and when they earn their place
 
 Names are conventions, not magic — consistency across your Workspaces is the point.
@@ -404,7 +753,7 @@ around either.
    agents will create and reach for; a Workspace carrying five vendor charter files for one runtime is
    the over-application failure, not thoroughness. Add the one your runtime actually loads.
 
-   *A dated, non-normative list of which tools load which filename is in §15. It is a snapshot of a
+   *A dated, non-normative list of which tools load which filename is in §16. It is a snapshot of a
    fast-moving ecosystem — verify it against your runtime's current documentation rather than
    trusting it, and treat its absence of a tool as "not checked", not "does not exist".*
 5. **Create `library.md` with at least one real route.** If nothing is worth routing, the Workspace
@@ -455,6 +804,7 @@ Status:     Accepted | Superseded by <link> on <date>
 Decision:   <what was decided>
 Context:    <what forced the choice>
 Rejected:   <alternatives and why not>   ← the part everyone skips and later needs
+Revisit if: <the condition that reopens this>
 Evidence:   <how it was verified, or "asserted, unverified">
 Decided by: <name> — human | agent
 Agent had:  <what context the agent was working from, if an agent decided>
@@ -462,6 +812,11 @@ Agent had:  <what context the agent was working from, if an agent decided>
 
 **Rejected alternatives are mandatory.** Without them, a future reader re-opens a settled question
 or re-tries a known failure.
+
+**`Revisit if:` is mandatory on a decline** — it is what the `accepted` verdict is checked
+against. A re-raise condition must name an event a third party could notice without asking you.
+If checking whether it has fired requires your judgement, it is not a trigger: *"revisit if
+circumstances change"* is not a re-raise condition.
 
 **Supersede; never edit in place.** When a decision changes, mark the old entry `Superseded by`
 with a date and write a new one. Editing history destroys the reasoning trail you built the record
@@ -575,7 +930,482 @@ reviewer. A gate with no defined bypass gets an undefined one.
 
 ---
 
-## 10. The Audit Rubric
+## 10. SOP-7 — Standing up shared external tools
+
+### 1. Establish the convention *before* the directory
+
+The directory is the mechanism; the convention is what makes anyone use it. In the audit, **every
+measured duplication happened despite the tool being discoverable.** A shared location without a
+stated norm reproduces the same failure against a new path.
+
+Put this where staff read before writing scripts — the Workspace charter or its routed library, not
+a README nobody opens.
+
+**What makes such an index worth opening**, from the one written for the audited machine:
+
+> Nearly every route in it is **a rule someone could plausibly *simplify* into a defect** — pin this
+> binary to System32, enforce the allowlist on both paths not one, don't "just add a module", don't
+> "correct" that `%APPDATA%` reference.
+>
+> **A library that only says where things are is a directory listing. One that says which apparent
+> tidy-ups are actually regressions is worth reading first.**
+
+Two practical constraints learned writing it:
+
+- **Route, never reproduce.** A summary of the convention inside the index will drift from the
+  convention. Link, so the two cannot disagree.
+- 🔴 **State the CURRENT state, not only the target state — or the convention authorises breakage.**
+  In a Workspace that has not yet migrated, a route saying *"resolve by bare name via `PATH`"* tells
+  a newcomer that `PATH` is authoritative **while the scripts still call vendored copies through a
+  local resolver.** Someone helpfully "tidying" a resolver call into a bare name would have broken
+  a dozen call sites. The index must say plainly: *the migration is planned, not done; do not
+  convert these on your own initiative.* Revise when it lands.
+  **This is the permissive-half failure wearing new clothes** — an aspirational rule, stated without
+  its current exception, read as an instruction.
+- 🔑 **Give a provisional route an expiry TEST, not an expiry date.** *"Provisional pending X"* rots
+  into permanence the moment nobody remembers whether X happened. Instead, hand the reader a
+  one-command check they can run **now**:
+
+  > ⚠ **PROVISIONAL** — this cross-workspace absolute path is correct *only while* the tool is off
+  > `PATH`. **If you are reading this and `where.exe <tool>` returns a hit, this clause has expired
+  > — fix the route.**
+
+  **The reader cancels it, rather than it silently ageing out.** Cross-reference the rule that should
+  replace it, so someone who trips the expiry lands on the convention instead of inventing a fix.
+- ⚠️ **A hub or Home workspace may legitimately differ — do not standardise it by reflex.** In the
+  audit the project Workspaces consolidated to one canonical location while the **Home workspace was
+  deliberately excluded**: it serves a different function, and its index routes material arriving
+  from outside rather than describing a project tree. **Record the exemption in the exempt file
+  itself, with its reason** — otherwise the next person tidying for consistency finds it, assumes it
+  was missed, and "fixes" it. A stated exception survives; an unexplained one gets normalised away.
+- ⚠️ **Advertise the convention centrally, or the merge will simply re-diverge.** On the audited
+  machine, three of four Workspaces kept their index in the non-canonical location — **not because
+  anyone overrode a known rule, but because the rule lived in one Workspace's charter and nowhere
+  else.** Under-advertised, not ignored. Consolidating the files without publishing the convention
+  fixes the symptom and leaves the cause: *a convention nobody can discover gets re-derived wrong by
+  the next person, and documentation that cannot be checked becomes a fossil.*
+- ⚠️ **Check that your links resolve from where they are written.** A workspace-local index whose
+  WikiLinks resolve against a *local* documents folder will render a link to a Home-level document
+  as **a dead link that looks live** — and the reader concludes the *document* is missing rather than
+  that the *link* is wrong. Use an absolute path across such a boundary. This was caught in review
+  after the broken form had already been issued to three workspaces.
+- 🔑 **Declare the resolution base in the file; do not leave it implicit.** The subtler defect found
+  during consolidation was not a broken link — it was **relative paths whose base was never stated
+  and merely happened to be correct.** While the index sat beside the tree it described, `docs/…`
+  resolved by coincidence. Moving the index one directory down turned an unstated base into an
+  actively misleading one: a reader could reasonably resolve it against the index's own directory
+  and find nothing.
+
+  **Prefer a stated base to a computed one.** One header line —
+  *"paths below are relative to the workspace root `<path>`, not to this file's directory; anything
+  outside the workspace is given as a full absolute path"* — beats rewriting every route with `../`
+  prefixes, which is brittle and breaks again on the next move.
+
+  ⚠️ **This is structural wherever the canonical index lives below the tree it describes**, so put
+  the base declaration in the **scaffolding template**, not in each workspace's copy. Otherwise every
+  workspace rediscovers it independently, and the ones that don't ship a latent defect that activates
+  the next time anything moves.
+
+  🔴 **But verify the template's declaration before trusting it — in the audit it was FALSE.** The
+  scaffolding declared that WikiLinks resolve under a local `Docs/` directory. In **two of the
+  workspaces checked that directory existed and was completely empty**, every routed document living
+  elsewhere. So a WikiLink in those files had **never been able to resolve — before or after any
+  consolidation.**
+
+  Worse, and the detail worth carrying: **the canonical file's own pre-existing route was already
+  broken by its own declared base**, in a file others were being told to merge *into*. **The
+  destination of a consolidation is not automatically the correct one.** Audit it with the same
+  suspicion as the thing you are merging in — an index that has never been exercised looks identical
+  to one that works.
+
+> **Unprivileged code:** resolve external tools **by bare name via `PATH`**.
+> **Elevated code: never `PATH`.** Resolve by **absolute path into a directory unprivileged users
+> cannot write** (see C15 — this is one rule, not two).
+> **Never** hardcode a path into another Workspace. If a tool is not on `PATH`, say so rather than
+> reaching sideways.
+
+⚠️ **The elevated carve-out is inside the box deliberately.** This box is the passage most likely to
+be copied into someone's charter, stripped of the surrounding document. An earlier draft said only
+*"resolve external tools by bare name via `PATH`"* — which **contradicted C15** and would have
+instructed adopters to build the exact privilege-escalation this Standard exists to prevent. A
+quotable rule must carry its own exceptions, because **quotation is how rules travel and context is
+what gets lost in transit.**
+
+### 2. Classify the failure you are actually fixing
+
+Discoverability is three distinct problems. Naming them prevents building the wrong fix:
+
+| Mode | Failure | Fixed by |
+|---|---|---|
+| **A** | Precedent handed the author a path; they never searched | **Convention** |
+| **B** | The author searched, and the tool genuinely was not discoverable | **Shared directory on PATH** |
+| **C** | The author never knew the tool existed, so never searched | **Manifest** |
+
+**The claim that matters here is structural, not statistical — take this rather than the counts:**
+
+> A shared directory on `PATH` only ever helps an author **who is already searching for a tool**.
+> **Mode A never enters the search path** — precedent supplied an answer before the question formed.
+> **Mode C never enters it either** — you cannot search for a name you have never heard.
+> **Both bypass the mechanism by construction. Only Mode B is downstream of it.**
+
+That explains *why* the observed counts fall as they do instead of asking you to trust them:
+**copying is cheaper than searching, so authors copy.** Mode A is what happens **instead of**
+searching, not a failure of searching. A directory that serves only searchers will always miss the
+modes that skip searching.
+
+**The practical upshot for an adopter — and it is prospective, not a post-mortem of someone else's
+machine:** build the directory for Mode B, **expect your observed incidents to be A and C, and do
+not read that as the directory failing.** It is serving the one mode that requires someone to have
+already gone looking.
+
+*(Audit figures, for provenance only — the argument above does not depend on them. **Three
+classified incidents: two Mode A, one Mode C, zero Mode B.** The unit is an incident, not a tool or
+a file. **Classification requires knowing whether the author searched, which is recoverable only by
+self-report** — vendorings whose rationale could not be recovered are excluded from these counts, so
+this is not the full population of duplications. Zero Mode B means **no search failed**, not that
+nobody searches: the one search actually run succeeded.)*
+
+Mode C is not the cheapest to ignore. The audited instance was a tool sitting unnoticed in the host
+application's own `bin`. Not knowing it existed, the author reached for a general-purpose
+alternative — **which does not execute JavaScript, so the source's JS-toggled tables were dropped
+entirely.** Not degraded: absent. Caught only because extraction completeness was independently
+verified against the raw source.
+
+*(Supporting figures, deliberately not stated as a percentage of the document: the correct
+extraction recovered **35.8 KB of text**; the general-purpose tool produced **3 KB**. Quoting
+"94% of a 55 KB document" would compare **markup bytes to text bytes** — and stripping markup is
+what the tool is supposed to do, so that framing conflates correct behaviour with data loss and
+hands a hostile reader a free rebuttal. **The qualitative claim is the defensible one.**)*
+
+⚠️ **State the counterfactual honestly, because the tempting version is not supported:** it is
+**unknown** whether the unnoticed tool would have handled that particular source — the content was
+JS-toggled and might have defeated it too. **The cost of Mode C is not that the better tool was
+passed over. It is that the author never got to evaluate it.** That claim needs no counterfactual
+and cannot be rebutted by pointing out the alternative might also have failed. **Mode C cost data,
+not disk.**
+
+### 3. Site the directory outside the backup, structurally
+
+Prefer a location that was **never** a backup source over one carrying an exclusion. An exclusion
+is a config line that can be reverted, lost in a migration, or silently stop matching. A location
+outside every source needs no config at all and cannot be tidied away.
+
+Do not site it inside a Python virtual environment or couple it to one Workspace's runtime; venvs
+get rebuilt, and a machine-wide tool surface should not inherit a single project's lifetime.
+
+### 4. Register on user PATH, not machine PATH — and harden the ACL at creation
+
+Per C15. Machine `PATH` plus a user-writable directory is an escalation chain. If machine scope is
+ever genuinely required, both of these are prerequisites, not alternatives: break ACL inheritance
+and remove `Authenticated Users: Modify`, **and** eliminate every bare-name invocation from
+elevated code.
+
+Harden at creation. Retrofitting permissions to a directory already in use is a migration.
+
+### 5. Back up the manifest, not the binaries
+
+Third-party tools are large, usually re-downloadable, and contain **no irreplaceable user data**.
+They are the worst possible archive payload. But excluding them opens a rebuild hole, and the answer
+is not to archive them anyway:
+
+> **The tools directory holds bytes you can *usually* re-fetch. The archived manifest holds the
+> record of *what* to re-fetch — and, via the SHA-256, the means to *verify* you got the same
+> thing.**
+
+A manifest of name, version, version-query command, package ID, install path, SHA-256, size,
+`pinned: true|false` **with the reason and its owner**, and a **`coupling` field for any C14
+exception** is kilobytes.
+
+⚠️ **That last field is not optional decoration — without it C14's exception cannot be complied
+with.** C14 requires a sibling-Workspace reference be registered *as a labelled coupling and never
+as the tool's canonical `path`*, and a schema whose only location slot is `path` leaves nowhere else
+to put it. On the audited machine the evidence was already visible: the manifest carried a coupling
+record for a *different* tool by smuggling it into free-text notes — *"<publish script>:63 HARDCODES
+this absolute path. Moving this binary breaks that script."* **A record forced into prose because no
+field existed is the schema telling you what it is missing.** Site it somewhere already
+archived. It costs no runtime.
+
+⚠️ **Do not read "re-downloadable" as a property of the tool.** It is an assumption about a third
+party that the manifest neither controls nor measures. A manifest makes a binary *identifiable* and
+a re-fetch *verifiable*; it does not make the binary *obtainable*. This bites hardest exactly where
+SOP-7 §9 says the build is load-bearing: distributors routinely retain only recent releases, so **the
+pinned tool is simultaneously the one most worth archiving and the one this section argues hardest
+to exclude.** Where a pin is genuinely load-bearing the manifest is *not* sufficient — archive that
+one binary, or record a retrieval source you control. **Copy that binary into a location already
+inside a backup source — alongside the archived manifest — rather than adding an inclusion rule that
+reaches back into the tools directory.** SOP-7 §3's structural property survives only if the tools
+directory itself stays unreferenced by backup config; an inclusion rule reaching into it is the
+config line SOP-7 §3 argues against. The exclusion recommendation stands for the unpinned majority, which
+is where it is actually true.
+
+**The manifest must cover the host application's own bundled tools**, not only the shared
+directory. That is where Mode C lives.
+
+⚠️ **And the manifest must not itself teach the anti-pattern — this was found live.**
+
+The audited generator resolved each tool to **first-found** and recorded that as the canonical
+`path`. For four tools it therefore recorded **a private workspace copy** as the answer, while
+simultaneously flagging `onUserPath = true`:
+
+```
+ffmpeg   onUserPath=True  pinned=True  path=E:\...\<Workspace>\bin\ffmpeg.exe
+rclone   onUserPath=True  pinned=True  path=E:\...\<Workspace>\bin\rclone.exe
+```
+
+So a reader consulting the manifest to *"find the existing tool before installing another copy"* —
+the exact behaviour the manifest exists to produce — **is pointed into another Workspace's private
+`bin\`**, which is the move C14 forbids and precisely how the audited hardcode came about. *The
+discoverability artifact was reproducing the failure it was built to prevent.*
+
+⇒ **When a tool is on `PATH`, record the `PATH` resolution as the canonical path, and list any
+vendored duplicate separately, labelled as a duplicate.** First-found is the wrong rule.
+
+⇒ **Audit the manifest for omissions against the tools that cannot be discovered any other way.**
+The same generator omitted one of only two genuinely *undiscoverable* tools on the machine — the
+highest-value entry it could have carried. (**Undiscoverable is narrower than off-`PATH`**: the
+sweep found three tools off `PATH`, but one of them installs to a conventional location a reader
+would think to check. Off-`PATH` is a fact about resolution; undiscoverable is a fact about whether
+anyone can find it, and only the second is what the manifest exists to fix.)
+
+### 6. Measure the cost against the schedule, not the disk
+
+In the audit, disk was never the constraint — 15 TB free against roughly 6 GB of retained
+duplication. **The binding constraint was the nightly job's abort window**, because the mirror is a
+delta but the archive is rebuilt in full every run.
+
+⚠️ **Measured vs projected, kept distinct — this section's headline numbers are PROJECTIONS.**
+
+| Quantity | Basis |
+|---|---|
+| Compression of `ffmpeg`, `rclone`, `yt-dlp` | **measured** at the tool's real setting |
+| Compression of `ffprobe`, `pandoc` | **extrapolated** at the measured `ffmpeg` ratio |
+| **~200 MB added per archive**, **~16 min added compression**, ~6 GB retained | **derived from that extrapolation — projected, not measured** |
+| ~26-minute margin (18 min 24 s run against a 03:45 abort) | **measured**, from the previous night's run |
+
+The trade is decided by the *measured* margin against a *projected* cost, and that asymmetry is the
+honest way to state it. **Re-measure before relying on the projection** if the decision is close.
+
+That job's failure mode is *total* — an abort produces no archive at all. Halving the margin of an
+unattended job to store mostly re-fetchable tools is a bad trade regardless of free space. (Subject
+to the SOP-7 §5 caveat: a load-bearing pinned build is the exception that earns its archive slot.)
+
+Also **measured**, and counter-intuitive: **do not assume binaries compress.** Ratios ranged from
+4.21:1 down to **1.02:1** for a packed PyInstaller bundle — which is why extrapolating one tool's
+ratio onto another is exactly the move that needs flagging.
+
+### 7. Sequence the migration so rollback stays cheap
+
+1. **A complete cross-workspace reference sweep, with termination verified.** In the audit
+   **three** separate sweeps timed out and returned partial results, and a partial result was
+   briefly mistaken for evidence of no coupling. Scope to executable file types; check the exit
+   code; never trust a quiet search.
+2. **Repoint borrowed references first** — deleting a binary that a neighbour still resolves is
+   the one irreversible step.
+3. **Switch scripts to bare-name resolution and verify green.**
+4. **Only then delete the vendored copies.** Deleting first turns rollback from a revert into a
+   re-download.
+5. **Restart long-lived processes.** A running process holds the `PATH` it started with; scheduled
+   workers will not see a new entry until they restart.
+
+### 8. Do not oversell consolidation where formats differ
+
+A shared directory dedupes *bytes*, not *capability*. In the audit, two Workspaces held ~2.4 GB of
+speech-to-text assets that looked like duplication and were not: one CTranslate2, one ggml,
+**mutually unloadable**. Near-zero recoverable overlap.
+
+The honest pitch there is **discoverability for the next Workspace** — which today would find
+nothing and download a third copy — not savings on the current two. Claiming otherwise sets up a
+disappointment that discredits the rest.
+
+### 9. Pinned versions survive consolidation, or the pin was a lie
+
+If a Workspace's DR document records `ffmpeg 8.1.2` as a reproducible fact, a shared copy that
+shadows it with a different build **silently makes that document false**. Either the shared copy
+carries the pinned version, or the DR document is rewritten to point at the shared location with
+its own verification step.
+
+Watch resolution order specifically. A *missing* tool fails loudly; a **different** tool fails
+quietly. One audited pipeline degraded silently to a fallback known to be wrong by up to 2.6× if
+the primary produced no parseable output — an empty result, not an error.
+
+**And assert behaviour, not version strings.** Exact-version equality turns routine upgrades into
+mid-run hard stops. Minimum-version passes everything *newer* — precisely the direction a silent
+semantic change arrives from. Neither proves a destructive subcommand still means what it meant.
+Prefer bounding the blast radius: re-verify after the first destructive operation rather than
+applying an unverified assumption N times in a loop.
+
+### 10. Upgrading a shared tool is a consent protocol, not a maintenance task
+
+The moment a tool is shared, upgrading it stops being a unilateral act. A version bump that is
+routine for one consumer can be breaking for another, and the consumer who breaks usually finds out
+at run time, in a scheduled job, after the person who upgraded has moved on.
+
+**Announce through the manifest, then require an explicit answer from each consumer.**
+
+1. A new version becomes available → **announced in the manifest.**
+2. Each consuming Workspace **evaluates impact against its own processes**.
+3. Each records **acceptance, or a documented issue.**
+4. **Unanimous acceptance** among consumers → the tool is updated.
+5. **Any issue raised** → escalate to the human owner for a decision.
+6. **Timeout with missing responses** → escalate to the human owner.
+
+**Silence is not consent.** A timeout must escalate, never auto-approve. This is the load-bearing
+property: the failure mode being prevented is an upgrade that nobody objected to *because nobody
+looked*.
+
+Suggested windows, scaled to the cost of waiting rather than the cost of reviewing:
+
+| Severity | Window | Meaning |
+|---|---|---|
+| **Critical** | 6 h | Active security fix, or a live issue |
+| **Urgent** | 24 h | Fixes a breaking bug or a real risk |
+| **Non-elevated** | 48 h | Everything else |
+
+**Seven things that decide whether this works in practice:**
+
+- **The clock cannot start before detection.** A 6-hour window against a weekly version check burns
+  a week before the six hours begin — and still reports "6 h". **Detection cadence must be at least
+  as tight as the tightest window**, or the number is decoration. If you cannot detect a critical
+  release within the critical window, publish the cadence you can actually sustain.
+- **Prefer pull over push.** A consent window that depends on a notification reaching an idle agent
+  inherits every delivery failure of the messaging layer. Have each consumer's own scheduled task
+  read the manifest and react on its own cadence; push may supplement, never carry it.
+- **"All consumers" must be computable.** Unanimity is undefined without a maintained per-tool
+  consumer registry — and only consumers should count. A Workspace that never touches the tool must
+  not be able to block it by silence.
+- **A pin is a standing objection.** Where a Workspace pins a version as a reproducibility fact, a
+  new release should auto-register an issue that only the pin-holder can clear. Requiring a hand
+  response to every routine bump decays into rubber-stamping, which is worse than no protocol.
+- **Unknown severity defaults to the safe label**, and who assigns severity is written down.
+  Note the asymmetry: under-labelling risks exposure, over-labelling costs one review round.
+- **Escalation names names.** "Consensus not reached" is not actionable; *which* consumers are
+  silent, on *which* tool, is.
+- **Keep N-1 and document the revert.** Consumers discover some breakage only in real use. An
+  upgrade protocol with no reverse gear turns one bad upgrade into an incident.
+
+### 11. A user-writable value that reaches a document a human ACTS ON is an instruction channel
+
+**Sanitise at ingestion, not at display.** This one was found live, in the implementation of the
+section above, by the reviewer who had already approved the change that introduced it.
+
+The manifest pattern in SOP-7 §5 puts a **user-writable file** in front of an **elevated process**. The
+obvious guard is "never execute anything derived from it", and that guard is necessary but **not
+sufficient** — because the values were still interpolated raw into a recovery document.
+
+**A newline in a manifest string field does not corrupt a line. It appends arbitrary new ones.**
+A demonstrated proof-of-concept authored a fabricated `## STEP 7 — MANDATORY BEFORE RESTORE`
+heading containing a remote-fetch-and-execute command, placed directly above the genuine rebuild
+instructions. Nothing in the pipeline executed it. **It did not need to** — a disaster-recovery
+document is followed by a human, under time pressure, in the one situation where they are least
+likely to question a step that looks official.
+
+⇒ **Strip or escape control characters from every externally-sourced value before it enters a
+generated document.** One line of code, at ingestion. Doing it at display is too late and too easy
+to forget at the next call site.
+
+**The test to use** — and specifically *not* "could this be executed?":
+
+> If an attacker wrote the most convincing thing they could into this field,
+> **what would a plausible reader DO?**
+
+#### ⚠️ Where sanitising is the wrong tool: CONSTRUCT the value, do not clean it
+
+Stripping control characters defends a field whose legitimate content is *prose*. It does nothing
+for a field whose legitimate content **is an instruction.**
+
+The audited design stored a `revertCommand` — a string whose entire purpose is *"a command to run"*,
+displayed to a human who is **expecting to run it**. In the injection above the attacker had to
+fabricate something that resembled an instruction. Here the field is already one.
+
+**A single-line command is exactly what that field is supposed to contain, so the sanitiser passes
+it unchanged — and the result gets called "sanitised".** That is the trap: the guard reports success
+precisely where it is useless.
+
+⇒ **Never store-then-render a command. Store validated components and construct it at display
+time.** Each component is constrained independently — an identifier that must match a known set, a
+version matching a strict pattern, a path that must normalise to inside an expected directory. A
+poisoned component then **fails validation** and the document prints *"command unavailable — field
+failed validation"*, which is a loud actionable failure rather than a plausible malicious
+instruction.
+
+**Generalisation worth carrying:** sanitising asks *"is this content safe?"* — an open question over
+an infinite input space. Construction asks *"can I rebuild this from parts I trust?"* — a closed one.
+Prefer the closed question wherever the output is something a human or a machine will act on.
+
+**And the test for which tool you need — this needs no security expertise, which is the point:**
+
+> **Write down the most dangerous LEGAL value for the field.
+> If it looks like a normal value, sanitising is the wrong tool.**
+
+Sanitising works on a `version` field because a version string has **no business containing a
+newline** — the malicious form is *structurally different* from the legitimate one, so a filter can
+tell them apart. It fails on a `revertCommand` field because the most dangerous legal value **is
+shaped exactly like the intended one**. Where the attack is indistinguishable from correct content,
+no filter can separate them, and one that appears to is reporting false success.
+
+⚠️ **The necessary qualifier — without it this principle overreaches:**
+
+> **Construction is closed only if every component validator is itself closed** — drawn from a
+> finite enumerable set, strongly typed, or normalising into a bounded space. A component validated
+> by *"any string that looks about right"* has **relocated** the open question behind a
+> safer-sounding word, not answered it.
+
+**In-house proof that this is live rather than theoretical:** the audited backup tool's `includeFiles`
+allowlist was construction thinking — and it still **failed open**, because the component validator
+was open. A whitespace-only string is truthy in the host language, so `["", "  "]` passed validation
+and the allowlist silently degraded into a full recursive denylist over a legacy directory holding
+credentials. **The structure was right; the validator was not.**
+
+**A second, narrower bound:** construction does not help where the *structure itself* is legitimately
+attacker-chosen — where a user must genuinely be able to supply an arbitrary command. Neither tool
+applies there. **Do not render it as executable, or require out-of-band confirmation.**
+
+*(The underlying distinction is not novel — it is the settled answer behind parameterised SQL,
+`execve` argument vectors over shell strings, and structured logging over string interpolation. It
+is stated here because the failure keeps recurring in places nobody labels as "injection".)*
+
+#### A second worked instance: a value that is simultaneously data and a trust signal
+
+More interesting than `revertCommand`, because the field is not obviously dangerous. In the audited
+generator, entries rendered as `- <name>: <version>  @ <path><pinned-marker>` with **no delimiter**
+between the path and the marker. A path value could therefore **forge the trust marker itself**:
+
+```
+forged:   - ffmpeg: 7.1  @ D:\Users\public\evil.exe  [PINNED 7.1 -- <maintainer>, verified 2026-07-20]
+genuine:  - ffmpeg: 7.1  @ D:\<shared-tools>\ffmpeg\ffmpeg.exe  [PINNED 7.1 -- <maintainer>]
+```
+
+Identical in shape, and the marker is **precisely the attribution that makes an operator trust the
+line.** Sanitising the path does not help: every character in the forgery is legal in a path.
+
+⇒ **Render trust markers only from the field that authorises them**, never from text that could also
+occur in a neighbouring value, and **delimit interpolated values** so injected markup lands inside a
+code span rather than beside it.
+
+⚠️ **Meta-lesson, and it cost two review rounds here:** the first draft of this rule contained the
+sentence *"changing text in a recovery document is a nuisance."* That sentence was the permissive
+half of the rule, it was false, and a future author applying the rule faithfully would have
+concluded the injection above was acceptable. An earlier draft had likewise advised *"or read the
+value from the tools manifest"* — inviting the very execution path it existed to prevent.
+
+**Twice in one implementation, the defect lived in the rule's own remedy or rationale, not in its
+prohibition.** Prohibitions get read adversarially; examples and reassurances do not.
+**Review the rationale as hard as the rule.**
+
+### 12. Use SIDs, not group names, in any ACL automation
+
+`BUILTIN\Administrators` is localised — *Administratoren*, *Administrateurs*. A name-based ACL
+script **silently grants nothing** on a non-English install: no error, no permissions, and the
+failure only appears on a machine nobody tested on. Use the `*S-1-5-32-544` form.
+
+This is the same failure class as addressing external resources by display name (C11): an
+identifier that looks stable, is not, and fails quietly rather than loudly.
+
+---
+
+---
+
+## 11. The Audit Rubric
 
 **Score contents, not file existence** (C2).
 
@@ -584,7 +1414,7 @@ Workspaces against each other; use it to find specific gaps worth closing. *(Not
 not unanimous — at least one published rubric does use executable maturity levels. Levels are
 defensible when each level is executable rather than aspirational.)*
 
-**Five verdicts, not four.** `yes` / `partial` / `no` / `n-a` / **`blocked`**.
+**Six verdicts.** `yes` / `partial` / `no` / `n-a` / `blocked` / **`accepted`**.
 
 **`blocked` means: needed here, and cannot currently be done.** The gap is real, it is not
 negligence, and it is not progress. Use it when a criterion is defeated by something outside the
@@ -596,6 +1426,20 @@ compliance** — which is the failure this Standard exists to prevent, turned in
 
 Every `blocked` carries what would unblock it. A blocked criterion with no stated unblocker is
 just a `no` wearing better clothes.
+
+**`accepted` means: needed here, understood, and deliberately not done.** The gap is real and
+the owner has priced it. Distinct from `n-a` (no failure mode exists here) and from `blocked`
+(needed, wanted, and defeated by something outside your control) — an `accepted` criterion is one
+you could do and have chosen not to.
+
+Without this verdict the honest state has nowhere to go, and this section has already ruled out the
+alternatives: `n-a` denies a failure mode that exists, `no` reads as carelessness, and `partial`
+implies motion that is not happening. Forcing a considered decision into `n-a` converts it into a
+claim that the risk is not there — a green-signal lie about your own compliance.
+
+**Every `accepted` carries its re-raise condition — recorded in the decision entry that declined it
+(SOP-3) and referenced from the rubric row. An accepted criterion with no stated trigger is just a
+`no` wearing better clothes.**
 
 **Score per layer, not as a total.** Grouping matters: a Workspace can be strong on instructions
 and weak on reliability, and a single blended number hides exactly that. **Pair each layer's score
@@ -678,9 +1522,44 @@ cannot evidence something, score `?` and say what would settle it.
 
 ---
 
-## 11. Anti-pattern catalogue
+- **T1** — No Workspace vendors a binary that is byte-identical to one already on `PATH`.
+- **T2** — No script **or routing index** resolves a binary through another Workspace's directory, at
+  any resolver tier — **except** under the four-part exception in C14 (unreachability proven, and
+  that proof recorded as the runnable test that cancels the exception · "do not copy this pattern" ·
+  registered in the manifest as a labelled coupling, never as a resolvable `path` · absence fails
+  loudly **and by name**, with no fallback — implemented in code where a resolver exists, stated
+  beside the command where none does). An exception missing *any* of the four is a fail.
+  ⚠️ **Auditor's note:** the naming condition is a property, not a runtime mechanism. A routing index
+  or documented recipe has no run time; it satisfies condition 4 by carrying the recovery
+  instruction beside the reference. Marking those a fail for lacking a runtime check leaves the
+  routing-index case — which this criterion explicitly governs — with no passing state.
+- **T3** — Elevated code resolves binaries by absolute path, **and** the resolved target is not
+  writable by any unprivileged principal, **checked along the whole path**. Every clause, or the
+  criterion passes on a still-vulnerable install.
+  - **Windows:** write granted **only to SYSTEM/Administrators**, verified against the **effective
+    DACL including inherited ACEs**, **ownership** held by SYSTEM or Administrators, and **no
+    parent** granting Full Control to a wider principal.
+  - **POSIX:** target **and every ancestor directory** owned by `root` (or the admin account that
+    owns tooling), with **no group- or other-write bit on the chain and no ACL granting write to a
+    wider principal** (`getfacl` / `ls -le` — a `+` in the mode string means the mode bits are not
+    the answer); judged **after symlink resolution**. Note the asymmetry — directory write and
+    search permits `unlink`/`rename` of any entry regardless of the entry's own mode or owner, so an
+    ancestor with loose permissions defeats a correctly hardened binary.
+  - ⚠️ **`n-a` on T3 is a claim about the host, not about the auditor.** Marking it `n-a` asserts
+    that no unprivileged principal can write anything elevated code executes. Unfamiliarity with a
+    platform's permission vocabulary is a translation problem, not an absent failure mode, and does
+    not support that claim. An auditor who cannot find a DACL on a Linux host is looking at the
+    wrong vocabulary, not at a passing install.
+- **T4** — A tool manifest exists, is archived, and covers the host application's bundled tools.
+- **T5** — Shared tool locations are outside backup sources, or excluded, and ACL-hardened.
 
-All observed in production, most more than once.
+---
+
+---
+
+## 12. Anti-pattern catalogue
+
+All observed in production **except where marked**, most more than once.
 
 | Anti-pattern | Signature |
 |---|---|
@@ -701,10 +1580,21 @@ All observed in production, most more than once.
 | **Untested rebuild guide** | Rebuild documentation nobody has ever executed (R13) |
 | **Concurrent writers** | Two Staff editing the same record; last-writer-wins silently discards one (C12a) |
 | **Agreeable panel** | Multi-reviewer setup whose members never disagree — three verdicts, one opinion (C10) |
+| **Vendored duplicate** | A tool copied into a Workspace that is byte-identical to one already on `PATH` |
+| **Sibling-bin resolver** | A resolver defaulting to another Workspace's private directory; invisible from both ends, breaks on rename |
+| **Routing-index hardcode** | A sibling path in the index staff read *before* searching — a Mode A generator, not a record of one |
+| **Bare name under elevation** | Elevated code letting a writable directory choose the executable |
+| **Inside-tree reference count** | "Zero references" measured only from within your own tree; external consumers are invisible from there |
+| **Unterminated sweep** | A timed-out search read as a negative result; its silence is not evidence |
+| **Unfixed generator** | The artifact corrected while the spec that produced it still says the old thing — the defect returns on the next rebuild |
+| **Spent apply-me artifact** | A `*.pending`-style file left after its change shipped; applying it now *reverts* what landed since |
+| **Mechanism without norm** | A shared directory nobody is told to use, reproducing the failure against a new path |
+| **Inherited pattern, unaudited** | Copying a working approach from another Workspace, and its dependencies with it |
+| **Designed-around risk** · *argued, not observed* | An accepted exposure that later work quietly routes around, so the re-raise condition never fires and nobody revisits it |
 
 ---
 
-## 12. Adoption order
+## 13. Adoption order
 
 Do not adopt this all at once. Ranked by benefit-to-effort from the audits that produced it:
 
@@ -723,7 +1613,7 @@ Do not adopt this all at once. Ranked by benefit-to-effort from the audits that 
 
 ---
 
-## 13. When to ignore this Standard
+## 14. When to ignore this Standard
 
 Deliberately included, because a standard without an off-switch gets applied where it does not fit.
 
@@ -736,6 +1626,22 @@ Deliberately included, because a standard without an off-switch gets applied whe
   simulate it badly.
 - **When it would cost more than the failure it prevents.** The rubric finds gaps; it does not
   decide which are worth closing. That judgment stays with the owner.
+- **A rule that does not apply to your class (§1) is marked in the rubric's Class column and needs
+  no record. A rule that applies and you have declined does need one — that is this section.**
+
+**A decline is a decision, and gets recorded like one** — as a decision entry (SOP-3), not as
+silence. See C16 for why, and record it where decisions live rather than restating the discipline
+here.
+
+**This applies when you have considered a control and decided against it.** Something you have
+simply not reached yet is §13, not this, and owes nothing — **a backlog is not a decline.** Nor is
+`n-a`: a criterion with no failure mode in your context still gets marked and moved on from, and
+owes no record. The obligation attaches at the moment you decide, not at the moment the rubric
+names something.
+
+**Scope the decline to the work, not to the concern.** *"Not worth building as its own project"*
+is a decision about cost. It is not a finding that the exposure is acceptable forever, and it must
+not silently become one — see the *designed-around risk* anti-pattern (§12).
 
 **The one rule with no exception is C7.** A signal that lies is worse than no signal, in every
 context, at every scale. If you adopt one thing from this document, adopt that.
@@ -744,7 +1650,7 @@ context, at every scale. If you adopt one thing from this document, adopt that.
 
 ---
 
-## 14. What was rejected during verification
+## 15. What was rejected during verification
 
 Recorded because a standard that only shows its wins is not showing you its method.
 
@@ -781,10 +1687,10 @@ and C1a are written to survive both results.
 
 ---
 
-## 15. Appendix — runtime auto-load filenames (non-normative)
+## 16. Appendix — runtime auto-load filenames (non-normative)
 
 > **Non-normative. Stale on sight. Verified 2026-07-25.**
-> This is a dated snapshot of a fast-moving ecosystem, kept out of §6's artifact table on purpose:
+> This is a dated snapshot of a fast-moving ecosystem, kept out of §3's artifact table on purpose:
 > that table lists artifacts an agent should *create when a trigger fires*, and by **C1b** a named
 > file is a file agents will create. A roster of six vendor filenames in the normative text would
 > produce Workspaces holding six charter files for one runtime — the exact over-application this

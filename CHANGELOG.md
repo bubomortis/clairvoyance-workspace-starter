@@ -11,6 +11,69 @@ version.
 
 ---
 
+## [v1.4] — 2026-07-27
+
+### Not breaking for adopters
+
+**Nothing you already created needs renaming.** This release adds sections, four Charter criteria and
+one rubric verdict. If you adopted v1.3, no file on disk changes name or location.
+
+**But section numbers after SOP-6 shifted by one**, because SOP-7 is inserted as §10. If you quote
+the Standard by section number anywhere, re-check: Rubric §10→§11, Anti-patterns §11→§12, Adoption
+§12→§13, When to ignore §13→§14, What was rejected §14→§15, Appendix §15→§16.
+
+### Added — external tools
+
+- **C13 — Tools are resolved, not vendored.** A Workspace should not carry a copy of a tool the
+  machine already has. Measured: two Workspaces vendored four tools that were byte-identical by
+  SHA-256 to copies already on `PATH`, created *after* them.
+- **C14 — Never resolve a binary through another Workspace's private directory**, with a four-part
+  self-closing exception for the case where a tool is genuinely unreachable any other way. The
+  exception exists because a rule with no legitimate path for the real case gets ignored rather than
+  followed. **The routing-index form of this failure is worse than the code form** — a documentation
+  route is a *generator*, producing the failure on a schedule for every future author.
+- **C15 — Anything running elevated resolves binaries by absolute path, never by `PATH`** — and an
+  absolute path is *necessary but not sufficient*, because a path into a user-writable directory is
+  equally exploitable. **Stated for Windows and POSIX**, where one clause inverts rather than
+  translating: POSIX directory write authorises `unlink`/`rename` of any entry regardless of that
+  entry's own mode or owner, so a correctly hardened binary under a loose parent can still be
+  replaced.
+- **§10 — SOP-7, Standing up shared external tools.** Discovery failure modes, manifest design,
+  backup siting, upgrade consent, and why a shared directory alone does not fix discovery.
+- **T1–T5**, five external-tool audit criteria.
+
+### Added — declining a rule
+
+- **C16 — A control you will not maintain is worse than one you declined.** C7's mechanism one level
+  up: a control *believed* to be in place suppresses investigation of that exposure exactly as a
+  false green signal does.
+- **A sixth rubric verdict, `accepted`** — needed here, understood, deliberately not done. Distinct
+  from `n-a` (no failure mode exists) and `blocked` (defeated by something outside your control).
+  Every `accepted` carries its re-raise condition.
+- **SOP-3's decision template gains `Revisit if:`**, mandatory on a decline. A re-raise condition
+  must name an event a third party could notice without asking you; if checking whether it fired
+  requires your judgement, it is not a trigger.
+- **§14 now says a decline is a decision and gets recorded like one** — scoped to controls you
+  considered and rejected. A backlog is not a decline.
+- **Eleven anti-patterns**, including *designed-around risk*: an accepted exposure that later work
+  quietly routes around, so the trigger never fires. §12's header now reads *"All observed in
+  production **except where marked**"* — that row is marked, because it is argued rather than
+  observed.
+
+### Evidence
+
+First release where the new material was **checked against external sources after drafting** rather
+than reconstructed afterwards. Every source in [CITATIONS.md](CITATIONS.md) §1a was opened and read.
+Eleven citations survived; seven leads were rejected, including one dead link, one paywalled standard
+cited at the wrong edition, and one citation that resolved but described an adjacent problem — that
+last agreed on by both models consulted. **The rejections are recorded alongside the citations.**
+
+Three claims are labelled as having **no external basis**: that a manifest improves discovery, that a
+re-raise condition should be third-party observable, and the ranking in C16. They are local
+extensions, marked as such.
+
+---
+
 ## [v1.3] — 2026-07-25
 
 ### Breaking for adopters
@@ -27,11 +90,11 @@ version.
   not read `AGENTS.md`, your charter is silently not loaded and nothing reports it. The rule:
   `AGENTS.md` is canonical; add a vendor-named pointer file **only if** your runtime auto-loads a
   different name; that pointer **may add, never restate**. Two charter files is two sources of truth.
-- **§15 — runtime auto-load filenames.** Which runtimes load which file, with a confidence mark per
+- **§15 — runtime auto-load filenames** *(renumbered to §16 in v1.4)*. Which runtimes load which file, with a confidence mark per
   entry. Deliberately **non-normative and outside the artifact table**: by C1b a named file is a file
   agents will create, so a vendor roster in normative text would produce Workspaces holding six
   charter files for one runtime — this document committing the failure it documents. It is safe in
-  §15 because `STANDARD.md` is `Audience: human` and agents do not read it, which is also why it
+  that appendix because `STANDARD.md` is `Audience: human` and agents do not read it, which is also why it
   must not be migrated into an agent-facing derive doc or a Criteria Card.
 - **`CITATIONS.md`** — every source behind the Standard, with a confidence mark per entry, the claims
   that have **no** external citation, and the places the Standard overreaches what its sources
@@ -83,7 +146,7 @@ than as a total — a capability checklist, not a maturity ladder.
 Second research pass folded in. Added instruction-file provenance and over-application (C1a/C1b), the
 factory/product split (C6), heartbeat and absence-of-signal monitoring (C7a/C7b), single-threaded
 writes (C12a/C12b), superseded-not-edited decision records, the rebuild drill, and a rubric regrouped
-into six scoreable layers. Two claims were **rejected during verification** — see §14 of the Standard.
+into six scoreable layers. Two claims were **rejected during verification** — see §14 of the Standard *(§15 from v1.4 onward)*.
 
 ## v1.0 — unpublished
 
