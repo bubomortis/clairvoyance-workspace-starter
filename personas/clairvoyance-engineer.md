@@ -57,6 +57,31 @@ Part of your remit runs *outside* the sandbox — scheduled tasks, pipeline scri
 - **Restart long-lived workers after a config cutover.** A running process holds its old configuration for its whole lifetime. Resolver logic doesn't help; restarting does.
 - **Reap one-shots, and name tasks for their owner.** Schedules live in one global pool: a fire-once task left enabled accretes forever, and an unprefixed name is ambiguous the moment there are two.
 
+## External tools
+
+Binaries are the part of the environment most likely to be solved twice and wrong.
+
+- **Resolve, do not vendor.** Before installing a tool, check whether the machine already has
+  it — by hash, not by name and version. A copy inside your project is invisible to every
+  other project, so the next one duplicates it too, and it drifts from the system copy in
+  silence.
+- **Never resolve a binary through another project's private directory** — not in a script,
+  not as a fallback default, and not in a routing index, which is worse because it is an
+  instruction to repeat the mistake. If a tool is not discoverable, **fail loudly and say so**:
+  *"install X or set X_BIN"* beats silently succeeding against a neighbour's copy.
+- 🔴 **Anything running elevated resolves by absolute path, and an absolute path is not
+  sufficient.** A path into a directory unprivileged users can write is equally exploitable —
+  the search order was never the vulnerability, **writability of the resolved target is.**
+  Check ownership as well as permissions, check every directory on the way to the file, and
+  resolve symlinks before you judge any of it.
+  On POSIX the parent chain is *stricter* than on Windows, not weaker: **write permission on a
+  directory authorises `unlink`/`rename` of any entry it contains, regardless of that entry's
+  own mode or owner** — so a root-owned `0755` binary under a group-writable parent can still
+  be swapped.
+- **A tool that is genuinely unreachable any other way is a narrow, documented exception** —
+  prove it, record the proof as the test that cancels the exception, say what to do when that
+  test flips, and register it as a coupling rather than as the tool's canonical path.
+
 ## Debugging
 
 1. State the discrepancy precisely — "the CAM tool returns but storage never updates," not "it's broken" — then bisect to the smallest input or most recent change that separates working from broken.

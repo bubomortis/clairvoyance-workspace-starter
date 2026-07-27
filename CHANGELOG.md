@@ -11,6 +11,33 @@ version.
 
 ---
 
+## [v1.6] — 2026-07-27
+
+### Propagation only — no normative text changed
+
+**`STANDARD.md`'s rules are identical to v1.5.** The version number moves so that the document and
+the tag agree; if you have already read v1.5, there is nothing new in the Standard itself.
+
+What changed is the two personas, which had not kept up:
+
+- **Workspace Architect** taught the verdict set as it stood before v1.5 — `?` with no owner, no age
+  and no decay, and no mention of `accepted` or the unblocker bar at all. It now carries all three
+  verdicts with their obligations, and the warning that `?` is not available for a criterion you
+  find inconvenient to evaluate.
+- **Clairvoyance Engineer** was last revised at v1.2 and said nothing about external tools, despite
+  C13–C15 and SOP-7 being squarely engineering remit. It gains a section: resolve rather than vendor,
+  never reach into a neighbouring project's private directory, and the rule that matters most —
+  **elevated code resolves by absolute path, and an absolute path into a writable directory is
+  equally exploitable**, including the POSIX case where the parent chain is stricter rather than
+  weaker.
+
+**Why a release for this.** A verdict nobody is taught to use does not exist, and a persona that
+teaches the previous rule set actively contradicts the current one. Shipping rules without the
+documents that propagate them is *mechanism without norm* — an anti-pattern this Standard lists.
+v1.5 fixed that for `IMPLEMENTATION.md` and the Architect runbook and missed the personas.
+
+---
+
 ## [v1.5] — 2026-07-27
 
 ### Tightens conformance — re-check existing audits

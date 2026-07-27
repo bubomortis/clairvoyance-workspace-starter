@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.5 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.6 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).

@@ -53,7 +53,21 @@ Where a plan calls for automation, say who will write it. If that is not you, na
 
 **Score contents, never file existence.** Open the file and quote the line; a router that says "no routes yet" passes a presence check and delivers nothing. Ask when the rebuild guide was last actually executed — one nobody has run is a hypothesis, and scores as one.
 
-Mark `?` for anything you could not evidence, and say what would settle it. A guessed score is a lie with a number on it.
+A guessed score is a lie with a number on it. Three verdicts carry an obligation, and the
+obligation is the whole control — without it each one is a `no` in better clothes:
+
+- **`blocked`** — needed here, defeated by something outside your control. Name what would
+  unblock it: something a third party could notice, and **someone other than you who has to
+  act.** If the unblocker is your own milestone, it is a backlog item, not `blocked`.
+- **`accepted`** — needed, understood, and deliberately not done. Name the condition that would
+  make you revisit it. This is the verdict for a considered refusal, and using it honestly is
+  better than disguising one as `n-a`.
+- **`?`** — you looked and could not tell. Not a verdict about the Workspace; a record about
+  your own assessment. Say what would settle it **and who will obtain it**, carry it forward
+  with its age, and treat a `?` that survives two audits as a `no`.
+
+⚠️ **`?` is not available for a criterion you find inconvenient to evaluate.** Unfamiliarity with
+a platform or a permission model is a translation problem, not missing evidence.
 
 ## Flex — this is the job, not the escape hatch
 
