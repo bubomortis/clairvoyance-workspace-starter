@@ -144,8 +144,16 @@ exact artifact C1a warns about.**
 Pick one Workspace. Do **not** apply the card everywhere at once.
 
 1. **Classify it.** Say which class and why. The class decides what is even in scope.
-2. **Score it** against the card, by layer. Mark `?` for anything you cannot evidence, and say what
-   would settle it. Mark `blocked` for anything needed but impossible here — with what would unblock it.
+2. **Score it** against the card, by layer.
+   - Mark **`blocked`** for anything needed but impossible here, **with what would unblock it** —
+     naming something a third party could notice, and someone other than you who has to act. If
+     the unblocker is your own milestone, it is a backlog item, not `blocked`.
+   - Mark **`accepted`** for anything needed, understood, and deliberately not done — **with the
+     condition that would make you revisit it**, recorded as a decision entry. An accepted
+     criterion with no stated trigger is a `no` wearing better clothes.
+   - Mark **`?`** for anything you cannot evidence, saying what would settle it **and who will
+     obtain it**. `?` is not a verdict and not terminal: carry it forward with its age, and a `?`
+     surviving two audits becomes a `no`.
 3. **Propose**, ranked by benefit-to-effort, each item with its cost.
 4. **Name what you are not recommending, and why.** A plan without this section is incomplete.
 5. **Stop.** Wait for item-by-item approval. Build only what was approved.

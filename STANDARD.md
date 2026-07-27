@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.4 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.5 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).
@@ -9,9 +9,10 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-**Upgrading from v1.3?** Nothing you already created needs renaming. v1.4 adds four Charter
-criteria, a seventh SOP, and one rubric verdict — and renumbers the sections after SOP-7.
-Full history in [CHANGELOG.md](CHANGELOG.md).
+**Upgrading from v1.4?** No artifact you created changes name or location. But v1.5 **tightens
+conformance**: an audit that passed with an unblocker reading *"when we have time"* does not pass
+now, and `?` rows acquire an owner, an age, and a decay to `no`. Re-check any audit you are still
+relying on. Full history in [CHANGELOG.md](CHANGELOG.md).
 
 A practical standard for setting up and operating Clairvoyance Workspaces where AI Staff do
 sustained work. It exists because most Workspace problems are not intelligence problems — they
@@ -1414,7 +1415,9 @@ Workspaces against each other; use it to find specific gaps worth closing. *(Not
 not unanimous — at least one published rubric does use executable maturity levels. Levels are
 defensible when each level is executable rather than aspirational.)*
 
-**Six verdicts.** `yes` / `partial` / `no` / `n-a` / `blocked` / **`accepted`**.
+**Six verdicts** — `yes` / `partial` / `no` / `n-a` / `blocked` / **`accepted`** — **plus `?`**,
+which is not a verdict about the Workspace but a record that the auditor could not determine the
+state. It is defined at the close of this section and carries obligations of its own.
 
 **`blocked` means: needed here, and cannot currently be done.** The gap is real, it is not
 negligence, and it is not progress. Use it when a criterion is defeated by something outside the
@@ -1426,6 +1429,25 @@ compliance** — which is the failure this Standard exists to prevent, turned in
 
 Every `blocked` carries what would unblock it. A blocked criterion with no stated unblocker is
 just a `no` wearing better clothes.
+
+**The unblocker is held to the same standard as an `accepted` criterion's re-raise condition:
+it must name something a third party could notice without asking you.** *"When we have a tier
+that includes it"*, *"when someone with that skill joins"* — checkable by anyone. *"When we
+have time"*, *"when circumstances allow"* — filled in, and meaning nothing.
+
+**Then name who or what has to act. If the answer is *you*, it is not blocked** — a milestone of
+your own is a backlog item however precisely you can date it. *"When we finish the consolidation"*
+is observable, specific, and still the wrong verdict. **Observability and externality are
+different tests and the verdict needs both**; the two examples above pass because neither turns
+on you.
+
+⚠️ **A vacuous unblocker means the verdict is wrong, or you have not found the external condition
+yet.** This is not a claim about how people behave — it follows from the definition. `blocked`
+asserts that something outside your control defeats the criterion, so if it is genuinely blocked,
+**an external unblocker exists by construction** and your job is to name it. If there is none to
+find, nothing external is defeating anything: that is a backlog item, or an `accepted` if you
+have actually decided against it. **The two tests catch hollow statements and mislabelled
+verdicts with the same two questions**, which is most of their value.
 
 **`accepted` means: needed here, understood, and deliberately not done.** The gap is real and
 the owner has priced it. Distinct from `n-a` (no failure mode exists here) and from `blocked`
@@ -1519,6 +1541,36 @@ trust under pressure, which is the only time you will reach for it.
 rather than events, deliberately: an auditor arriving cold cannot verify how a past review was
 conducted, and scoring it `no` for lack of evidence manufactures a gap that is not there. Where you
 cannot evidence something, score `?` and say what would settle it.
+
+**`?` is the seventh token and it is not a verdict.** The six verdicts describe the *Workspace*.
+`?` describes the *assessment* — it records that the auditor could not determine the state, which
+is a fact about the audit and not about the thing audited. That is why it is counted separately
+and why it behaves differently:
+
+- **`?` is never terminal, and it decays.** Every other verdict can close an audit. `?` is an open
+  item that must resolve to one of the six once the evidence named beside it is obtained. So:
+  **every `?` names who will obtain the evidence, every subsequent audit carries unresolved `?`
+  rows forward with their age, and a `?` that survives two audits is a `no`** — the evidence was
+  obtainable by definition, and nobody obtained it.
+  ⚠️ **This is the obligation that cannot be satisfied by writing a better sentence.** An
+  unblocker and a re-raise condition are *event-driven*: the world changes and they trip on their
+  own. An evidence statement is *actor-driven* — someone has to go and get it — so without an
+  owner and a decay path it never executes, and a well-worded `?` sits across audits indefinitely
+  while every stated obligation is formally satisfied. **That, not a weak evidence statement, is
+  how `?` becomes the cheap exit.**
+- **`?` asserts that you looked and could not tell.** It does not cover not having looked, and it
+  is not available for a criterion you find inconvenient to evaluate. **Unfamiliarity with a
+  platform, a vocabulary or a toolchain is a translation problem, not missing evidence** — see
+  T3, where a Windows-shaped permission model on a POSIX host is the standing example.
+- **`?` must name the evidence that would settle it**, on the same terms as an unblocker or a
+  re-raise condition: something a third party could go and obtain. *"Needs more investigation"*
+  is not that.
+
+⚠️ **Do not let `?` become the cheap exit.** `blocked` and `accepted` were each given a required
+field precisely so they could not be reached for casually; a token with no obligation sitting
+beside them would absorb exactly the cases those fields were built to expose. The obligations
+above are what stop it, and they are the reason `?` earns a place in the rubric rather than
+merely appearing in it.
 
 ---
 

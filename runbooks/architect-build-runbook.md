@@ -173,8 +173,10 @@ compliance.
 > If you are starting a greenfield Workspace, you are the first to exercise that path — treat the
 > intake as unverified and tell us how it went.
 - [ ] Their first report uses PLAN mode and did not create files.
-- [ ] Their report contains at least one `n-a` or "not recommended" — if everything scored as a
-      gap to close, the flex instruction is not landing.
+- [ ] Their report contains at least one `n-a`, `accepted`, or "not recommended" — if everything
+      scored as a gap to close, the flex instruction is not landing. **`accepted` is the stronger
+      signal of the two**: `n-a` says a criterion did not apply, `accepted` says they priced one
+      and declined it.
 - [ ] **The first exchange asked fewer than five questions, and each one changed something.** A
       discovery interview means the intake has become a ritual — the number of questions should be
       emergent, and zero is a valid answer when the context is already evident.

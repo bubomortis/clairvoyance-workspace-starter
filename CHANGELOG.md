@@ -11,6 +11,43 @@ version.
 
 ---
 
+## [v1.5] — 2026-07-27
+
+### Tightens conformance — re-check existing audits
+
+No artifact you created changes name or location. **But an audit that passed under v1.4 may not pass
+now**, which is why this is a minor release and not a patch.
+
+- **`blocked`'s unblocker now has a quality bar.** It already had to be stated; it now has to be
+  *checkable*. Name something a third party could notice without asking you — and **name who or what
+  has to act. If the actor is you, the criterion is not blocked**, however precisely you can date the
+  milestone. *"When we have time"* and *"when we finish the consolidation"* both fail, for different
+  reasons: the first is vacuous, the second is internal.
+  A vacuous unblocker means the verdict is wrong or the external condition has not been found yet —
+  and that follows from the definition rather than from any claim about behaviour. `blocked` asserts
+  something outside your control defeats the criterion, so if it genuinely does, an external
+  unblocker exists by construction.
+- **`?` is defined.** It has appeared in the rubric since v1.0, uncounted and undefined. It is **not
+  a verdict about the Workspace** — it records that the *auditor* could not determine the state, which
+  is a fact about the audit. It now carries three obligations: it names **who will obtain** the
+  evidence, unresolved rows are **carried forward with their age**, and **a `?` surviving two audits
+  becomes a `no`** — the evidence was obtainable by definition and nobody obtained it.
+  The decay path is the load-bearing part. An unblocker and a re-raise condition are *event-driven*
+  and trip on their own; an evidence statement is *actor-driven* and never executes without an owner.
+  Without decay, a well-worded `?` sits across audits indefinitely with every obligation formally
+  satisfied — which is how it would have become the cheapest exit in the rubric.
+
+### Derived documents ship with it
+
+- **`IMPLEMENTATION.md`** taught the derivation with `?` and `blocked` and **did not know `accepted`
+  existed.** Shipping a verdict without the instruction that propagates it is *mechanism without
+  norm*, which this Standard lists as an anti-pattern. It now teaches all three, with their bars.
+- **The Architect build runbook's flex check** counted `n-a` only. It now counts `accepted` too, and
+  notes that `accepted` is the stronger signal of the two: `n-a` says a criterion did not apply,
+  `accepted` says someone priced one and declined it.
+
+---
+
 ## [v1.4] — 2026-07-27
 
 ### Not breaking for adopters
