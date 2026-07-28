@@ -125,8 +125,9 @@ Derived from: Workspace Standard <version> on <date>
 
 **`## Verdicts and their obligations` is not optional, and it is the one section to copy rather
 than compress.** It carries all seven tokens — `yes` / `partial` / `no` / `n-a` / `blocked` /
-`accepted`, plus `?` — and, for the four that carry an obligation, the obligation *and its
-quality bar*, because in each case the bar is the whole control:
+`accepted`, plus `?` — and, for the three that carry an obligation, the obligation *and its
+quality bar* — plus the caution on `n-a`, which owes no record but is still a claim you have to
+be able to defend. In each case the bar is the whole control:
 
 - **`blocked`** — what would unblock it: something a third party could notice, and **someone
   other than you who has to act**. If the actor is you, it is backlog, not `blocked`.
@@ -141,6 +142,16 @@ quality bar*, because in each case the bar is the whole control:
 stated twice will diverge, and the verdicts are the most-copied rules in the set — the personas
 route here rather than carrying their own copy. If you compress a bar out of the Card, you have
 not simplified the Card; you have deleted the control from every document downstream of it.
+
+**§3 restates these bars, on purpose, and that is the one exception.** Two reasons, and both are
+narrow enough that they do not license a third copy. **C5's harm is divergence a reader cannot
+adjudicate**, and §3 states its direction of authority — which converts a competing copy into a
+derived one. The two are also **in the same file**: one reader, one pass, and any edit puts both
+copies on screen together, so the drift window is near zero. C5's real target is two copies in
+two files that no single change ever brings into view. And **they address different acts** — §2
+says what to *write into* the Card, §3 says how to *score with it*; reducing §3 to a pointer
+sends a reader back up the document mid-procedure, which is the friction that makes people work
+from memory instead. **Neither reason survives being moved to two separate files.**
 
 **Then route it.** Add a line to this Workspace's `library.md`:
 `- IF designing, auditing or building a Workspace → read [[Workspace Criteria Card]]`
@@ -171,6 +182,7 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
 2. **Score it** against the card, by layer. The bars below are the Card's *Verdicts and their
    obligations* section applied — that section is where they are authored, and where to change
    them if the Standard moves. Restated here only because this is the step where they bite.
+   **If these ever differ from §2, §2 governs — and one of them is wrong.**
    - Mark **`blocked`** for anything needed but impossible here, **with what would unblock it** —
      naming something a third party could notice, and someone other than you who has to act. If
      the unblocker is your own milestone, it is a backlog item, not `blocked`.
@@ -181,7 +193,9 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
      criterion with no stated trigger is a `no` wearing better clothes.
    - Mark **`?`** for anything you cannot evidence, saying what would settle it **and who will
      obtain it**. `?` is not a verdict and not terminal: carry it forward with its age, and a `?`
-     surviving two audits becomes a `no`.
+     surviving two audits becomes a `no`. **Not available for a criterion you find inconvenient
+     to evaluate** — unfamiliarity with a platform or a permission model is a translation
+     problem, not missing evidence.
 3. **Propose**, ranked by benefit-to-effort, each item with its cost.
 4. **Name what you are not recommending, and why.** A plan without this section is incomplete.
 5. **Stop.** Wait for item-by-item approval. Build only what was approved.

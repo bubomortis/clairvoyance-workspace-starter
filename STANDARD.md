@@ -695,10 +695,11 @@ only honest once the thing it declines is gone.
 
 ⚠️ **This is a comparison against the half-measure, not against doing it properly.** If full
 implementation is genuinely on the table, that is the option to price first. But *on the table*
-means **owned, scheduled and dated by a named person** — the same bar as a `blocked` unblocker,
-and for the same reason: a condition shaped like an intention (*"when we have time"*) is exactly
-the one that never fires. **Until it lands, this criterion still applies and the half-measure
-still comes out.** A scheduled fix does not stop an installed half-control reading as coverage in
+means **owned, scheduled and dated by a named person** — the same *kind* of bar as a `blocked`
+unblocker: checkable by a third party, not shaped like an intention. Externality does not apply
+here; the point is that the fix is real, not that it is someone else's. A condition shaped like
+an intention (*"when we have time"*) is exactly the one that never fires. **Until it lands, this
+criterion still applies and the half-measure still comes out.** A scheduled fix does not stop an installed half-control reading as coverage in
 the meantime, and the fix is the thing most likely to slip. Intent is not coverage. And the
 question is never **only** *"is this a real risk?"* — almost
 everything a rubric surfaces is, and that answer alone settles nothing in either direction. It is
@@ -1475,9 +1476,10 @@ Every `blocked` carries what would unblock it. A blocked criterion with no state
 just a `no` wearing better clothes.
 
 **The unblocker is held to the same standard as an `accepted` criterion's re-raise condition:
-it must name something a third party could notice without asking you.** *"When we have a tier
-that includes it"*, *"when someone with that skill joins"* — checkable by anyone. *"When we
-have time"*, *"when circumstances allow"* — filled in, and meaning nothing.
+it must name something a third party could notice without asking you** (this test is a local
+extension — see SOP-3's provenance note). *"When we have a tier that includes it"*, *"when
+someone with that skill joins"* — checkable by anyone. *"When we have time"*, *"when
+circumstances allow"* — filled in, and meaning nothing.
 
 **Then name who or what has to act. If the answer is *you*, it is not blocked** — a milestone of
 your own is a backlog item however precisely you can date it. *"When we finish the consolidation"*
@@ -1621,23 +1623,27 @@ merely appearing in it.
 **External-tool layer**
 
 Scored on the same terms as the six layers above. Note that four of the five are scoped by what
-the Workspace *does* rather than by which class it is — a Project with no external tools and a
-Base with none are equally out of scope, and both say so in the Class column.
+the Workspace *does* rather than by which class it is — for those four, a Project with no external
+tools and a Base with none are equally out of scope, and both say so in the Class column.
 
 | # | Criterion | Class |
 |---|---|---|
 | T1 | No vendored byte-identical copy | All *that carry or resolve external tools* |
 | T2 | No sibling-Workspace binary resolution | All *that carry or resolve external tools* |
 | T3 | Elevated code resolves by absolute path, to a target no unprivileged principal can write | All *that run anything elevated* |
-| T4 | Tool manifest exists, archived, covers bundled tools | All *that carry or resolve external tools* |
+| T4 | Tool manifest exists, archived, covers bundled tools | All |
 | T5 | Shared tool locations sited outside backup and ACL-hardened | All *that own a shared tool location* |
 
 ⚠️ **A Base Workspace is in scope for these on the same terms as any other class**, per §1's
-"plus" clause — a Base that resolves external tools or runs elevated code scores T1–T5, and one
-that does neither marks them in this Class column and owes no decision record (§14). Do **not**
-route structural inapplicability through `accepted` or a SOP-3 entry; that is what the column is
-for. Note that T3 is the narrow case: `n-a` there is a claim about the host, not about the
-auditor — see its own note below.
+"plus" clause — a Base scores whichever of T1–T5 its Class column admits, and marks the rest in
+that column, owing no decision record for them (§14). Do **not** route structural inapplicability
+through `accepted` or a SOP-3 entry; that is what the column is for. Note that T3 is the narrow
+case: `n-a` there is a claim about the host, not about the auditor — see its own note below.
+
+⚠️ **T4 is deliberately not scoped by whether you believe you use external tools.** Mode C is the
+case where you do not know you have one, and the host application's bundled tools are present in
+every Workspace regardless. The manifest is also what makes T1's and T2's scope question
+answerable by looking rather than by recall.
 
 - **T1** — No Workspace vendors a binary that is byte-identical to one already on `PATH`.
 - **T2** — No script **or routing index** resolves a binary through another Workspace's directory, at

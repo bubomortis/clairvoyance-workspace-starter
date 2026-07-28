@@ -16,9 +16,11 @@ version.
 ### Tightens conformance — re-score C14 exceptions and `accepted` verdicts
 
 No artifact you created changes name or location. **But an audit that passed under v1.6 may not
-pass now**, which is why this is a minor release and not a patch: three of the four fixes below
-turn something that passed into something that fails. A patch number would tell adopters the
-opposite of the truth.
+pass now**, which is why this is a minor release and not a patch: **four** things that passed
+before now fail — a C14 exception built from the v1.6 Engineer persona, an `accepted` with a
+judgement-shaped trigger, an `accepted` the owner never confirmed, and a half-measure previously
+exempted by C16 on the strength of a planned fix. A patch number would tell adopters the opposite
+of the truth.
 
 **This release is a remediation.** v1.4–v1.6 were written and tagged in one evening; an
 independent adversarial review of that delta found four blocking defects and returned *not safe to
@@ -74,6 +76,14 @@ rather than quietly fixed, because the pattern is the finding.
   decision entries for criteria that do not apply to it. The new table also states that a Base
   Workspace is in scope on the same terms as any other class, and that structural inapplicability
   goes in the column, never through `accepted`.
+  **T4 is `All`, and deliberately so** — caught by the re-review of this release, in the fix
+  itself. Scoping the manifest criterion by whether the Workspace carries external tools gates it
+  on the self-assessment Mode C is *defined* by getting wrong: a Workspace whose author believes
+  it uses none marks `n-a`, and the criterion that would have surfaced the tool never runs. The
+  host application's bundled tools are also present in every Workspace, so T4's population is
+  never empty. **Correctly removing manufactured noise for tool-free Workspaces manufactured a
+  blind spot on the one criterion that must not be scoped by what the author already knows** —
+  a different failure from the permissive halves above, and worth recording as its own shape.
 
 ### Fixed — two personas from the same release disagreed on the rule the release existed to propagate
 
@@ -129,7 +139,17 @@ Carried deliberately, to keep this diff small enough to review exactly. Each is 
 - **The upgrade banner still has no v1.3 path.** v1.3 is the last version published and adopted
   before v1.4–v1.6 landed together, so the most likely upgrader is the one it does not address.
   v1.4's entry also never tells a reader to re-check an audit, despite adding nine new things to
-  score.
+  score. **The banner was rewritten in this release, which was the free moment to add it** — the
+  cost of fixing it goes up from here.
+- **The Engineer persona routes to two different places**, and the Card — the sanctioned target —
+  can legitimately omit C14's four conditions, because they were not given the do-not-compress
+  protection the verdicts section just got. It fails loudly rather than silently (the bullet
+  states the count, so an Engineer who cannot find the other two knows to ask), which is why it
+  is not blocking. The fix is one more line in `IMPLEMENTATION.md` §2.
+- **The T-block cites §1's "plus" clause for something that clause does not say.** The plus clause
+  admits *SOP sections a Charter criterion depends on*; T1–T5 are rubric criteria, so what
+  actually puts a Base in scope is the new Class column itself. The fix touches §1's scope
+  strings, and a structural edit there earns its own adversarial read rather than riding along.
 - **C13's headline is broader than T1.** C13 says *a tool the machine already has*; T1 says
   *byte-identical to one already on `PATH`*. A deliberately pinned build — SOP-7 §9's own worked
   example of a legitimate pin — violates the first and passes the second.
