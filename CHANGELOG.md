@@ -11,6 +11,139 @@ version.
 
 ---
 
+## [v1.7] — 2026-07-28
+
+### Tightens conformance — re-score C14 exceptions and `accepted` verdicts
+
+No artifact you created changes name or location. **But an audit that passed under v1.6 may not
+pass now**, which is why this is a minor release and not a patch: three of the four fixes below
+turn something that passed into something that fails. A patch number would tell adopters the
+opposite of the truth.
+
+**This release is a remediation.** v1.4–v1.6 were written and tagged in one evening; an
+independent adversarial review of that delta found four blocking defects and returned *not safe to
+adopt as-is*. All four are fixed here, along with the two non-blocking findings that share their
+root cause. **Every one of the four sat in a rule's remedy, exception or propagated copy — none in
+a prohibition.** That is the permissive-half shape this Standard names twice (SOP-7 §11, C14), and
+the release process reproduced it three times in one evening on its own newest text. Recorded here
+rather than quietly fixed, because the pattern is the finding.
+
+### Fixed — the exception that swallowed its own criterion
+
+- **C16's escape clause no longer exempts anyone on the strength of an intention.** It read: *if
+  full implementation is genuinely on the table, this criterion does not apply to you.* C16's
+  target population is people who installed half a control — a population that almost universally
+  believes full implementation is on the table, because that belief is why they stopped halfway
+  rather than declining. The clause handed them an exemption keyed on intent, with no test, one
+  release after v1.5 established at length that intent-shaped conditions are exactly the ones that
+  mean nothing. It also nullified the operative remedy directly above it (*if the half-measure is
+  already installed, remove it*).
+  **Now:** *on the table* means owned, scheduled and dated by a named person — the same bar as a
+  `blocked` unblocker — **and the criterion still applies until the fix lands.** The exemption
+  became a priority instruction, which is what it was always trying to be: price the full
+  implementation first, and take the half-measure out in the meantime.
+
+### Fixed — `accepted` lost its bar on the way into the derived documents
+
+- **`accepted`'s re-raise condition now carries the third-party-observable test everywhere.**
+  `STANDARD.md` §11 declares the `accepted` and `blocked` bars *identical*. Both derived documents
+  carried `blocked`'s verbatim — including v1.5's who-must-act half — and dropped `accepted`'s
+  entirely. The weaker copy landed on the **self-exemption** verdict, the one that lets a Workspace
+  decline a criterion outright, so Staff working from either document would accept *"revisit if
+  circumstances change"* — which the Standard itself names as the *designed-around risk*
+  anti-pattern. Fixed in `IMPLEMENTATION.md` §3 and, structurally, in both personas (below).
+- **`IMPLEMENTATION.md` §1 gains a fourth human decision: confirm anything marked `accepted`.**
+  The human's job listed a `blocked` counterpart and no `accepted` one, so a Staff member could
+  self-issue a decline that never surfaced to the owner — while the Standard says of `accepted`
+  that *the owner has priced it*. If nobody showed the owner the price, it was not priced.
+
+### Fixed — a Base Workspace could not satisfy C14's exception
+
+- **§1's class table no longer scopes a class narrower than the Charter it admits.** The Base row
+  read *Charter + SOPs 3–5 only*. The Charter is now C1–C16, so a Base Workspace is bound by C14 —
+  but C14's exception condition 3 discharges in the tools manifest, defined in SOP-7, which is §10.
+  The artifact that satisfies the condition was out of scope for the class the criterion binds, so
+  **C14 was absolute for every Base Workspace** — precisely the state its exception exists to
+  prevent, and the state C14's own text says teaches readers a rule is aspirational.
+  **Now:** the row reads *plus any SOP section a Charter criterion in scope depends on*, stated as
+  a general rule rather than a patch for SOP-7, with the recurrence check written down: when you
+  add a Charter criterion, ask whether every class bound by it has access to what discharges it.
+- **T1–T5 gain the Class column every other rubric criterion has.** They shipped in v1.4 as a
+  headerless bullet list between two rules, while §14 routes class-inapplicability *through* that
+  column — so a Workspace with no external tools had nowhere to record that and was sent to write
+  decision entries for criteria that do not apply to it. The new table also states that a Base
+  Workspace is in scope on the same terms as any other class, and that structural inapplicability
+  goes in the column, never through `accepted`.
+
+### Fixed — two personas from the same release disagreed on the rule the release existed to propagate
+
+- **The Engineer persona taught a two-of-four C14 exception.** Its new *External tools* section
+  described conditions 1 and 3 and omitted 2 (*do not treat this as a pattern to copy* — the
+  condition that stops the exception propagating) and 4 (*its absence fails loudly and by name*).
+  T2 is unambiguous that an exception missing **any** of the four is a fail, so an Engineer
+  following the persona faithfully built an exception the Architect auditing the same Workspace
+  would fail. Not a drift risk: wrong on the day it shipped.
+  **Now:** the bullet routes to C14 for the enumeration, states that all four must hold, and keeps
+  only the two that are genuinely the code author's — the proof recorded as the runnable test that
+  cancels the exception, and absence failing loudly and by name. Those two fire on opposite events
+  and the previous text conflated them.
+
+### Fixed — the root cause of both propagation defects
+
+- **The verdict set now has an authored home in the agent-facing chain.** `IMPLEMENTATION.md` §2's
+  Card shape had no verdicts section at all, so when v1.5 and v1.6 needed to propagate the verdict
+  semantics they had nowhere to route and copied instead — into a persona whose own second line
+  says *read it; do not restate it*. C5 predicts the rest: any rule stated twice will diverge, and
+  the only question is when. The answer here was *at ship* — two of the four blockers above are
+  that divergence, present in the tag.
+  **Now:** `## Verdicts and their obligations` is a required Card section, carrying all seven
+  tokens and, for the four with an obligation, the obligation *and its quality bar*. Both persona
+  blocks are reduced to a route plus what is genuinely persona-specific: for the Architect, that
+  filling the field does not discharge the obligation and that `accepted` is not theirs to issue
+  alone; for the Engineer, the two conditions that are implemented in code. **This removes the
+  divergence class rather than patching its two instances** — which is why it shipped with the
+  blockers rather than after them.
+
+### Fixed — three unmarked local extensions
+
+- **SOP-3's `Revisit if:` and SOP-7 §2's manifest claim now carry provenance notes**, and §15's
+  list is extended from two claims to five. The Standard's headline virtue is that it marks the
+  claims it cannot source; these were the two it did not, and they are load-bearing — v1.5 built
+  its entire conformance tightening on the third-party-observable test and v1.6 propagated it into
+  two personas, all on an unlabelled extension. `CITATIONS.md` §1a is blunt about both: SP 800-137
+  *does not* support the third-party-observable test, and RA-7 requires a justification **and
+  nothing further** — no revisit condition, no review date, no trigger.
+  This also makes v1.4's *Evidence* sentence true. It claimed three local extensions were *marked
+  as such*; only C16's was.
+
+### Known, unfixed
+
+Carried deliberately, to keep this diff small enough to review exactly. Each is real:
+
+- **`?`'s decay to `no` contradicts unchanged §11 text three lines above it** — which says scoring
+  `no` for lack of evidence *manufactures a gap that is not there* — and converts an assessment
+  fact into a Workspace fact, which the same passage insists `?` categorically is not. It is also
+  not checkable from the Workspace: *"survives two audits"* and *"carry it forward with its age"*
+  need an audit-history artifact, and §3's table has no row for one. **This needs a decision about
+  what `?` decays *to*, not an edit.**
+- **The upgrade banner still has no v1.3 path.** v1.3 is the last version published and adopted
+  before v1.4–v1.6 landed together, so the most likely upgrader is the one it does not address.
+  v1.4's entry also never tells a reader to re-check an audit, despite adding nine new things to
+  score.
+- **C13's headline is broader than T1.** C13 says *a tool the machine already has*; T1 says
+  *byte-identical to one already on `PATH`*. A deliberately pinned build — SOP-7 §9's own worked
+  example of a legitimate pin — violates the first and passes the second.
+- **The Engineer's *resolve, do not vendor* check cannot be executed as written.** It says check
+  by hash, not by name and version; you cannot hash a copy you have not obtained yet.
+- **v1.5's externality test narrows `blocked`'s domain in a solo Workspace** — where the actor is
+  you by default — and is disclosed as a wording bar rather than as a narrowing.
+- **C1a/R5's authorship-vs-tuning overreach**, open since v1.3 and now four releases old.
+- Cosmetic: the three newest CHANGELOG headings are undefined reference links, `STANDARD.md` has a
+  doubled *SOP-7 SOP-7 §5* token and four doubled horizontal rules, and `CITATIONS.md`'s scope line
+  still says *SOP-1 through SOP-6*.
+
+---
+
 ## [v1.6] — 2026-07-27
 
 ### Propagation only — no normative text changed

@@ -24,10 +24,14 @@ Point any capable Staff member at this runbook. They will produce **two things**
 2. **A plan** — what they propose changing in a given Workspace, with the cost of each item, and an
    explicit list of what they are *not* recommending.
 
-**Your job is three decisions**, none of which require reading the Standard:
+**Your job is four decisions**, none of which require reading the Standard:
 
 - Approve, trim, or reject items on the plan — individually, not wholesale.
 - Say when something they flagged as `blocked` is worth unblocking.
+- **Confirm anything they marked `accepted`.** That verdict declines a criterion outright and
+  leaves the gap open on purpose. It is a risk *you* are taking, not one they can take on your
+  behalf — and the Standard's own wording for it is that *the owner has priced it*. If nobody
+  showed you the price, it was not priced.
 - Tell them when they are over-engineering. *"That feels like more than this needs"* is legitimate
   and sufficient feedback; the Standard explicitly agrees with you by default.
 
@@ -113,10 +117,30 @@ Derived from: Workspace Standard <version> on <date>
 
 ## Absolutes (never relaxed)
 ## Classify: Project / Pipeline / Base — and what each excludes here
+## Verdicts and their obligations
 ## Artifact triggers — create X when Y is already true
 ## Criteria, by layer — with anything excluded here marked and why
 ## When not to apply this
 ```
+
+**`## Verdicts and their obligations` is not optional, and it is the one section to copy rather
+than compress.** It carries all seven tokens — `yes` / `partial` / `no` / `n-a` / `blocked` /
+`accepted`, plus `?` — and, for the four that carry an obligation, the obligation *and its
+quality bar*, because in each case the bar is the whole control:
+
+- **`blocked`** — what would unblock it: something a third party could notice, and **someone
+  other than you who has to act**. If the actor is you, it is backlog, not `blocked`.
+- **`accepted`** — the re-raise condition, on the same third-party-observable terms, recorded as
+  a decision entry and **confirmed by the human**.
+- **`?`** — what evidence would settle it, **who will obtain it**, its age carried forward, and
+  decay to `no` after two audits. Not available for a criterion you find inconvenient.
+- **`n-a`** — a claim that the failure mode does not exist here, which is a claim about the
+  Workspace and not about your familiarity with it.
+
+**This section exists so that no other agent-facing document has to restate it.** C5: any rule
+stated twice will diverge, and the verdicts are the most-copied rules in the set — the personas
+route here rather than carrying their own copy. If you compress a bar out of the Card, you have
+not simplified the Card; you have deleted the control from every document downstream of it.
 
 **Then route it.** Add a line to this Workspace's `library.md`:
 `- IF designing, auditing or building a Workspace → read [[Workspace Criteria Card]]`
@@ -144,12 +168,16 @@ exact artifact C1a warns about.**
 Pick one Workspace. Do **not** apply the card everywhere at once.
 
 1. **Classify it.** Say which class and why. The class decides what is even in scope.
-2. **Score it** against the card, by layer.
+2. **Score it** against the card, by layer. The bars below are the Card's *Verdicts and their
+   obligations* section applied — that section is where they are authored, and where to change
+   them if the Standard moves. Restated here only because this is the step where they bite.
    - Mark **`blocked`** for anything needed but impossible here, **with what would unblock it** —
      naming something a third party could notice, and someone other than you who has to act. If
      the unblocker is your own milestone, it is a backlog item, not `blocked`.
    - Mark **`accepted`** for anything needed, understood, and deliberately not done — **with the
-     condition that would make you revisit it**, recorded as a decision entry. An accepted
+     condition that would make you revisit it**, recorded as a decision entry, and **confirmed by
+     the human** (§1). The condition is held to the same bar as an unblocker: something a third
+     party could notice without asking you. *"When circumstances change"* is not one. An accepted
      criterion with no stated trigger is a `no` wearing better clothes.
    - Mark **`?`** for anything you cannot evidence, saying what would settle it **and who will
      obtain it**. `?` is not a verdict and not terminal: carry it forward with its age, and a `?`

@@ -71,8 +71,9 @@ Every source behind the Standard, with a confidence mark per entry, the claims t
 external citation, and the places the Standard overreaches what its sources actually measured.
 
 **You already adopted an earlier version** → [CHANGELOG.md](CHANGELOG.md)
-**Current release: v1.3.** Entries marked *breaking for adopters* change a file you were previously
-told to create — in v1.3, `CLAUDE.md` became `AGENTS.md`.
+**Current release: v1.7.** Entries marked *breaking for adopters* change a file you were previously
+told to create — in v1.3, `CLAUDE.md` became `AGENTS.md`. Entries marked *tightens conformance*
+mean an audit that passed under the previous version may not pass now — v1.5 and v1.7 both do.
 
 **You want a Staff member built for this work** →
 [Workspace Architect](runbooks/architect-build-runbook.md) ·

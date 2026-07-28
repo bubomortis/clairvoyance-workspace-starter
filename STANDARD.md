@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.6 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.7 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).
@@ -9,10 +9,21 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-**Upgrading from v1.4?** No artifact you created changes name or location. But v1.5 **tightens
-conformance**: an audit that passed with an unblocker reading *"when we have time"* does not pass
-now, and `?` rows acquire an owner, an age, and a decay to `no`. Re-check any audit you are still
-relying on. Full history in [CHANGELOG.md](CHANGELOG.md).
+**Upgrading from v1.4, v1.5 or v1.6?** No artifact you created changes name or location. But two
+releases **tighten conformance**, so re-check any audit you are still relying on:
+
+- **v1.5** — an audit that passed with an unblocker reading *"when we have time"* does not pass
+  now, and `?` rows acquire an owner, an age, and a decay to `no`.
+- **v1.7** — **re-score every C14 exception and every `accepted` from a v1.6 audit.** An exception
+  now passes only with all four conditions; the Engineer persona shipped in v1.6 taught two of
+  them, so anything built from it is a violation rather than an exception — check specifically for
+  the missing *do not copy this pattern* marking and the missing *fails loudly and by name*.
+  An `accepted` now needs a re-raise condition a third party could notice without asking you —
+  *"revisit if circumstances change"* no longer passes — **and the owner has to confirm it.**
+  Separately, C16 stops exempting a half-measure on the strength of an intention to finish it, and
+  a Base Workspace that was told C14 applied absolutely can now discharge its exception.
+
+Full history in [CHANGELOG.md](CHANGELOG.md).
 
 A practical standard for setting up and operating Clairvoyance Workspaces where AI Staff do
 sustained work. It exists because most Workspace problems are not intelligence problems — they
@@ -65,13 +76,22 @@ meet produces noise and teaches people to ignore the rubric.
 |---|---|---|
 | **Project** | A human-designed directory for a body of work. | Full Standard |
 | **Pipeline** | A Project that also runs recurring automated throughput. | Full Standard + SOP-6 |
-| **Base** | Your app's own user-data root, with a Workspace registered on top. | Charter + SOPs 3–5 only |
+| **Base** | Your app's own user-data root, with a Workspace registered on top. | Charter + SOPs 3–5, **plus any SOP section a Charter criterion in scope depends on** — currently SOP-7 §5, wherever a C14 exception exists |
 
 **Why the Base class exists.** In a Base workspace the folder layout is app-generated, durable
 content is interleaved with runtime state, files are rewritten at runtime, and it is usually not
 a version-controlled repository. You cannot tidy that tree — deleting an "unused" folder can break
 the app. **Waive** structure, naming and hygiene criteria there. **Do not waive** decision records,
 review gates, or honest health signals.
+
+⚠️ **A class scope cannot be narrower than the Charter it admits.** If a Charter criterion in
+scope discharges through an artifact defined in an SOP, that SOP section is in scope too — read
+the "plus" clause above as the general rule, not as a special case for SOP-7. Scope the class
+narrower than the criterion's dependencies and the criterion does not become lighter; it becomes
+**absolute**, because the only thing that could satisfy it has been ruled out of scope. That is
+how a rule with a deliberate exception silently loses it, and it is the failure mode to check for
+whenever a new Charter criterion is added: **does every class bound by it have access to what
+discharges it?**
 
 ---
 
@@ -674,8 +694,13 @@ on reading as coverage to whoever finds it next, whatever the decision log says;
 only honest once the thing it declines is gone.
 
 ⚠️ **This is a comparison against the half-measure, not against doing it properly.** If full
-implementation is genuinely on the table, that is the option to price first and this criterion
-does not apply to you. And the question is never **only** *"is this a real risk?"* — almost
+implementation is genuinely on the table, that is the option to price first. But *on the table*
+means **owned, scheduled and dated by a named person** — the same bar as a `blocked` unblocker,
+and for the same reason: a condition shaped like an intention (*"when we have time"*) is exactly
+the one that never fires. **Until it lands, this criterion still applies and the half-measure
+still comes out.** A scheduled fix does not stop an installed half-control reading as coverage in
+the meantime, and the fix is the thing most likely to slip. Intent is not coverage. And the
+question is never **only** *"is this a real risk?"* — almost
 everything a rubric surfaces is, and that answer alone settles nothing in either direction. It is
 *"what does this cost, what does it buy, and what would change the answer?"*
 
@@ -818,6 +843,17 @@ or re-tries a known failure.
 against. A re-raise condition must name an event a third party could notice without asking you.
 If checking whether it has fired requires your judgement, it is not a trigger: *"revisit if
 circumstances change"* is not a re-raise condition.
+
+> **Provenance note, stated because this Standard demands it of others.** Both halves of that
+> paragraph are **local extensions**. The established practice (NIST SP 800-53 RA-7) requires a
+> risk acceptance to carry a justification **and nothing further** — no revisit condition, no
+> review date, no trigger. Requiring `Revisit if:` at all is ours. So is the
+> **third-party-observable test**: the nearest source (NIST SP 800-137) supports continuous
+> monitoring of accepted risk but says nothing about who must be able to notice the trigger.
+> Both are argued from the *designed-around risk* failure mode (§12), not cited. **Do not present
+> either as established practice** — adopt them because the reasoning holds. The same test is
+> reused for `blocked`'s unblocker and for `?`'s evidence statement in §11, and inherits this
+> label wherever it appears.
 
 **Supersede; never edit in place.** When a decision changes, mark the old entry `Superseded by`
 with a date and write a new one. Editing history destroys the reasoning trail you built the record
@@ -1041,6 +1077,14 @@ Discoverability is three distinct problems. Naming them prevents building the wr
 | **A** | Precedent handed the author a path; they never searched | **Convention** |
 | **B** | The author searched, and the tool genuinely was not discoverable | **Shared directory on PATH** |
 | **C** | The author never knew the tool existed, so never searched | **Manifest** |
+
+> **Provenance note, stated because this Standard demands it of others.** The Mode C row — *that
+> a manifest improves discovery* — is a **local extension**. A deliberate search found no source
+> establishing that a tool inventory reduces re-solving, and the structural argument below is
+> what carries it, not evidence. The three-mode split itself is a classification of three
+> observed incidents on one machine; it is offered because it makes the *fix* fall out, not
+> because the population is large enough to generalise from. Adopt it because the reasoning
+> holds.
 
 **The claim that matters here is structural, not statistical — take this rather than the counts:**
 
@@ -1574,6 +1618,27 @@ merely appearing in it.
 
 ---
 
+**External-tool layer**
+
+Scored on the same terms as the six layers above. Note that four of the five are scoped by what
+the Workspace *does* rather than by which class it is — a Project with no external tools and a
+Base with none are equally out of scope, and both say so in the Class column.
+
+| # | Criterion | Class |
+|---|---|---|
+| T1 | No vendored byte-identical copy | All *that carry or resolve external tools* |
+| T2 | No sibling-Workspace binary resolution | All *that carry or resolve external tools* |
+| T3 | Elevated code resolves by absolute path, to a target no unprivileged principal can write | All *that run anything elevated* |
+| T4 | Tool manifest exists, archived, covers bundled tools | All *that carry or resolve external tools* |
+| T5 | Shared tool locations sited outside backup and ACL-hardened | All *that own a shared tool location* |
+
+⚠️ **A Base Workspace is in scope for these on the same terms as any other class**, per §1's
+"plus" clause — a Base that resolves external tools or runs elevated code scores T1–T5, and one
+that does neither marks them in this Class column and owes no decision record (§14). Do **not**
+route structural inapplicability through `accepted` or a SOP-3 entry; that is what the column is
+for. Note that T3 is the narrow case: `n-a` there is a claim about the host, not about the
+auditor — see its own note below.
+
 - **T1** — No Workspace vendors a binary that is byte-identical to one already on `PATH`.
 - **T2** — No script **or routing index** resolves a binary through another Workspace's directory, at
   any resolver tier — **except** under the four-part exception in C14 (unreachability proven, and
@@ -1725,10 +1790,16 @@ the full text was read.*
 **Downgraded — dead source.** One frequently-cited article on silent cron failure returns a hard
 404. The argument it supported is independently sourced and survives; the citation does not.
 
-**Labelled as local, not cited.** C8 (record execution mode) and SOP-6 (folder-as-state-machine)
-have **no authoritative external backing**. Both are marked in place rather than dressed up. A
-deliberate search found no established workspace-layout practice for AI agents at all — if a
-standard tells you otherwise, ask it for the citation.
+**Labelled as local, not cited.** Every claim here with **no authoritative external backing** is
+marked in place rather than dressed up, and this is the full list: C8 (record execution mode),
+SOP-6 (folder-as-state-machine), SOP-7 §2's Mode C (that a manifest improves discovery), SOP-3's
+`Revisit if:` requirement, the **third-party-observable test** applied to re-raise conditions,
+unblockers and `?` evidence statements, and C16's ranking (that a half-measure is worse than a
+decline). The two verdict-bar entries are the ones most worth naming, because the nearest sources
+actively stop short of them: RA-7 asks a risk acceptance for a justification and nothing further,
+and SP 800-137 says nothing about who must be able to notice a trigger. A deliberate search found
+no established workspace-layout practice for AI agents at all — if a standard tells you
+otherwise, ask it for the citation.
 
 **Two headline studies genuinely disagree**, and anyone citing one is giving you half the picture:
 one measured *efficiency* on focused changes and found context files produced meaningfully less

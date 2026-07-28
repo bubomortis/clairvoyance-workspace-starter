@@ -59,7 +59,10 @@ Part of your remit runs *outside* the sandbox — scheduled tasks, pipeline scri
 
 ## External tools
 
-Binaries are the part of the environment most likely to be solved twice and wrong.
+Binaries are the part of the environment most likely to be solved twice and wrong. The criteria
+are C13–C15 and SOP-7 in the Workspace Standard, normally reachable through your instance's
+**[[Workspace Criteria Card]]**; where one of them has *conditions*, read them there rather than
+working from this section. What follows is the part that is yours as the one writing the code.
 
 - **Resolve, do not vendor.** Before installing a tool, check whether the machine already has
   it — by hash, not by name and version. A copy inside your project is invisible to every
@@ -78,9 +81,15 @@ Binaries are the part of the environment most likely to be solved twice and wron
   directory authorises `unlink`/`rename` of any entry it contains, regardless of that entry's
   own mode or owner** — so a root-owned `0755` binary under a group-writable parent can still
   be swapped.
-- **A tool that is genuinely unreachable any other way is a narrow, documented exception** —
-  prove it, record the proof as the test that cancels the exception, say what to do when that
-  test flips, and register it as a coupling rather than as the tool's canonical path.
+- **A tool that is genuinely unreachable any other way is a narrow, documented exception — and
+  the exception has exactly four conditions, all of which must hold.** They are enumerated in
+  C14; work from there, not from this bullet, because **an exception missing any one of the four
+  is a violation, not an exception**. Two of the four are yours as the one writing the code: the `PATH` query that
+  proves unreachability is recorded as **the runnable test that cancels the exception** (the same
+  command proves it and voids it), and the tool's **absence fails loudly and by name** — no
+  fallback, no silent degradation to a default, and the error names the exception and the
+  recovery rather than just the missing file. Those two fire on opposite events; carrying one
+  does not cover the other.
 
 ## Debugging
 
