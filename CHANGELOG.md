@@ -69,9 +69,13 @@ back `no` the first time they are asked.
   **The bound stops at one round because of where authority sits, not because persistence is
   improper** — both AHRQ's second stage (*"move up the chain of command"*) and the ACM Code's
   whistleblowing clause prescribe escalation, and both presume a chain above the person who decided.
-  A Workspace has none: NIST's RMF holds that the authorizing official *"is the only person who can
-  accept risk"*, and here that is the owner. Where such a chain does exist, those sources apply and
-  this bound does not. The rule also instructs you to **assume a reason you cannot see** — a choice that
+  A Workspace **generally** has none: NIST's RMF holds that the authorizing official *"is the only
+  person who can accept risk"*, and here that is the owner. **That last step is the Standard's own
+  structural claim, not NIST's** — RMF's authorizing official is itself accountable upward — and it
+  is marked as asserted in both claim-status registers, because it is what bounds the criterion to
+  one round. Where such a chain **does** exist, those sources govern escalation **to that
+  authority**; the one-round bound with the owner still holds, invoking it requires naming the
+  authority and the consequence, and the escalation is itself a decision-record entry. The rule also instructs you to **assume a reason you cannot see** — a choice that
   is wrong in general can be correct for the situation actually in hand, and recorded dissent is
   what lets you defer without needing the owner to justify themselves. **One boundary:** where the
   consequence lands on someone who cannot consent for themselves, it is not solely the owner's risk
@@ -106,9 +110,13 @@ Recorded rather than quietly corrected, because this file's premise is checkabil
   careful assessment — so the Code's limit is on the **groundedness** of a report, not its
   **frequency**. Quoting it for a count argued from a passage measuring quality of basis: the same
   error as the C1a/R5 authorship-from-tuning overread this project already carries. The gloss
-  *"repetition is not diligence"* is **gone**; the underlying norm — that repetition converts a
-  concern into pressure — is kept, restated in the Standard's own voice and **explicitly marked as
-  this Standard's claim rather than the ACM's**, with a note not to cite the Code for a count.
+  *"repetition is not diligence"* is **gone, and so is the norm behind it.** Keeping it restated in
+  our own voice was tried and abandoned: it contradicted the paragraph above, which says the bound
+  holds *"not because raising a concern twice is a fault."* If repetition converts a concern into
+  pressure, raising it twice **is** a fault, and the criterion cannot say both. **The authority
+  argument is the one that survives** — it is better grounded and needs no psychological claim about
+  repetition, so C18 no longer makes one. What remains is the instruction not to cite the Code for a
+  count.
 - **AHRQ's two-challenge rule governs C18's case after all.** Its second stage triggers on the
   **outcome** — *"if the outcome is still not acceptable… move up the chain of command"* — which is
   *heard and overruled*, exactly C18's situation, and it prescribes escalation. An earlier draft
@@ -116,10 +124,20 @@ Recorded rather than quietly corrected, because this file's premise is checkabil
   rely on that trigger distinction and to **avoid** the domain argument. That was backwards: the
   domain argument is the one that survives, because it travels with the chain-of-command apparatus
   the rule presumes and a Workspace lacks.
-- **§1's standing check gains a second half — ranges and counts.** Four consecutive releases have
-  shipped a stale enumeration; this one shipped `T1–T5` in the clause that scopes Base Workspaces
-  into the tooling layer, which would have let a Base with an elevated task cite it to skip T6. A
-  stale range is normative, not cosmetic.
+- **§1's standing check gains a second half — ranges and counts, and now a named file list.** Five
+  consecutive releases have shipped a stale enumeration. This one shipped `T1–T5` in the clause that
+  scopes Base Workspaces into the tooling layer — which would have let a Base with an elevated task
+  cite it to skip T6 — and then, in the very commit that added the check, shipped a stale
+  `34-criterion` count **inside the prompt block the Architect runbook hands to an agent**. A count
+  in a prompt block is a scoring instruction, not prose: following it literally drops the newest
+  criterion off the end. *"Every place"* has failed five times as an instruction, so the check now
+  names the files.
+- **The chain-above-the-owner exception was ungated when first written, and is now gated.** As
+  drafted it read *"those sources apply and this bound does not"* — trivially assertible on any
+  managed machine, disapplying the bound wholesale rather than narrowing it, and licensing going
+  over an owner's head with no requirement to name anyone, record anything, or tell them. It was the
+  same defect as the third-party clause hardened three paragraphs later in the same commit, and
+  wider. Found on re-review of the fix commit, which is the argument for reviewing fix commits.
 
 ---
 

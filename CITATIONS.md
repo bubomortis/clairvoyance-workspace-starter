@@ -350,7 +350,9 @@ from mechanism and one recorded case, and the Standard says so.
    *Supplies:* **the obligation half only** — a computing professional *"has an additional obligation
    to report any signs of system risks that might result in harm"*, and §2.5 requires *"comprehensive
    and thorough evaluations… including analysis of possible risks."*
-   ⚠️ **It does NOT supply the limit half, and an earlier draft of this file claimed it did.** The
+   ⚠️ **It does NOT supply the limit half, and an earlier draft of this file claimed it did** — that
+   draft called the "capricious" line *"the one that bounds escalation"*, which names the error
+   precisely: the Code bounds nothing of the sort. The
    full passage runs: *"…report any signs of system risks that might result in harm. **If leaders do
    not act to curtail or mitigate such risks, it may be necessary to 'blow the whistle' to reduce
    potential harm.** However, capricious or misguided reporting of risks can itself be harmful.
@@ -497,6 +499,7 @@ Listed because a citation list that hides its gaps is doing the thing C2 warns a
 | **C17** — a privilege *outlives its justification* and nothing re-checks it | One recorded instance (§1b). The least-privilege principle itself **is** cited; this failure mode is not, and the two must not be conflated |
 | **C17** — reducing privilege can remove the ability to reverse it | One recorded instance, local, reproduced |
 | **C18** — the ratchet, and the prerequisite framing | One recorded case (§1b). The cost-signal reading of resistance **is** cited; the sequencing failure is not |
+| **C18** — a Workspace has no chain of command above its owner | **Structural claim, asserted.** NIST (§1b entry 5) supplies that acceptance is a *single role's* call; it does not supply *"and nobody is above that role"* — RMF's own authorizing official is accountable upward. Stated as *generally*, with an explicit exception clause. This premise is what bounds C18 to one round, so it is the load-bearing uncited claim in the criterion |
 | **SOP-1, SOP-3, SOP-5** and most of **SOP-4** | Survey of five production Workspaces |
 
 The corpus's own **thin-evidence flag** belongs here too: "runbook-as-code" and "intelligent

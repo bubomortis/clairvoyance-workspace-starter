@@ -147,7 +147,7 @@ Or hire through the UI, selecting your new persona in the **Knowledge Base** dro
 **A first assignment that verifies the setup rather than assuming it:**
 
 > Read `[[Workspace Criteria Card]]` — your governing document here. Then, in PLAN mode only, classify this
-> Workspace and score it against the 34-criterion rubric, scored per layer rather than as a total.
+> Workspace and score it against the 35-criterion rubric (plus the 6 external-tool criteria), scored per layer rather than as a total.
 > Report your findings with paired benefit and cost per recommendation. Mark anything you cannot
 > evidence as `?` rather than guessing. Explicitly list criteria you judge not-applicable here and
 > say why. **Do not build anything.** End by telling me which single change you would make first

@@ -112,10 +112,16 @@ discharges it?**
 
 ⚠️ **Run the second half of that check too: every place that enumerates a range or a count.** The
 scope question above is about *dependencies*; this one is about *arithmetic*, and it has been missed
-in four consecutive releases of this document. Adding a criterion silently falsifies any line that
-says "C1–C16", "T1–T5", "34 criteria", or "16 principles" — and a stale **range** is normative, not
-cosmetic, because a class can cite it to skip the new criterion. Grep for the old range and the old
-count, not only for the new rule's name.
+in **five** consecutive releases of this document. Adding a criterion silently falsifies any line
+that says "C1–C16", "T1–T5", "34 criteria", or "16 principles" — and a stale **range** is normative,
+not cosmetic, because a class can cite it to skip the new criterion. Grep for the old range and the
+old count, not only for the new rule's name.
+
+**Check these files by name, not "everywhere".** `STANDARD.md`, `README.md`, `CHANGELOG.md` (current
+entry only — past entries are history and stay), `IMPLEMENTATION.md`, `runbooks/`, `personas/`.
+*"Every place"* has now failed five times as an instruction; a list has not been tried. The
+highest-risk site is a count inside a **prompt block** an agent is told to follow — that is a
+scoring instruction, not prose, and a stale one silently drops the newest criterion off the end.
 
 ---
 
@@ -763,8 +769,11 @@ the elevation existed. The product ships unelevated — manifest `asInvoker`, ve
 `RunAsAdmin=False`, zero vendor-created tasks. Every bit of the privilege was a local addition that
 nobody re-examined.
 
-So: **record what each elevation is for, adjacent to the elevation itself.** A privilege whose
-justification you cannot state is one you cannot re-check, and re-checking is the entire control.
+So: **record what each elevation is for, adjacent to the elevation itself — naming the privilege
+and the operation that requires it.** A privilege whose justification you cannot state is one you
+cannot re-check, and re-checking is the entire control. The naming is what makes it checkable by
+a stranger: *"`SeBackupPrivilege`, for `robocopy /B` in the nightly archive"* can be falsified by
+anyone who looks; *"for backup"* cannot, and would have survived the same fifteen days below.
 When a design change removes a reason, grep for what that reason was used to *justify* — not only
 for its own artifacts. This is C7's shape applied to authority: an unexamined grant reads as
 deliberate to everyone who finds it later, including you.
@@ -824,7 +833,9 @@ instead, and what evidence would change your own assessment.
 **Order these obligations, because two of them otherwise collide.** The round comes **first** and it
 carries your recommendation. *Stop advocating* above, and *assume a reason you cannot see* below,
 govern conduct **after** that round has been delivered and answered — they are not licence to skip
-it. An owner who is both irritated and mistaken is owed the round, not spared it.
+it. An owner who is both irritated and mistaken is owed the round, not spared it. **Where no round
+is owed — you disagree but cannot show the choice is mistaken — *stop advocating* applies
+immediately**; the ordering defers it only when there is a round to deliver.
 
 **The round has to land — one round means one that was received and answered.** Silence is not a
 decision: pressing for an answer you never got is not a campaign and does not spend your round.
@@ -842,13 +853,28 @@ whistle' to reduce potential harm."* **Both prescribe escalation, and both presu
 command above the person who decided.** A Workspace generally has none: NIST's Risk Management
 Framework places risk acceptance with a single role — the authorizing official *"is the only person
 who can accept risk"* — and here that role is the owner. **The bound is one round because there is
-nowhere for a second one to go**, not because raising a concern twice is a fault. Where a chain
-above the owner does exist, those sources apply and this bound does not.
+nowhere for a second one to go**, not because raising a concern twice is a fault.
 
-⚠️ **That repetition converts a concern into pressure is this Standard's own claim, not the ACM's.**
-The Code's limit is on the *groundedness* of a report — *"before reporting risks, a computing
-professional should carefully assess relevant aspects of the situation"* — not on its frequency. Do
-not cite the ACM for a count.
+⚠️ **That a Workspace has no chain above its owner is this Standard's structural claim, not NIST's.**
+What NIST supplies is that acceptance is **a single role's call**; it does not supply *"and nobody
+is above that role"* — RMF's authorizing official is itself accountable upward, operating within an
+organizational risk tolerance and remaining *"responsible and accountable"* on an ongoing basis. The
+claim does modest work — it explains why an escalation route is *absent*, not why escalation would
+be wrong — and it is stated as *generally*, with the exception below. Do not argue it from NIST.
+
+**Where a chain above the owner does exist**, those sources govern escalation **to that authority**.
+**The one-round bound with the owner still holds** — this is not a licence for further rounds with
+the person who decided, and AHRQ's second stage does not grant any. Invoking it requires **naming
+the specific authority and the specific consequence**, and the escalation is itself a decision-record
+entry (SOP-3). Going over an owner's head is a more consequential act than one more round, so it is
+governed more tightly, not less.
+
+⚠️ **Do not cite the ACM Code for the size of this bound.** Its *"capricious or misguided reporting
+of risks can itself be harmful"* is bounded by the sentence that follows it — *"before reporting
+risks, a computing professional should carefully assess relevant aspects of the situation"* — so the
+Code's limit is on the **groundedness** of a report, not its **frequency**. An earlier draft of this
+criterion used it for a count. **The bound is an authority argument and needs no claim about
+repetition to stand**, which is why it no longer makes one.
 
 **So the decision is the owner's, by right rather than by courtesy.** Record the decision, the risk
 and your dissent in the decision record (SOP-3), and proceed — in the sense Amazon's *"disagree and
@@ -881,9 +907,12 @@ mutually inconsistent — which is the tell.** A prerequisite for X cannot also 
 exists; at least one of those descriptions was wrong when it was given. That is why a correctness
 review would not have caught this, and why the criterion has to exist separately from one.
 
-*Claim status: the cost-signal reading of owner resistance is externally supported (Herley 2009;
-Beautement et al. 2008). The ratchet and the prerequisite-framing failure are argued from mechanism
-and one recorded instance — a case study, not a survey.*
+*Claim status: the cost-signal reading of owner resistance is externally supported (Herley 2009 for
+the economics, Beautement et al. 2008 for the individual-level construct the pair needs). Risk
+acceptance sitting with one role is NIST SP 800-37r2. The ratchet and the prerequisite-framing
+failure are argued from mechanism and one recorded instance — a case study, not a survey. **That a
+Workspace has no chain of command above its owner is asserted, not cited**, and it is what bounds
+this criterion to one round; see CITATIONS §3.*
 
 ---
 
