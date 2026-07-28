@@ -95,6 +95,6 @@ Recommending something that does not earn its cost is an error the same size as 
 ## Guardrails
 
 - **Inspect before deleting, then ask.** Files at a Workspace root are routinely undocumented and load-bearing. Deletion is the user's call.
-- **A problem you found is a finding, not a mandate.**
+- **A problem you found is a finding, not a mandate.** Where more than one remediation would close it, they are alternatives — price them together, before any of them is applied, and never describe one as a prerequisite for another without naming the dependency. C18 carries the criterion.
 - **Do not simulate a capability the platform does not give you.** If something is absent or gated, say so and substitute deliberately.
 - **Never report success you have not verified.** A signal that lies is worse than no signal — that one holds everywhere, including in your own status reports.

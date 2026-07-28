@@ -264,6 +264,143 @@ produced eleven citable sources and seven rejections, and the rejections are the
 
 ---
 
+## 1b. v1.9 — Least privilege, and how a control is proposed (C17, C18)
+
+**Compiled 2026-07-28. Same method as §1a and the same bar: every source below was fetched and
+read, and the quoted text was extracted from the retrieved document — not from an abstract, a
+landing page or a summary.** Metadata was cross-checked against two independent indexes (Crossref
+and OpenAlex/Semantic Scholar) before any source was fetched.
+
+⚠️ **Do not treat an HTTP 403 as a dead link.** Three ACM DOIs in this pass return 403 to a
+scripted fetch and are entirely live; the same misreading produced the 39 bogus DEAD verdicts
+described at the top of this file. Where the publisher blocked retrieval, the paper was located at
+its **workshop proceedings** instead (`nspw.org`), which is the authoritative copy for both NSPW
+entries below.
+
+### C17 — Lowest privilege that achieves the goal
+
+1. ● **Saltzer, J. H. & Schroeder, M. D. — "The Protection of Information in Computer Systems."**
+   *Proceedings of the IEEE* 63(9), 1975. `doi:10.1109/proc.1975.9939`
+   Read at the author's canonical copy: `https://web.mit.edu/Saltzer/www/publications/protection/Basic.html`
+   *Supplies:* the principle verbatim — *"**Least privilege:** Every program and every user of the
+   system should operate using the least set of privileges necessary to complete the job. Primarily,
+   this principle limits the damage that can result from an accident or error."*
+   ⚠️ Cite the `Basic.html` section, not the paper's landing page — the landing page carries the
+   abstract only, and the principles are one level down.
+2. ● **NIST SP 800-53r5 — AC-6, Least Privilege.**
+   Read from the machine-readable catalogue: `https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json`
+   *Supplies:* the extension from users to **processes**, which is the half C17 actually rests on —
+   *"applied to system processes, ensuring that the processes have access to systems and operate at
+   privilege levels no higher than necessary to accomplish organizational missions or business
+   functions."*
+
+**No external source supports C17's actual contribution.** Neither reference addresses privilege
+that *outlives its justification*, which is the failure C17 records and the reason the rule exists.
+That claim rests on one recorded instance and is marked as such in the Standard. The citations
+establish the principle, not the failure mode — do not let them launder the claim status.
+
+### C18 — Alternatives are priced together
+
+3. ● **Herley, C. — "So Long, and No Thanks for the Externalities: The Rational Rejection of
+   Security Advice by Users."** NSPW 2009. `doi:10.1145/1719030.1719050`
+   Read at `https://www.nspw.org/papers/2009/nspw2009-herley.pdf` (the ACM DOI returns 403 to
+   scripted fetch and is live in a browser).
+   *Supplies:* the reclassification of refusal as economics rather than obstruction — *"users'
+   rejection of the security advice they receive is **entirely rational** from an economic
+   perspective. The advice offers to shield them from the direct costs of attacks, but burdens them
+   with far greater indirect costs in the form of effort."*
+4. ● **Beautement, A., Sasse, M. A. & Wonham, M. — "The Compliance Budget: Managing Security
+   Behaviour in Organisations."** NSPW 2008. `doi:10.1145/1595676.1595684`
+   Read at `https://www.nspw.org/papers/2008/nspw2008-beautement.pdf`.
+   *Supplies:* the mechanism that makes an unnecessary control costly rather than merely unwelcome —
+   compliance is *"a finite resource that needs to be carefully managed"*, and *"individuals and
+   organisations place different values on the cost and benefits"* of security behaviours.
+
+**Neither source addresses the ratchet or the prerequisite framing.** They establish that owner
+resistance carries information and that compliance capacity is finite. The sequencing failure — two
+sufficient fixes applied in order, each retroactively justifying the other's redundancy — is argued
+from mechanism and one recorded case, and the Standard says so.
+
+### C18 — when the owner's choice looks wrong
+
+5. ● **NIST SP 800-37 Rev. 2 — *Risk Management Framework for Information Systems and
+   Organizations*.** `https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-37r2.pdf`
+   *Supplies:* where the authority to accept risk actually sits, which is what makes deferring to
+   the owner correct rather than merely polite — the authorizing official *"is the only person who
+   can accept risk"*, and is *"the only organizational official who can accept the security and
+   privacy risk to organizational operations, organizational assets, and individuals."* Also the
+   basis for recording it: risk acceptance is an explicit, documented decision, and under ongoing
+   authorization the official remains *"responsible and accountable for explicitly understanding and
+   accepting the risk."*
+6. ● **ACM Code of Ethics and Professional Conduct** (§1.2, §2.5). `https://www.acm.org/code-of-ethics`
+   *Supplies:* **both halves of the one-round bound.** The obligation — a computing professional
+   *"has an additional obligation to report any signs of system risks that might result in harm"*,
+   and §2.5 requires *"comprehensive and thorough evaluations… including analysis of possible
+   risks."* And the limit, which is the less-quoted half and the one that bounds escalation:
+   *"capricious or misguided reporting of risks can itself be harmful."*
+7. ○ **Bezos, J. — 2016 Letter to Shareholders.** Amazon.com Inc., filed as Exhibit 99.1.
+   `https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm`
+   *Supplies:* the disposition required after deferring — *"use the phrase 'disagree and commit'…
+   If you have conviction on a particular direction even though there's no consensus"* — and Bezos'
+   own worked example, *"I disagree and commit and hope it becomes the most watched thing we've ever
+   made."* ○ rather than ● because it is a management essay, not a standard; it names the posture
+   the Standard wants and supplies no evidence for it.
+   ⚠️ **Fetch from SEC EDGAR with a User-Agent carrying a contact address**, per SEC access policy —
+   a generic browser UA returns 403 and reads as a dead link.
+
+8. ● **AHRQ TeamSTEPPS — *Tool: Two-Challenge Rule*.** Agency for Healthcare Research and Quality.
+   `https://www.ahrq.gov/teamstepps-program/curriculum/mutual/tools/rule.html`
+   Corroborated at Loyola's TeamSTEPPS IPE module,
+   `https://stritch.luc.edu/lumen/meded/softchalkhdht/teamsteppsipe/mobile_pages/teamsteppsipe28.html`
+   *Supplies:* **the boundary of C18's one-round bound, by contrast rather than by agreement.** The
+   trigger is explicit and is not C18's — it applies *"if your initial assertion is **ignored**"*,
+   requiring the concern to be voiced *"at least two times to ensure that it has been heard"*, and
+   escalating to *"a stronger course of action"* only after that. **Being ignored and being overruled
+   are different situations.** C18 governs the second; this rule governs the first, which is why it
+   is not a counter-argument to the one-round bound and why C18 now says a round must be *received
+   and answered* to count.
+   ⚠️ **Cite this URL, not the pocket guide.** `…/instructor/essentials/pocketguide.pdf` now
+   **returns `200` while redirecting to a generic landing page** — a soft-404. An earlier pass in
+   this project read that as evidence the rule could not be sourced; it was a wrong URL, not a
+   missing document, and the correction came from the owner rather than from the search.
+   *Scope note, non-blocking:* the sources situate the rule in high-stakes real-time operational
+   domains — aviation and clinical care — by construction rather than by an explicit exclusion
+   clause. Rely on the trigger distinction above, which is stated in the source; do not lean on the
+   domain argument, which is inferred from context.
+
+### Rejected during the v1.9 pass — do not resurrect
+
+9. ❌ **Freedman, J. L. & Fraser, S. C. — "Compliance Without Pressure: The Foot-in-the-Door
+   Technique."** *JPSP* 4(2), 1966. `doi:10.1037/h0023552`
+   **Dropped on fit, not availability.** Foot-in-the-door concerns a small request preceding a
+   larger one. C18's failure was a mitigation **misdescribed as a prerequisite** — a different
+   mechanism. Citing it would repeat the C1a/R5 overread this file already records: arguing from
+   data that measures something adjacent to the claim.
+10. ⚠️ **Staw, B. M. — "Knee-Deep in the Big Muddy: A Study of Escalating Commitment to a Chosen
+   Course of Action."** *OBHP* 16(1), 1976. `doi:10.1016/0030-5073(76)90005-2`
+   Apt for the ratchet, and **not used.** No open-access copy exists via Unpaywall, OpenAlex or
+   Semantic Scholar; metadata is confirmed but the text was never retrieved. **Do not quote it
+   until someone has read it.** The same applies to Staw 1981 (`doi:10.2307/257636`) and Brockner
+   1992 (`doi:10.2307/258647`), both checked and both closed.
+11. ⚠️ **Adams, A. & Sasse, M. A. — "Users Are Not the Enemy."** *CACM* 42(12), 1999.
+   `doi:10.1145/322796.322806`
+   Live, paywalled, content not retrieved. Its argument is substantially covered by entries 3 and 4,
+   so it was cut rather than cited unread. Four verified sources beat six gestured at.
+12. ❌ **The "two-man rule" / dual control** (e.g. `https://williamhale.co.uk/two-man-rule-explained-how-dual-control-improves-access-control-security/`)
+   **Checked and excluded — different problem entirely.** Dual control requires two authorised
+   principals to jointly execute a sensitive *action*; it is an access-control mechanism, not a
+   protocol for handling disagreement about a decision. Named here only because the similar name
+   makes it a plausible wrong turn for the next reader.
+
+⚠️ **Method note — an empty search result is not evidence of absence.** DuckDuckGo served results
+for the first query of this pass and zero for every subsequent one; the harvester's *"tried 0
+sources"* is indistinguishable from *"no such paper"* without a control. Every empty result in this
+pass was re-run against a control query known to be indexed. The reliable sources were APIs
+(Crossref, OpenAlex, Semantic Scholar, Unpaywall) and direct proceedings URLs — scraping was the
+weakest link and the least necessary one.
+
+---
+
 ## 2. The SOPs
 
 The SOPs are **substantially thinner on external citation than the Charter**, and lean on the
@@ -320,6 +457,9 @@ Listed because a citation list that hides its gaps is doing the thing C2 warns a
 | **C7b** — PowerShell 5.1 `&&`, `-ErrorAction`, `$LASTEXITCODE` traps | Local, reproduced in-house |
 | **C8** — record execution mode | **Explicitly labelled a local extension.** A deliberate search found no authoritative source. Internal incident evidence only |
 | **C11** — address by stable ID | Survey: one sync tool duplicated a backup tree |
+| **C17** — a privilege *outlives its justification* and nothing re-checks it | One recorded instance (§1b). The least-privilege principle itself **is** cited; this failure mode is not, and the two must not be conflated |
+| **C17** — reducing privilege can remove the ability to reverse it | One recorded instance, local, reproduced |
+| **C18** — the ratchet, and the prerequisite framing | One recorded case (§1b). The cost-signal reading of resistance **is** cited; the sequencing failure is not |
 | **SOP-1, SOP-3, SOP-5** and most of **SOP-4** | Survey of five production Workspaces |
 
 The corpus's own **thin-evidence flag** belongs here too: "runbook-as-code" and "intelligent

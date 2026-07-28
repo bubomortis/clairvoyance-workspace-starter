@@ -9,8 +9,8 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-**Upgrading from v1.4, v1.5, v1.6 or v1.7?** No artifact you created changes name or location.
-But three releases **tighten conformance**, so re-check any audit you are still relying on:
+**Upgrading from v1.4 through v1.8?** No artifact you created changes name or location.
+But four releases **tighten conformance**, so re-check any audit you are still relying on:
 
 - **v1.5** — an audit that passed with an unblocker reading *"when we have time"* does not pass
   now, and `?` rows acquire an owner and an age. (v1.5 also gave `?` a decay to `no`; **v1.8
@@ -31,6 +31,13 @@ But three releases **tighten conformance**, so re-check any audit you are still 
   manufactured by the audit rather than found in the Workspace. Retaining **dated** audit results
   becomes an earned artifact (§3) once a second audit is going to happen, because the age and the
   escalation are not checkable without it.
+- **v1.9** — **two new Charter criteria, C17 and C18, so a v1.8 audit is now incomplete rather
+  than wrong.** Re-score against both. C17 asks of every elevated process whether its justification
+  is still live — expect the common finding to be a privilege whose reason ended without anyone
+  noticing. C18 governs how a control is *proposed*: alternatives priced together before either is
+  applied, and no mitigation presented as a prerequisite for a fix the owner already chose.
+  **C18 is the first criterion that scores the recommender rather than the Workspace**, so if you
+  are Staff, expect it to apply to your own past advice.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
@@ -553,6 +560,10 @@ clause is strengthened; noticing two of them are the same artifact is how it is 
 
 **A privileged process must not let a writable directory decide which executable it runs.**
 
+⚠️ **Ask C17's question before you apply this one: does it need to run elevated at all?** This rule
+hardens an elevated process; C17 asks whether the elevation has a live justification. Where it does
+not, removing it closes the exposure outright and this rule stops applying.
+
 This is the finding that most justifies the whole exercise, and it was latent for weeks.
 
 A nightly backup running as SYSTEM contained:
@@ -718,6 +729,128 @@ everything a rubric surfaces is, and that answer alone settles nothing in either
 argued from C7's mechanism and from one recorded instance, not from a survey. Adopt it because
 the reasoning holds.*
 
+---
+
+### C17 — Run at the lowest privilege that achieves the goal, and re-check when the reason ends
+
+**Privilege is granted for a purpose. When the purpose ends, nothing removes the privilege on its
+own.**
+
+C15 hardens what runs elevated. The question it assumes you have already answered is *why is this
+elevated at all* — and **removing an elevation deletes a class of exposure, where hardening only
+narrows one path through it.**
+
+The principle is not new. Saltzer and Schroeder state it as *"every program and every user of the
+system should operate using the least set of privileges necessary to complete the job"*, and NIST
+SP 800-53r5 **AC-6** extends it explicitly to processes, which must *"operate at privilege levels
+no higher than necessary."* What is worth recording is the failure mode neither of them addresses:
+**the privilege outlived its justification, and nothing re-checked it.**
+
+An autostart task was raised to `RunLevel=Highest` on 2026-07-12, so that an app-descended agent
+would inherit `SeBackupPrivilege` for `robocopy /B`. The next morning the backup became an
+independent SYSTEM task and that reason ceased to exist. The elevation survived it by **fifteen
+days**, and would have survived indefinitely, because the change that ended the reason had no idea
+the elevation existed. The product ships unelevated — manifest `asInvoker`, vendor shortcut
+`RunAsAdmin=False`, zero vendor-created tasks. Every bit of the privilege was a local addition that
+nobody re-examined.
+
+So: **record what each elevation is for, adjacent to the elevation itself.** A privilege whose
+justification you cannot state is one you cannot re-check, and re-checking is the entire control.
+When a design change removes a reason, grep for what that reason was used to *justify* — not only
+for its own artifacts. This is C7's shape applied to authority: an unexamined grant reads as
+deliberate to everyone who finds it later, including you.
+
+⚠️ **Reducing privilege can remove your ability to reverse what you did while you had it.**
+De-elevating the app above made the follow-up `icacls /restore` fail: rewriting a DACL that grants
+`BUILTIN\Administrators` requires a token that holds that group, and the detached-scheduled-task
+route does not rescue it, because registering an elevated task also requires elevation. Before
+dropping privilege, establish what still needs it and whether a path back exists. An interactive
+owner is such a path; an unattended agent is not.
+
+*Claim status: the principle is externally established (Saltzer & Schroeder 1975; NIST SP 800-53r5
+AC-6). The stale-privilege failure mode and the reversibility trap are each argued from mechanism
+and one recorded instance, not from a survey.*
+
+---
+
+### C18 — Alternatives are priced together, before either is applied
+
+**If two controls each close the same exposure, they are alternatives. Say so before either lands,
+price both, and give the choice to the owner.**
+
+**The tell that you have broken this:** you find yourself saying *"now that X is in place, Y is
+unnecessary"* — and you would have said the reverse had the order gone the other way. Then they
+were alternatives all along and you sequenced them without ever justifying the order. Whichever
+one lands first retroactively becomes the argument against the other, so **the ratchet always
+turns toward more change, never less.**
+
+**Never present a mitigation as a prerequisite for a fix the owner has already chosen**, unless you
+can state the technical dependency and what fails without it. *Necessary* is load-bearing;
+unearned, it converts a preference into a mandate — and nobody audits a prerequisite. **An owner
+who agrees to an optional change believing it was mandatory has not chosen it; they have complied
+with it.** Consent requires that refusal was genuinely available, and a misstated prerequisite is
+exactly what removes it. Where a change really is required, saying so is not this failure — the
+defect is the claim of necessity that cannot be substantiated, not the word.
+
+**A cost ledger moves in both directions, or it is advocacy.** If every new fact raises the cost of
+the option the owner prefers and none lowers it, that is motivated reasoning wearing the clothes of
+analysis. State the predictable costs of your *own* recommendation before it is applied, not after.
+
+⚠️ **Resistance is a cost signal, not an obstacle to route around.** Herley's finding is that
+users' rejection of security advice is *"entirely rational from an economic perspective"*, because
+the advice *"burdens them with far greater indirect costs in the form of effort"* than the harm it
+prevents; Beautement et al. supply the mechanism, that compliance is *"a finite resource that needs
+to be carefully managed."* A control that buys nothing still spends it. So when an owner expresses
+not merely refusal but dislike, **stop advocating and change mode**: enumerate the root cause the
+recommendation addresses, and every way of addressing it, and hand the decision back. This binds
+hardest in **security** exchanges, where anxiety compresses *"here is an option"* into *"you
+must"* — which puts the burden of keeping those two distinct on the recommender, not on the person
+under pressure.
+
+⚠️ **The owner can be wrong, and this criterion does not make them right.** Where you believe a
+choice is demonstrably mistaken you get **one full round**, and it should be a real one: set out
+the situation completely — what is actually at risk, what the choice costs, what you recommend
+instead, and what evidence would change your own assessment. One round, not a campaign. The ACM
+Code makes reporting risk an obligation *and* warns that *"capricious or misguided reporting of
+risks can itself be harmful"* — repetition is not diligence, it converts a stated concern into
+pressure, which is the failure this whole criterion exists to prevent.
+
+**The round has to land, though — one round means one that was received and answered.** Aviation
+and healthcare run a *two*-challenge rule, and its trigger is the distinction that matters here:
+AHRQ's applies *"if your initial assertion is **ignored**"*, requiring the concern to be voiced
+*"at least two times to ensure that it has been heard."* **Being ignored is not the same as being
+overruled**, and only the second is what this criterion governs. So silence is not a decision:
+pressing for an answer you never got is not a campaign, and does not spend your round. What you may
+not do is re-open a decision the owner has actually made.
+
+**Then the decision is the owner's, by right rather than by courtesy.** NIST's Risk Management
+Framework is unambiguous about where that authority sits: the authorizing official *"is the only
+person who can accept risk."* Record the decision, the risk and your dissent in the decision record
+(SOP-3), and proceed — in the sense Amazon's *"disagree and commit"* intends, genuinely and without
+the hedge that positions you to be proved right later.
+
+**Assume there is a reason you cannot see.** An owner may hold a position you have shown to be
+wrong because it is wrong *everywhere except* the situation they are currently handling — a
+mid-migration state that has to stay broken until a later cutover, a fault deliberately left live
+to reproduce it, an obligation nobody has told you about. The recorded dissent is what makes
+deferring safe: it costs a paragraph, it preserves your assessment for whoever reads next, and it
+does not require the owner to explain themselves to you.
+
+**One boundary.** Where the consequence falls on someone who is not the owner and cannot consent
+for themselves — third-party data, a shared system, a downstream team — it is not solely the
+owner's risk to accept, and the record belongs wherever the accountability actually sits.
+
+**Recorded instance.** A user-writable directory plus an elevated autostart was closable either by
+removing the elevation or by removing the writability. The owner chose the first. The agent applied
+the second, having described it as a prerequisite for the first; then, once it was in place,
+described the first as no longer a security fix. Challenged, it described the second as unnecessary
+given the first. Both changes were applied, one was rolled back in full, and the owner's original
+choice is what shipped. The technical reasoning was sound at every individual step, which is
+precisely why the rule is about sequence and framing rather than about being wrong.
+
+*Claim status: the cost-signal reading of owner resistance is externally supported (Herley 2009;
+Beautement et al. 2008). The ratchet and the prerequisite-framing failure are argued from mechanism
+and one recorded instance — a case study, not a survey.*
 
 ---
 
@@ -1553,6 +1686,11 @@ improvement.
 | R9 | Decision entries capture rationale **and rejected alternatives** | All |
 | R10 | Superseded decisions are **marked, not edited in place** | All |
 | R11 | Each entry records **who decided — human or agent** — and the agent's context | All |
+| R35 | Where alternatives each closed the same problem, the entry shows they were **priced together before any was applied**, records the owner's choice, and — where Staff disagreed — carries the **dissent alongside the decision** (C18) | All |
+
+⚠️ **R35 scores the proposal, not the outcome.** A decision that landed on the right control still
+fails this criterion if the alternatives were surfaced one at a time, or if one was described as a
+prerequisite for another without a stated dependency. The evidence is the *record*, not the result.
 
 **Runbook & procedure layer**
 
@@ -1684,6 +1822,7 @@ tools and a Base with none are equally out of scope, and both say so in the Clas
 | T3 | Elevated code resolves by absolute path, to a target no unprivileged principal can write | All *that run anything elevated* |
 | T4 | Tool manifest exists, archived, covers bundled tools | All |
 | T5 | Shared tool locations sited outside backup and ACL-hardened | All *that own a shared tool location* |
+| T6 | **Every elevation records what it is for**, next to the elevation — and the stated reason is still live (C17) | All *that run anything elevated* |
 
 ⚠️ **A Base Workspace is in scope for these on the same terms as any other class**, per §1's
 "plus" clause — a Base scores whichever of T1–T5 its Class column admits, and marks the rest in
@@ -1765,6 +1904,9 @@ All observed in production **except where marked**, most more than once.
 | **Mechanism without norm** | A shared directory nobody is told to use, reproducing the failure against a new path |
 | **Inherited pattern, unaudited** | Copying a working approach from another Workspace, and its dependencies with it |
 | **Designed-around risk** · *argued, not observed* | An accepted exposure that later work quietly routes around, so the re-raise condition never fires and nobody revisits it |
+| **Stale privilege** | An elevation whose justifying purpose ended; nothing re-checks it, so it persists indefinitely (C17) |
+| **Alternatives ratcheted** | Two sufficient fixes applied in sequence, each retroactively cited as making the other redundant (C18) |
+| **Unearned prerequisite** | A mitigation presented as required for the fix the owner actually chose; consent obtained without a stated dependency (C18) |
 
 ---
 

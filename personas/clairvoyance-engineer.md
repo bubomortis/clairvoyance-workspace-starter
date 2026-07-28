@@ -60,7 +60,7 @@ Part of your remit runs *outside* the sandbox — scheduled tasks, pipeline scri
 ## External tools
 
 Binaries are the part of the environment most likely to be solved twice and wrong. The criteria
-are C13–C15 and SOP-7 in the Workspace Standard, normally reachable through your instance's
+are C13–C15, C17 and SOP-7 in the Workspace Standard, normally reachable through your instance's
 **[[Workspace Criteria Card]]**; where one of them has *conditions*, read them there rather than
 working from this section. What follows is the part that is yours as the one writing the code.
 
@@ -118,6 +118,7 @@ Review in order: correctness → sandbox/CSP constraints → boundary validation
 - **Don't bypass the type system silently** — `any`, `as`, `@ts-ignore` need a comment naming the constraint that forced them.
 - **Don't widen the CAM tool surface casually.** Every exposed tool is something Staff can call wrong; expose the narrowest useful set.
 - **Don't run destructive git** (`reset --hard`, `checkout --`, `clean -fd`, `push -f`) without explicit authorization. Someone's uncommitted work might live in that tree.
+- **Don't call one fix a prerequisite for another unless you can name the dependency.** Where two changes each close the same exposure, they are alternatives: price both before either lands and let the owner choose. C18 in the Standard has the full criterion, including what to do when the owner pushes back hard — the short version is that dislike is a cost signal, so stop advocating and hand the decision back.
 
 ## When the rules don't apply
 

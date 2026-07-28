@@ -11,6 +11,87 @@ version.
 
 ---
 
+## [v1.9] — 2026-07-28
+
+### Tightens conformance — two new Charter criteria, C17 and C18
+
+No artifact changes name or location. A v1.8 audit is **incomplete** against v1.9 rather than
+invalidated by it: there are two more criteria to score, and both are the kind that tend to come
+back `no` the first time they are asked.
+
+### Added — C17, run at the lowest privilege that achieves the goal
+
+- **The Charter hardened elevated processes (C15) without ever asking whether they needed to be
+  elevated.** C17 supplies the prior question. Removing an elevation deletes a class of exposure;
+  hardening narrows one path through it. C15 now points here before it applies.
+- **The transferable failure is not "least privilege" — it is that a privilege outlives its
+  justification and nothing re-checks it.** The recorded instance ran `RunLevel=Highest` for one
+  day's worth of reason and kept it for fifteen, because the change that ended the reason had no
+  idea the elevation existed. So the rule's obligation is to **record what each elevation is for,
+  next to the elevation**, and to grep for what a superseded reason was used to *justify*.
+- **New trap: reducing privilege can strip your ability to reverse what you did while you held
+  it.** The same incident's `icacls /restore` failed after de-elevation, and the
+  detached-scheduled-task workaround failed with it, because registering an elevated task also
+  needs elevation.
+- Externally grounded rather than argued from one instance: Saltzer & Schroeder 1975 for the
+  principle, NIST SP 800-53r5 **AC-6** for its application to processes. See CITATIONS.md.
+
+### Added — C18, alternatives are priced together, before either is applied
+
+- **The first criterion in this Standard that scores the recommender rather than the Workspace.**
+  Where two controls each close the same exposure they are alternatives, and the choice belongs to
+  the owner — which requires both to be priced *before* either is applied.
+- **The tell it names:** *"now that X is in place, Y is unnecessary"*, when you would have said the
+  reverse had the order gone the other way. Whichever change lands first retroactively becomes the
+  argument against the other, so the ratchet turns only toward more change.
+- **A mitigation may not be presented as a prerequisite for a fix the owner already chose** unless
+  the technical dependency can be stated. *Necessary* converts a preference into a mandate, and
+  nobody audits a prerequisite — so an owner who agrees to an optional change believing it was
+  mandatory has complied rather than chosen. The criterion is aimed at the **unsubstantiated** claim
+  of necessity; where a change genuinely is required, saying so plainly is what the rule wants.
+- **Owner resistance is reclassified as a cost signal, not an obstacle.** Herley 2009 (rejection of
+  security advice is *"entirely rational"* when its indirect costs exceed the harm prevented) and
+  Beautement et al. 2008 (compliance is *"a finite resource"*) are what move this from etiquette to
+  economics. On negative affect the obligation is to **stop advocating**, enumerate the root cause
+  and every way of addressing it, and hand the decision back — most of all in security exchanges,
+  where anxiety collapses *"here is an option"* into *"you must"*.
+- **C18 says explicitly that the owner can be wrong, and gives that case a procedure** rather than
+  leaving it to be inferred: **one full round** — the situation stated completely, the consequences
+  of the choice, what you recommend instead, and what would change your own assessment — then the
+  decision is the owner's, recorded with your dissent, and you proceed. One round rather than a
+  campaign, because the ACM Code makes reporting risk an obligation *and* warns that *"capricious or
+  misguided reporting of risks can itself be harmful"*; the deferral is by right rather than
+  courtesy, because NIST's RMF holds that the authorizing official *"is the only person who can
+  accept risk."* **The round must be received and answered to count** — aviation and healthcare's
+  *two*-challenge rule applies *"if your initial assertion is ignored"*, and being ignored is not
+  being overruled. Pressing for an answer you never got is not a campaign; re-opening a decision the
+  owner actually made is. The rule also instructs you to **assume a reason you cannot see** — a choice that
+  is wrong in general can be correct for the situation actually in hand, and recorded dissent is
+  what lets you defer without needing the owner to justify themselves. **One boundary:** where the
+  consequence lands on someone who cannot consent for themselves, it is not solely the owner's risk
+  to accept.
+- Both rules discharge through SOP-3 decision records, which every class bound by the Charter
+  already has in scope — so §1's class-scope check produced no widening. Recorded per §1's standing
+  instruction to run that check whenever a Charter criterion is added.
+
+### Added — two rubric criteria, so the new rules are scoreable rather than decorative
+
+- **T6 (tooling layer)** — every elevation **records what it is for**, next to the elevation, and
+  the stated reason is still live. Class: *All that run anything elevated*. Expect this to score
+  `no` on first pass almost everywhere; almost nothing records why it is elevated.
+- **R35 (decision & rationale layer)** — where alternatives each closed the same problem, the entry
+  shows they were **priced together before any was applied**, records the owner's choice, and where
+  Staff disagreed carries the **dissent alongside the decision**. Class: *All*.
+  ⚠️ **R35 scores the proposal, not the outcome.** A decision that landed on the right control still
+  fails if the alternatives were surfaced one at a time. Appended as R35 rather than inserted beside
+  R9 where it thematically belongs — **renumbering would invalidate every existing audit record.**
+
+### Added — three anti-patterns
+
+**Stale privilege** (C17), **Alternatives ratcheted** (C18), **Unearned prerequisite** (C18).
+
+---
+
 ## [v1.8] — 2026-07-28
 
 ### Tightens conformance — re-check every standing `?`

@@ -71,9 +71,11 @@ Every source behind the Standard, with a confidence mark per entry, the claims t
 external citation, and the places the Standard overreaches what its sources actually measured.
 
 **You already adopted an earlier version** → [CHANGELOG.md](CHANGELOG.md)
-**Current release: v1.8.** Entries marked *breaking for adopters* change a file you were previously
+**Current release: v1.9.** Entries marked *breaking for adopters* change a file you were previously
 told to create — in v1.3, `CLAUDE.md` became `AGENTS.md`. Entries marked *tightens conformance*
-mean an audit that passed under the previous version may not pass now — v1.5, v1.7 and v1.8 all do.
+mean an audit that passed under the previous version may not pass now — v1.5, v1.7, v1.8 and v1.9
+all do. v1.9 adds two Charter criteria (C17, C18), so an audit that passed under v1.8 is incomplete
+against v1.9 rather than invalidated by it.
 
 **You want a Staff member built for this work** →
 [Workspace Architect](runbooks/architect-build-runbook.md) ·
