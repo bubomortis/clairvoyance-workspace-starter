@@ -75,7 +75,11 @@ back `no` the first time they are asked.
   is marked as asserted in both claim-status registers, because it is what bounds the criterion to
   one round. Where such a chain **does** exist, those sources govern escalation **to that
   authority**; the one-round bound with the owner still holds, invoking it requires naming the
-  authority and the consequence, and the escalation is itself a decision-record entry. The rule also instructs you to **assume a reason you cannot see** — a choice that
+  authority and the consequence, the escalation is itself a decision-record entry, and **the owner
+  is told it is happening.** The named authority must hold **decision rights over the risk**, not
+  merely outrank the owner — NIST's model is jurisdictional, and seniority is not jurisdiction.
+  **Covert escalation is the one prohibited form:** a criterion that insists dissent be *recorded*
+  cannot let it be discharged by routing around the person it concerns. The rule also instructs you to **assume a reason you cannot see** — a choice that
   is wrong in general can be correct for the situation actually in hand, and recorded dissent is
   what lets you defer without needing the owner to justify themselves. **One boundary:** where the
   consequence lands on someone who cannot consent for themselves, it is not solely the owner's risk

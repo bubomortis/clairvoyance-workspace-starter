@@ -773,7 +773,7 @@ So: **record what each elevation is for, adjacent to the elevation itself — na
 and the operation that requires it.** A privilege whose justification you cannot state is one you
 cannot re-check, and re-checking is the entire control. The naming is what makes it checkable by
 a stranger: *"`SeBackupPrivilege`, for `robocopy /B` in the nightly archive"* can be falsified by
-anyone who looks; *"for backup"* cannot, and would have survived the same fifteen days below.
+anyone who looks; *"for backup"* cannot, and would have survived the same fifteen days.
 When a design change removes a reason, grep for what that reason was used to *justify* — not only
 for its own artifacts. This is C7's shape applied to authority: an unexamined grant reads as
 deliberate to everyone who finds it later, including you.
@@ -865,9 +865,13 @@ be wrong — and it is stated as *generally*, with the exception below. Do not a
 **Where a chain above the owner does exist**, those sources govern escalation **to that authority**.
 **The one-round bound with the owner still holds** — this is not a licence for further rounds with
 the person who decided, and AHRQ's second stage does not grant any. Invoking it requires **naming
-the specific authority and the specific consequence**, and the escalation is itself a decision-record
-entry (SOP-3). Going over an owner's head is a more consequential act than one more round, so it is
-governed more tightly, not less.
+the specific authority and the specific consequence**, the escalation is itself a decision-record
+entry (SOP-3), and **the owner is told you are doing it**. The named authority must actually **hold
+decision rights over this risk**, not merely outrank the owner — NIST's model is jurisdictional, an
+authorizing official being the authority *for that system* rather than for everything. Going over an
+owner's head is a more consequential act than one more round, so it is governed more tightly, not
+less — and **covertly is the one way it must not happen**, since a dissent this criterion elsewhere
+insists on *recording* cannot be discharged by routing it around the person it concerns.
 
 ⚠️ **Do not cite the ACM Code for the size of this bound.** Its *"capricious or misguided reporting
 of risks can itself be harmful"* is bounded by the sentence that follows it — *"before reporting
