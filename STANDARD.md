@@ -36,8 +36,9 @@ But four releases **tighten conformance**, so re-check any audit you are still r
   is still live — expect the common finding to be a privilege whose reason ended without anyone
   noticing. C18 governs how a control is *proposed*: alternatives priced together before either is
   applied, and no mitigation presented as a prerequisite for a fix the owner already chose.
-  **C18 is the first criterion that scores the recommender rather than the Workspace**, so if you
-  are Staff, expect it to apply to your own past advice.
+  **C18 is the first criterion that governs how Staff propose a control rather than what the
+  Workspace contains** — scored, as always, on the artifact it leaves behind (R35, a decision
+  record). If you are Staff, expect it to apply to your own past advice.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
@@ -47,9 +48,9 @@ are *memory, orientation and verification* problems, and those are fixable with 
 
 **Three parts:**
 
-1. **The Charter** — 16 principles, for judgment no procedure covers.
+1. **The Charter** — 18 principles, for judgment no procedure covers.
 2. **The SOPs** — 7 procedures for the repeatable work.
-3. **The Rubric** — 34 checkable criteria in six scoreable layers, plus 5 external-tool criteria.
+3. **The Rubric** — 35 checkable criteria in six scoreable layers, plus 6 external-tool criteria.
 
 > **How to read this.** Internalise the Charter. Follow the SOPs. Score against the Rubric.
 > If an SOP conflicts with the Charter, the Charter wins and the SOP is wrong.
@@ -108,6 +109,13 @@ narrower than the criterion's dependencies and the criterion does not become lig
 how a rule with a deliberate exception silently loses it, and it is the failure mode to check for
 whenever a new Charter criterion is added: **does every class bound by it have access to what
 discharges it?**
+
+⚠️ **Run the second half of that check too: every place that enumerates a range or a count.** The
+scope question above is about *dependencies*; this one is about *arithmetic*, and it has been missed
+in four consecutive releases of this document. Adding a criterion silently falsifies any line that
+says "C1–C16", "T1–T5", "34 criteria", or "16 principles" — and a stale **range** is normative, not
+cosmetic, because a class can cite it to skip the new criterion. Grep for the old range and the old
+count, not only for the new rule's name.
 
 ---
 
@@ -562,7 +570,8 @@ clause is strengthened; noticing two of them are the same artifact is how it is 
 
 ⚠️ **Ask C17's question before you apply this one: does it need to run elevated at all?** This rule
 hardens an elevated process; C17 asks whether the elevation has a live justification. Where it does
-not, removing it closes the exposure outright and this rule stops applying.
+not, removing it closes the exposure outright — and this rule stops applying **once the elevation
+is actually removed**, not at the moment you judge it unjustified. Until then it applies in full.
 
 This is the finding that most justifies the whole exercise, and it was latent for weeks.
 
@@ -810,24 +819,40 @@ under pressure.
 ⚠️ **The owner can be wrong, and this criterion does not make them right.** Where you believe a
 choice is demonstrably mistaken you get **one full round**, and it should be a real one: set out
 the situation completely — what is actually at risk, what the choice costs, what you recommend
-instead, and what evidence would change your own assessment. One round, not a campaign. The ACM
-Code makes reporting risk an obligation *and* warns that *"capricious or misguided reporting of
-risks can itself be harmful"* — repetition is not diligence, it converts a stated concern into
-pressure, which is the failure this whole criterion exists to prevent.
+instead, and what evidence would change your own assessment.
 
-**The round has to land, though — one round means one that was received and answered.** Aviation
-and healthcare run a *two*-challenge rule, and its trigger is the distinction that matters here:
-AHRQ's applies *"if your initial assertion is **ignored**"*, requiring the concern to be voiced
-*"at least two times to ensure that it has been heard."* **Being ignored is not the same as being
-overruled**, and only the second is what this criterion governs. So silence is not a decision:
-pressing for an answer you never got is not a campaign, and does not spend your round. What you may
-not do is re-open a decision the owner has actually made.
+**Order these obligations, because two of them otherwise collide.** The round comes **first** and it
+carries your recommendation. *Stop advocating* above, and *assume a reason you cannot see* below,
+govern conduct **after** that round has been delivered and answered — they are not licence to skip
+it. An owner who is both irritated and mistaken is owed the round, not spared it.
 
-**Then the decision is the owner's, by right rather than by courtesy.** NIST's Risk Management
-Framework is unambiguous about where that authority sits: the authorizing official *"is the only
-person who can accept risk."* Record the decision, the risk and your dissent in the decision record
-(SOP-3), and proceed — in the sense Amazon's *"disagree and commit"* intends, genuinely and without
-the hedge that positions you to be proved right later.
+**The round has to land — one round means one that was received and answered.** Silence is not a
+decision: pressing for an answer you never got is not a campaign and does not spend your round.
+What you may not do is re-open a decision the owner has actually made. Aviation and healthcare's
+two-challenge rule marks the same boundary from the other side, its first stage triggering *"if
+your initial assertion is **ignored**"* and asking that the concern be voiced *"at least two times
+to ensure that it has been heard."*
+
+**Then it stops — and it stops because of where the authority sits, not because persistence is
+improper.** This distinction is load-bearing, because **the obvious sources point the other way**
+and it is worth stating why they do not settle it. AHRQ's *second* stage triggers on the outcome —
+*"if the outcome is still not acceptable… move up the chain of command"* — and the ACM Code holds
+that *"if leaders do not act to curtail or mitigate such risks, it may be necessary to 'blow the
+whistle' to reduce potential harm."* **Both prescribe escalation, and both presume a chain of
+command above the person who decided.** A Workspace generally has none: NIST's Risk Management
+Framework places risk acceptance with a single role — the authorizing official *"is the only person
+who can accept risk"* — and here that role is the owner. **The bound is one round because there is
+nowhere for a second one to go**, not because raising a concern twice is a fault. Where a chain
+above the owner does exist, those sources apply and this bound does not.
+
+⚠️ **That repetition converts a concern into pressure is this Standard's own claim, not the ACM's.**
+The Code's limit is on the *groundedness* of a report — *"before reporting risks, a computing
+professional should carefully assess relevant aspects of the situation"* — not on its frequency. Do
+not cite the ACM for a count.
+
+**So the decision is the owner's, by right rather than by courtesy.** Record the decision, the risk
+and your dissent in the decision record (SOP-3), and proceed — in the sense Amazon's *"disagree and
+commit"* intends, genuinely and without the hedge that positions you to be proved right later.
 
 **Assume there is a reason you cannot see.** An owner may hold a position you have shown to be
 wrong because it is wrong *everywhere except* the situation they are currently handling — a
@@ -840,13 +865,21 @@ does not require the owner to explain themselves to you.
 for themselves — third-party data, a shared system, a downstream team — it is not solely the
 owner's risk to accept, and the record belongs wherever the accountability actually sits.
 
+⚠️ **This clause relocates the record. It does not grant you further rounds, and it does not
+authorise acting against the decision.** To invoke it, **name the specific party and the specific
+consequence**; "it's a shared system" is true of nearly every machine with two accounts and is not
+an invocation. Left loose, this becomes the escape hatch the rest of the criterion closes — an
+agent that wants to keep pressing can classify almost anything as third-party.
+
 **Recorded instance.** A user-writable directory plus an elevated autostart was closable either by
 removing the elevation or by removing the writability. The owner chose the first. The agent applied
 the second, having described it as a prerequisite for the first; then, once it was in place,
 described the first as no longer a security fix. Challenged, it described the second as unnecessary
 given the first. Both changes were applied, one was rolled back in full, and the owner's original
-choice is what shipped. The technical reasoning was sound at every individual step, which is
-precisely why the rule is about sequence and framing rather than about being wrong.
+choice is what shipped. **Each step was defensible in isolation, and the characterisations were
+mutually inconsistent — which is the tell.** A prerequisite for X cannot also be redundant once X
+exists; at least one of those descriptions was wrong when it was given. That is why a correctness
+review would not have caught this, and why the criterion has to exist separately from one.
 
 *Claim status: the cost-signal reading of owner resistance is externally supported (Herley 2009;
 Beautement et al. 2008). The ratchet and the prerequisite-framing failure are argued from mechanism
@@ -1692,6 +1725,14 @@ improvement.
 fails this criterion if the alternatives were surfaced one at a time, or if one was described as a
 prerequisite for another without a stated dependency. The evidence is the *record*, not the result.
 
+⚠️ **Score R9 first; R35 refines it.** R35 has a blind spot on its own — its trigger reads
+*"where alternatives each closed the same problem"* off the record, so a recommender who never
+surfaced the alternative leaves no trace that one existed, and R35 silently does not fire. **R9 is
+what catches that case**, failing any entry that carries no rejected alternatives, which is why this
+gap is survivable rather than fatal. *Priced together before any was applied* is established by a
+**dated entry preceding the change**; where entries are not dated or version-controlled, score the
+timing half `?` rather than assuming it.
+
 **Runbook & procedure layer**
 
 | # | Criterion | Class |
@@ -1822,10 +1863,10 @@ tools and a Base with none are equally out of scope, and both say so in the Clas
 | T3 | Elevated code resolves by absolute path, to a target no unprivileged principal can write | All *that run anything elevated* |
 | T4 | Tool manifest exists, archived, covers bundled tools | All |
 | T5 | Shared tool locations sited outside backup and ACL-hardened | All *that own a shared tool location* |
-| T6 | **Every elevation records what it is for**, next to the elevation — and the stated reason is still live (C17) | All *that run anything elevated* |
+| T6 | **Every elevation records what it is for**, next to the elevation, **naming the privilege and the operation that requires it** — and the stated reason is still live (C17) | All *that run anything elevated* |
 
 ⚠️ **A Base Workspace is in scope for these on the same terms as any other class**, per §1's
-"plus" clause — a Base scores whichever of T1–T5 its Class column admits, and marks the rest in
+"plus" clause — a Base scores whichever of T1–T6 its Class column admits, and marks the rest in
 that column, owing no decision record for them (§14). Do **not** route structural inapplicability
 through `accepted` or a SOP-3 entry; that is what the column is for. Note that T3 is the narrow
 case: `n-a` there is a claim about the host, not about the auditor — see its own note below.

@@ -38,9 +38,10 @@ back `no` the first time they are asked.
 
 ### Added — C18, alternatives are priced together, before either is applied
 
-- **The first criterion in this Standard that scores the recommender rather than the Workspace.**
-  Where two controls each close the same exposure they are alternatives, and the choice belongs to
-  the owner — which requires both to be priced *before* either is applied.
+- **The first criterion in this Standard that governs how Staff propose a control, rather than what
+  the Workspace contains** — scored, as always, on the artifact it leaves behind (R35, a decision
+  record). Where two controls each close the same exposure they are alternatives, and the choice
+  belongs to the owner, which requires both to be priced *before* either is applied.
 - **The tell it names:** *"now that X is in place, Y is unnecessary"*, when you would have said the
   reverse had the order gone the other way. Whichever change lands first retroactively becomes the
   argument against the other, so the ratchet turns only toward more change.
@@ -58,14 +59,19 @@ back `no` the first time they are asked.
 - **C18 says explicitly that the owner can be wrong, and gives that case a procedure** rather than
   leaving it to be inferred: **one full round** — the situation stated completely, the consequences
   of the choice, what you recommend instead, and what would change your own assessment — then the
-  decision is the owner's, recorded with your dissent, and you proceed. One round rather than a
-  campaign, because the ACM Code makes reporting risk an obligation *and* warns that *"capricious or
-  misguided reporting of risks can itself be harmful"*; the deferral is by right rather than
-  courtesy, because NIST's RMF holds that the authorizing official *"is the only person who can
-  accept risk."* **The round must be received and answered to count** — aviation and healthcare's
-  *two*-challenge rule applies *"if your initial assertion is ignored"*, and being ignored is not
-  being overruled. Pressing for an answer you never got is not a campaign; re-opening a decision the
-  owner actually made is. The rule also instructs you to **assume a reason you cannot see** — a choice that
+  decision is the owner's, recorded with your dissent, and you proceed. **The obligations are
+  explicitly ordered** — the round comes first and carries your recommendation; *stop advocating* and
+  *assume a reason you cannot see* govern conduct only after it has been delivered and answered, so
+  an owner who is both irritated and mistaken is owed the round rather than spared it.
+  **The round must be received and answered to count**: aviation and healthcare's two-challenge rule
+  triggers its first stage *"if your initial assertion is ignored"*, and pressing for an answer you
+  never got is not a campaign. Re-opening a decision the owner actually made is.
+  **The bound stops at one round because of where authority sits, not because persistence is
+  improper** — both AHRQ's second stage (*"move up the chain of command"*) and the ACM Code's
+  whistleblowing clause prescribe escalation, and both presume a chain above the person who decided.
+  A Workspace has none: NIST's RMF holds that the authorizing official *"is the only person who can
+  accept risk"*, and here that is the owner. Where such a chain does exist, those sources apply and
+  this bound does not. The rule also instructs you to **assume a reason you cannot see** — a choice that
   is wrong in general can be correct for the situation actually in hand, and recorded dissent is
   what lets you defer without needing the owner to justify themselves. **One boundary:** where the
   consequence lands on someone who cannot consent for themselves, it is not solely the owner's risk
@@ -89,6 +95,31 @@ back `no` the first time they are asked.
 ### Added — three anti-patterns
 
 **Stale privilege** (C17), **Alternatives ratcheted** (C18), **Unearned prerequisite** (C18).
+
+### Fixed during pre-tag review — two citations were used against their own sources
+
+Recorded rather than quietly corrected, because this file's premise is checkability.
+
+- **The ACM Code no longer supports the one-round bound, and an earlier draft said it supplied
+  "both halves" of it.** It does not. The sentence *preceding* the "capricious or misguided" line
+  licenses whistleblowing when leaders decline to act, and the sentence *following* it prescribes
+  careful assessment — so the Code's limit is on the **groundedness** of a report, not its
+  **frequency**. Quoting it for a count argued from a passage measuring quality of basis: the same
+  error as the C1a/R5 authorship-from-tuning overread this project already carries. The gloss
+  *"repetition is not diligence"* is **gone**; the underlying norm — that repetition converts a
+  concern into pressure — is kept, restated in the Standard's own voice and **explicitly marked as
+  this Standard's claim rather than the ACM's**, with a note not to cite the Code for a count.
+- **AHRQ's two-challenge rule governs C18's case after all.** Its second stage triggers on the
+  **outcome** — *"if the outcome is still not acceptable… move up the chain of command"* — which is
+  *heard and overruled*, exactly C18's situation, and it prescribes escalation. An earlier draft
+  claimed *"C18 governs the second; this rule governs the first"*, and its scope note told readers to
+  rely on that trigger distinction and to **avoid** the domain argument. That was backwards: the
+  domain argument is the one that survives, because it travels with the chain-of-command apparatus
+  the rule presumes and a Workspace lacks.
+- **§1's standing check gains a second half — ranges and counts.** Four consecutive releases have
+  shipped a stale enumeration; this one shipped `T1–T5` in the clause that scopes Base Workspaces
+  into the tooling layer, which would have let a Base with an elevated task cite it to skip T6. A
+  stale range is normative, not cosmetic.
 
 ---
 

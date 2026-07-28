@@ -309,6 +309,13 @@ establish the principle, not the failure mode — do not let them launder the cl
    rejection of the security advice they receive is **entirely rational** from an economic
    perspective. The advice offers to shield them from the direct costs of attacks, but burdens them
    with far greater indirect costs in the form of effort."*
+   ⚠️ **Population-scale result, and C18 applies it at n=1.** The rationality finding is derived from
+   aggregate arithmetic over the whole US adult population, and the paper says so of itself: *"It is
+   hard to make this calculation for an individual user. However aggregate estimates across the whole
+   population are easier to reason about."* **Entry 4 is what rescues this** — the compliance budget
+   is explicitly an individual-level construct (*"the economics of compliance from an individual's
+   point of view"*), so the pair carries the claim where Herley alone would not. Cite them together
+   for any statement about a single owner.
 4. ● **Beautement, A., Sasse, M. A. & Wonham, M. — "The Compliance Budget: Managing Security
    Behaviour in Organisations."** NSPW 2008. `doi:10.1145/1595676.1595684`
    Read at `https://www.nspw.org/papers/2008/nspw2008-beautement.pdf`.
@@ -332,12 +339,30 @@ from mechanism and one recorded case, and the Standard says so.
    basis for recording it: risk acceptance is an explicit, documented decision, and under ongoing
    authorization the official remains *"responsible and accountable for explicitly understanding and
    accepting the risk."*
+   ⚠️ **Scope — what transfers is the separation, not the office.** The authorizing official is a
+   **formally designated** role (*"a senior official or executive with the authority to formally
+   assume responsibility…"*, typically holding budgetary oversight), bounded by organizational risk
+   tolerance and a risk-executive function. A Workspace owner has none of that apparatus, so do not
+   argue from the AO's designation. What transfers cleanly is the **assessor ≠ acceptor separation**
+   — the party who evaluates risk is not the party who accepts it — and that is all C18 needs for
+   *"by right rather than by courtesy."*
 6. ● **ACM Code of Ethics and Professional Conduct** (§1.2, §2.5). `https://www.acm.org/code-of-ethics`
-   *Supplies:* **both halves of the one-round bound.** The obligation — a computing professional
-   *"has an additional obligation to report any signs of system risks that might result in harm"*,
-   and §2.5 requires *"comprehensive and thorough evaluations… including analysis of possible
-   risks."* And the limit, which is the less-quoted half and the one that bounds escalation:
-   *"capricious or misguided reporting of risks can itself be harmful."*
+   *Supplies:* **the obligation half only** — a computing professional *"has an additional obligation
+   to report any signs of system risks that might result in harm"*, and §2.5 requires *"comprehensive
+   and thorough evaluations… including analysis of possible risks."*
+   ⚠️ **It does NOT supply the limit half, and an earlier draft of this file claimed it did.** The
+   full passage runs: *"…report any signs of system risks that might result in harm. **If leaders do
+   not act to curtail or mitigate such risks, it may be necessary to 'blow the whistle' to reduce
+   potential harm.** However, capricious or misguided reporting of risks can itself be harmful.
+   **Before reporting risks, a computing professional should carefully assess relevant aspects of the
+   situation.**"* Two corrections follow. First, the sentence *preceding* the "capricious" line
+   licenses escalation precisely when the decision-maker declines to act — so the source's net
+   direction on *"leader won't act"* is **escalate**, not stop. Second, "capricious or misguided" is
+   bounded by the sentence *after* it, which prescribes careful assessment: **the ACM's limit is on
+   the groundedness of a report, not its frequency.** Quoting it for a *count* is arguing from a
+   passage that measures *quality of basis* — the same move as C1a/R5's authorship-from-tuning
+   overread recorded above. **Do not cite the ACM for the one-round bound.** That bound now rests on
+   entry 5's authority allocation and the absence of a chain of command above the owner.
 7. ○ **Bezos, J. — 2016 Letter to Shareholders.** Amazon.com Inc., filed as Exhibit 99.1.
    `https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm`
    *Supplies:* the disposition required after deferring — *"use the phrase 'disagree and commit'…
@@ -352,13 +377,25 @@ from mechanism and one recorded case, and the Standard says so.
    `https://www.ahrq.gov/teamstepps-program/curriculum/mutual/tools/rule.html`
    Corroborated at Loyola's TeamSTEPPS IPE module,
    `https://stritch.luc.edu/lumen/meded/softchalkhdht/teamsteppsipe/mobile_pages/teamsteppsipe28.html`
-   *Supplies:* **the boundary of C18's one-round bound, by contrast rather than by agreement.** The
-   trigger is explicit and is not C18's — it applies *"if your initial assertion is **ignored**"*,
-   requiring the concern to be voiced *"at least two times to ensure that it has been heard"*, and
-   escalating to *"a stronger course of action"* only after that. **Being ignored and being overruled
-   are different situations.** C18 governs the second; this rule governs the first, which is why it
-   is not a counter-argument to the one-round bound and why C18 now says a round must be *received
-   and answered* to count.
+   *Supplies:* the **first-stage** trigger, which is not C18's — it applies *"if your initial
+   assertion is **ignored**"*, requiring the concern to be voiced *"at least two times to ensure that
+   it has been heard."* That is the source of C18's requirement that a round be *received and
+   answered* to count.
+   ⚠️ **The rule has a second stage, and it covers C18's case and points the other way.** *"If the
+   outcome is still not acceptable: The challenger must take a stronger course of action. The
+   challenger should turn to the supervisor and move up the chain of command if necessary."* That
+   triggers on the **outcome** — i.e. on being **heard and overruled**, which is exactly C18's
+   situation — and prescribes escalation. An earlier draft of this file claimed *"C18 governs the
+   second; this rule governs the first."* **That was wrong: the source governs both.** What actually
+   distinguishes them is the apparatus the second stage presumes — a chain of command above the
+   person who decided. Under entry 5's allocation there is none above a Workspace owner, so the
+   escalation this rule prescribes has nowhere to go. **That, and not the trigger, is what bounds
+   C18 to one round.**
+   *Corrected scope note:* the domain framing — that these sources situate the rule in high-stakes
+   real-time operational settings, aviation and clinical care — **is the argument that survives**,
+   because it travels with the chain-of-command apparatus. An earlier version of this note told the
+   reader the opposite: to rely on the trigger distinction and avoid the domain argument. It was
+   exactly backwards, and it is recorded here rather than quietly rewritten.
    ⚠️ **Cite this URL, not the pocket guide.** `…/instructor/essentials/pocketguide.pdf` now
    **returns `200` while redirecting to a generic landing page** — a soft-404. An earlier pass in
    this project read that as evidence the rule could not be sourced; it was a wrong URL, not a
