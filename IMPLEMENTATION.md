@@ -133,8 +133,10 @@ be able to defend. In each case the bar is the whole control:
   other than you who has to act**. If the actor is you, it is backlog, not `blocked`.
 - **`accepted`** — the re-raise condition, on the same third-party-observable terms, recorded as
   a decision entry and **confirmed by the human**.
-- **`?`** — what evidence would settle it, **who will obtain it**, its age carried forward, and
-  decay to `no` after two audits. Not available for a criterion you find inconvenient.
+- **`?`** — what evidence would settle it, **who will obtain it**, and its age carried forward.
+  After two audits it **escalates to the owner** — which is not a `no` and not a label: it owes a
+  tracked dated item with a named owner, a statement of what will be different this time, and the
+  owner's sight of it. Not available for a criterion you find inconvenient.
 - **`n-a`** — a claim that the failure mode does not exist here, which is a claim about the
   Workspace and not about your familiarity with it.
 
@@ -193,9 +195,13 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
      criterion with no stated trigger is a `no` wearing better clothes.
    - Mark **`?`** for anything you cannot evidence, saying what would settle it **and who will
      obtain it**. `?` is not a verdict and not terminal: carry it forward with its age, and a `?`
-     surviving two audits becomes a `no`. **Not available for a criterion you find inconvenient
-     to evaluate** — unfamiliarity with a platform or a permission model is a translation
-     problem, not missing evidence.
+     surviving two audits **escalates to the owner** — it does not become a `no`, because two
+     audits failing to get evidence is a fact about the audit, not about the Workspace. Escalating
+     owes a tracked dated item with a named owner and a statement of what will be different this
+     time; *"escalated"* in a cell with nothing owed reads as though someone is handling it, and
+     suppresses the investigation the word is meant to trigger. **Not available for a criterion
+     you find inconvenient to evaluate** — unfamiliarity with a platform or a permission model is
+     a translation problem, not missing evidence.
 3. **Propose**, ranked by benefit-to-effort, each item with its cost.
 4. **Name what you are not recommending, and why.** A plan without this section is incomplete.
 5. **Stop.** Wait for item-by-item approval. Build only what was approved.

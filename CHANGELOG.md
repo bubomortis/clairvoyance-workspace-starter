@@ -11,6 +11,81 @@ version.
 
 ---
 
+## [v1.8] — 2026-07-28
+
+### Tightens conformance — re-check every standing `?`
+
+No artifact you created changes name or location, and the headline change **removes** a failing
+score. But this is still a minor release and not a patch, for the reason the standing rule names:
+**the obligation that replaces the decay can fail a Workspace that passed under v1.7.** Anyone who
+has been quietly letting a `?` ride now owes a tracked, dated, owned item for it. Relief in the
+scoring, a new bar in the obligation — and the bar is the part that decides the release number.
+
+### Fixed — `?` escalates; it does not decay to `no`
+
+- **A `?` that survives two audits now escalates to the owner.** v1.5's decay rule contradicted
+  unchanged v1.2 text sitting three lines above it in §11 — *"scoring it `no` for lack of evidence
+  manufactures a gap that is not there"* — and then did exactly that. It also converted an
+  assessment fact into a Workspace fact, which the same v1.5 passage insists `?` categorically is
+  not: *"a fact about the audit and not about the thing audited."* **Two audits failing to obtain
+  evidence establishes that the audit is not getting done. It establishes nothing about the
+  Workspace**, and a decayed `no` sends remediation after a gap that may not exist. What failed is
+  the process, so the escalation is aimed at the process.
+- **The pressure the decay applied is preserved, and given a bar.** This was the risk in the
+  change: drop the decay without teeth and `?` becomes a permanent parking space again, which is
+  worse than the defect because it looks resolved. So the escalation is held to the same kind of
+  bar v1.5 gave `blocked` and `accepted`, and owes **three** things — a **tracked, dated item with
+  a named owner** that the rubric row references (a third party can open the tracker and check it
+  without asking the auditor, which is the observability test met by an artifact rather than by a
+  sentence); a statement of **what will be different this time**, because the same person and the
+  same approach is what already failed twice; and **the owner's sight of it**, since the remaining
+  remedies — funding, access, changing who audits — are nobody else's to authorise.
+  ⚠️ **An escalation is an obligation, not an adjective.** *"Escalated"* in a cell with nothing
+  owed reads as though someone is handling it, and suppresses the investigation the word exists to
+  trigger. That is C7's mechanism one level up, and it is the way this fix would have failed.
+- **And escalation terminates.** It resolves to one of the six when the evidence arrives, or — if
+  the owner concludes the evidence cannot be obtained here, which is itself a finding — to
+  `blocked` or `accepted` with their own bars. It must never sit as `?` with a new adjective.
+
+### Added — the audit record, so the rule is checkable
+
+- **`docs/AUDITS.md` joins §3's artifact table**, on §3's own trigger logic rather than
+  unconditionally: *a second audit is going to happen*. Written at the close of the **first** one,
+  because the second cannot carry `?` rows forward from a record that does not exist; a Workspace
+  audited once and never again does not need it. It may live in your tracker instead — what
+  matters is that audits are **dated and kept**, not where.
+- **A `?`'s age counts from the first audit that recorded it.** An audit nobody wrote down does
+  not start the clock, and backdating one is a green-signal lie about your own compliance (C7).
+  *"Survives two audits"* was not checkable from the Workspace before this — §3 had no row for an
+  audit record and nothing required audits be dated or retained — which was the same class of
+  defect as the rule it replaces.
+
+**Both halves of this were carried as *known, unfixed* in v1.7** and are now closed. The v1.7
+entry below is left as it stood; it was accurate when it shipped.
+
+**Deliberately not added: a rubric criterion for the audit record.** R8 covers the decision record
+and R17 the work ledger, so the symmetry is tempting — but adding one would change the criterion
+count and the scoring surface in a release scoped to a single defect. Recorded here so it reads as
+a decision rather than an oversight.
+
+### Known, unfixed
+
+Unchanged from v1.7 except where closed above: the v1.3 banner path, the Engineer persona's
+two routes, the T-block's citation of §1's *"plus"* clause, C13's headline against T1, the
+Engineer's hash-before-install check, `blocked`'s domain in a solo Workspace, C1a/R5's
+authorship-vs-tuning overreach, and the cosmetic set.
+
+- **New:** T1 scores byte-identity, which is a *proxy* for "this duplicate is redundant" and
+  fails in **both** directions — a **stale** duplicate is more dangerous than an identical one,
+  because if anything resolves it you get a silent version split rather than a no-op. Demonstrated
+  live: upgrading `rclone` moved the `PATH` copy to 1.74.4 while a vendored 1.74.3 remained, and
+  **T1 flipped from fail to pass with nothing fixed.** The proposed replacement tests whether the
+  copy is *referenced* (in code and docs) and whether an equivalent is reachable on `PATH`, with
+  byte-identity demoted to a confirmation that deleting is safe — never a gate saying it is not.
+  Not in this release: it changes what T1 measures and earns its own adversarial read.
+
+---
+
 ## [v1.7] — 2026-07-28
 
 ### Tightens conformance — re-score C14 exceptions and `accepted` verdicts

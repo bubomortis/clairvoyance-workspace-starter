@@ -1,6 +1,6 @@
 # The Clairvoyance Workspace Standard
 
-**Version:** 1.7 · **Status:** Free to copy, adapt, and share.
+**Version:** 1.8 · **Status:** Free to copy, adapt, and share.
 **Audience: human.** This document exists to be understood, argued with, and updated as the subject
 matures. It is deliberately heavy on evidence, counter-evidence and rationale — the parts a person
 needs to decide whether to adopt a rule, and the parts an agent does not benefit from (C1).
@@ -9,11 +9,12 @@ needs to decide whether to adopt a rule, and the parts an agent does not benefit
 [Implementation Runbook](IMPLEMENTATION.md), which has them derive a compact working copy tuned
 to your instance. You should not have to study this document to benefit from it.
 
-**Upgrading from v1.4, v1.5 or v1.6?** No artifact you created changes name or location. But two
-releases **tighten conformance**, so re-check any audit you are still relying on:
+**Upgrading from v1.4, v1.5, v1.6 or v1.7?** No artifact you created changes name or location.
+But three releases **tighten conformance**, so re-check any audit you are still relying on:
 
 - **v1.5** — an audit that passed with an unblocker reading *"when we have time"* does not pass
-  now, and `?` rows acquire an owner, an age, and a decay to `no`.
+  now, and `?` rows acquire an owner and an age. (v1.5 also gave `?` a decay to `no`; **v1.8
+  replaced it** — see below.)
 - **v1.7** — **re-score every C14 exception and every `accepted` from a v1.6 audit.** An exception
   now passes only with all four conditions; the Engineer persona shipped in v1.6 taught two of
   them, so anything built from it is a violation rather than an exception — check specifically for
@@ -22,6 +23,14 @@ releases **tighten conformance**, so re-check any audit you are still relying on
   *"revisit if circumstances change"* no longer passes — **and the owner has to confirm it.**
   Separately, C16 stops exempting a half-measure on the strength of an intention to finish it, and
   a Base Workspace that was told C14 applied absolutely can now discharge its exception.
+- **v1.8** — **re-check every standing `?`.** A `?` that has survived two audits no longer decays
+  to `no`; it **escalates**, and the escalation owes a tracked dated item with a named owner, a
+  statement of what will be different this time, and the owner's sight of it. So a `?` you have
+  been quietly letting ride now fails where it previously only aged — and any `no` you carry that
+  arrived by decay should go back to `?` and be escalated properly, because it was a gap
+  manufactured by the audit rather than found in the Workspace. Retaining **dated** audit results
+  becomes an earned artifact (§3) once a second audit is going to happen, because the age and the
+  escalation are not checkable without it.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
@@ -730,10 +739,19 @@ your Workspace.** If the trigger has not fired, not having the file is the corre
 | `docs/REBUILD.md` | Rebuild-from-zero guide. | …there is a process someone would otherwise have to reconstruct by reading code. |
 | `docs/DECISIONS.md` | Shared record incl. **rejected alternatives**. | …a decision has been made that would be expensive to revisit. In practice: immediately. |
 | `docs/STATUS.md` | Work ledger: open items, owner, assignments. | …work outlives a session, or more than one Staff member takes assignments here. |
+| `docs/AUDITS.md` | **Dated** rubric results, kept — verdict per criterion, and every `?` with its owner and the audit it first appeared in. | …a second audit is going to happen. In practice this is written at the close of the *first* one, because the second cannot carry `?` rows forward from a record that does not exist. A Workspace audited once and never again does not need it. |
 | `versions/v<n>_<date>/` | Config snapshot + narrative `VERSION.md`. | …configuration changes are consequential across runs and you would want to compare or roll back. |
 
 *The two that are effectively always earned are the router and the decision record. The rest depend
 on your Workspace, and creating them speculatively costs more than it returns.*
+
+**On the audit record specifically.** It exists to make one obligation checkable: §11 requires a
+`?` to carry its age and to escalate after two audits, and neither is verifiable from a Workspace
+that does not retain dated audits. It may live in your tracker rather than a file — what matters
+is that it is dated and kept, not where. **A `?`'s age counts from the first audit that recorded
+it**; an audit nobody wrote down does not start the clock, and backdating one is a green-signal
+lie about your own compliance (C7). If your first audit went unrecorded, the honest handling is
+that the clock starts now.
 
 **On work tracking.** If your Clairvoyance tier includes Todos, use them — they are better than a
 markdown file. If it does not, `docs/STATUS.md` is the fallback and it is normative in this
@@ -1593,17 +1611,50 @@ cannot evidence something, score `?` and say what would settle it.
 is a fact about the audit and not about the thing audited. That is why it is counted separately
 and why it behaves differently:
 
-- **`?` is never terminal, and it decays.** Every other verdict can close an audit. `?` is an open
-  item that must resolve to one of the six once the evidence named beside it is obtained. So:
-  **every `?` names who will obtain the evidence, every subsequent audit carries unresolved `?`
-  rows forward with their age, and a `?` that survives two audits is a `no`** — the evidence was
-  obtainable by definition, and nobody obtained it.
+- **`?` is never terminal, and it escalates.** Every other verdict can close an audit. `?` is an
+  open item that must resolve to one of the six once the evidence named beside it is obtained.
+  So: **every `?` names who will obtain the evidence, every subsequent audit carries unresolved
+  `?` rows forward with their age (§3's audit record is what makes that checkable), and a `?`
+  that survives two audits escalates to the owner.**
   ⚠️ **This is the obligation that cannot be satisfied by writing a better sentence.** An
   unblocker and a re-raise condition are *event-driven*: the world changes and they trip on their
   own. An evidence statement is *actor-driven* — someone has to go and get it — so without an
-  owner and a decay path it never executes, and a well-worded `?` sits across audits indefinitely
-  while every stated obligation is formally satisfied. **That, not a weak evidence statement, is
-  how `?` becomes the cheap exit.**
+  owner and an escalation path it never executes, and a well-worded `?` sits across audits
+  indefinitely while every stated obligation is formally satisfied. **That, not a weak evidence
+  statement, is how `?` becomes the cheap exit.**
+
+  **Escalating does not mean scoring it `no`.** Two audits failing to obtain evidence establishes
+  that *the audit is not getting done*, which is a fact about the audit — the one thing `?` is
+  defined to record. It does not establish anything about the Workspace, and scoring `no` would
+  manufacture a gap that may not be there and send remediation after it. **What has failed is the
+  process, so the escalation is aimed at the process.**
+
+  ⚠️ **An escalation is an obligation, not an adjective.** *"Escalated"* written in a rubric cell
+  with nothing owed is an instruction rendered as a status — it reads as though someone is now
+  handling it, which suppresses exactly the investigation the word is supposed to trigger. That is
+  C7's mechanism again, one level up, and it is how this fix would fail. So the escalation is held
+  to the same bar as an unblocker and a re-raise condition, and it owes **three** things:
+
+  1. **A tracked, dated item with a named owner** — in your work tracker, or `docs/STATUS.md` if
+     you have no tracker (§3). The rubric row references it, exactly as an `accepted` row
+     references its decision entry. **A third party can open the tracker and see whether it
+     exists, who holds it, and when it is due, without asking the auditor** — that is the
+     observability test, met by an artifact rather than by a sentence.
+  2. **A statement of what will be different this time.** The same person, the same approach and
+     more goodwill is the null escalation — it is what already failed twice. Naming a different
+     actor, a granted access, a booked hour or a changed method is what makes this an escalation
+     rather than a third attempt.
+  3. **The owner's sight of it.** By the time a criterion has resisted two audits, the remedies
+     left — funding the work, granting the access, changing who audits — are the owner's to
+     authorise and nobody else's. This is the same routing as an `accepted`, and for the same
+     reason: the auditor cannot discharge it alone.
+
+  **And escalation terminates.** It resolves when the evidence arrives — to one of the six — or
+  when the owner concludes it cannot be obtained here, which is itself a finding and routes to a
+  real verdict: `blocked` where something outside your control prevents evidencing it, or
+  `accepted` where the owner prices not knowing and records the re-raise condition. **What it must
+  never do is stay `?` with a new adjective**, which would rebuild the parking space this rule
+  exists to close.
 - **`?` asserts that you looked and could not tell.** It does not cover not having looked, and it
   is not available for a criterion you find inconvenient to evaluate. **Unfamiliarity with a
   platform, a vocabulary or a toolchain is a translation problem, not missing evidence** — see
