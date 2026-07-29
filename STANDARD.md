@@ -39,6 +39,19 @@ But four releases **tighten conformance**, so re-check any audit you are still r
   **C18 is the first criterion that governs how Staff propose a control rather than what the
   Workspace contains** — scored, as always, on the artifact it leaves behind (R35, a decision
   record). If you are Staff, expect it to apply to your own past advice.
+- **v1.10** — **R5 is now scored on tuning alone, and this TIGHTENS CONFORMANCE.** v1.3–v1.9
+  phrased R5 as *"hand-authored, not generated"* and cited the tuning
+  study for it, which cannot carry an authorship claim — it has no hand-authored arm. The direction
+  was defensible; the citation was wrong, and one supporting claim ("generated measured worse than
+  no file at all") overstated a result that is not statistically significant. **R5's pass set moves
+  in both directions.** A file nobody has revised now **fails** however carefully it was typed —
+  in our judgement the common case, though we have not measured that: a hand-written `AGENTS.md`
+  nobody has touched since. A generated file you have since **tuned against real failures** now
+  **passes** — and that path is not merely tolerated, it is the best-performing condition measured.
+  **Generated output shipped unmodified** is named as an anti-pattern, not scored by R5.
+  No artifact changes name or location, so this is not
+  *breaking for adopters* — but re-score R5 rather than carrying a v1.9 verdict forward, because it
+  can flip either way.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
@@ -147,13 +160,48 @@ So:
 
 **Two corollaries, both load-bearing:**
 
-**C1a — Do not auto-generate your instruction file.** Generated context files measured *worse than
-no file at all*. A follow-up study makes the mechanism explicit: **how the guidance is produced is
-the decisive variable.** Guidance iteratively tuned against observed failures reached a **33.0%**
+**C1a — Do not ship an instruction file you have never tuned.** **Whether the guidance has been
+tuned is the decisive variable.** Guidance iteratively tuned against observed failures reached a **33.0%**
 resolve rate, versus **28.3%** for a static generated knowledge base and **25.5%** unguided
-(p<0.001 for both contrasts). So the honest position is not "context files don't work" — it is
-**untuned context files don't work.** Write yours by hand, then *refine it against failures you
-actually observed*, not against what you imagine the agent needs.
+(p<0.001 for both probe-and-refine contrasts).
+
+Read those numbers precisely, because the careless reading is the one that gets quoted. **That
+p<0.001 is scoped to the two *probe-and-refine* contrasts** — 33.0 against 28.3, and 33.0 against
+25.5. **Tuning is the only thing here that significantly beats having no file at all.**
+
+A second study compared three settings on one corpus — no context file, LLM-generated, and
+developer-written:
+
+| Contrast | Effect | Significant? |
+|---|---|---|
+| Developer-written vs **no file** | +2.4% | **No** (p = 0.21) |
+| LLM-generated vs **no file** | marginal *negative* | **No** |
+| Developer-written vs **LLM-generated** | developer-written higher | **Yes** (p = 0.038) |
+
+Two conclusions follow, in this order of confidence.
+
+**First, and most important: an untuned file has no demonstrated advantage over no file, however it
+was written.** A carefully hand-typed `AGENTS.md` that nobody has revised does not clear that bar
+either.
+
+**Second, among files shipped untuned, provenance did separate.** Developer-written beat
+LLM-generated at p = 0.038, and that source recommends omitting LLM-generated context files
+outright. Note the scope carefully: what it measured was files shipped **as generated**.
+
+**Generated-and-then-tuned is a different artifact, and it is the winning one.** The 33.0%
+condition above *is* a one-shot generated knowledge base that was subsequently refined, and the
+study attributes the larger share of the gain to the refinement rather than the generation.
+
+So: **generate a first draft, then tune it. What must never ship is the draft itself.** What earns
+the resolve rate is what you do next — *refine it against failures you actually observed*, not
+against what you imagine the agent needs. **A file produced once and never revised is the artifact
+this corollary warns about, whatever produced it.**
+
+**One condition, and it is an instruction rather than a caveat.** Guidance calibrated for one
+model's behavioural profile was found to **actively destabilise a different model's agent loop**.
+So **tune against the model you actually run, and re-check when you change it** — a Workspace
+pointing several models at one instruction file must not assume the tuning transfers. (These
+results also depend on the agent's step budget; see `CITATIONS.md` for the scope of the numbers.)
 
 **C1b — Anything you name will be over-applied.** The failure mode is **over-compliance, not
 neglect.** Most people worry adherence is too low; the measured evidence points the other way.
@@ -1740,7 +1788,7 @@ improvement.
 | R2 | Router covers every process doc | All |
 | R3 | Charter FILE exists (role, authority, escalation) | Project, Pipeline |
 | R4 | No policy authored in more than one place | All |
-| R5 | Agent-facing instruction files are **hand-authored, not generated** (C1a) | All |
+| R5 | Agent-facing instruction files are **tuned against observed failures** (C1a) | All |
 | R6 | Instruction files contain **no rules the toolchain already enforces deterministically** | Project, Pipeline *with tooling* |
 | R7 | Deep reference is behind an index and loaded on demand, not inlined | All |
 
@@ -1961,7 +2009,8 @@ All observed in production **except where marked**, most more than once.
 | **Title inflation** | A source labelled more authoritative than it is |
 | **Unowned root** | Temp files accumulate because no one owns hygiene |
 | **Overview-as-instructions** | Descriptive project prose in an agent-facing file (C1) |
-| **Auto-generated instructions** | `/init`-style generated context file, never tuned against real failures (C1a) |
+| **Untuned instructions** | Context file shipped as a first draft — `/init`-generated or hand-written — never tuned against real failures (C1a) |
+| **Generated output shipped as-is** | An `/init`-style file committed exactly as produced; the one provenance contrast that reached significance (C1a) |
 | **Over-application** | A tool or path mentioned "for completeness" becomes the default choice (C1b) |
 | **Unconditional success ping** | Heartbeat emitted at the top of the script, so it fires even when the work fails (C7b) |
 | **Untested rebuild guide** | Rebuild documentation nobody has ever executed (R13) |

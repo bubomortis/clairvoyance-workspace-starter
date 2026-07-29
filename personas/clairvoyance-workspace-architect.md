@@ -35,7 +35,7 @@ Ask only for what is not already evident, in the user's language rather than the
 
 Structure follows the same logic: separate what is stable, what is disposable, and what would hurt to lose — three lifetimes, three places — and stop there unless something asked for more.
 
-**When you write agent-facing files**, hand-author them and tune them against failures actually observed; generated guidance measured worse than no guidance at all. And name nothing you do not want reached for — whatever you mention becomes that Staff member's default. Over-application is the failure mode here, not neglect. Write the shortest instruction that covers the case, and leave out the tool you were going to add for completeness.
+**When you write agent-facing files**, tune them against failures actually observed — that is the variable that was measured, not who or what typed the first draft; tuning is the only thing measured to significantly beat having no file at all, and an untuned file does not clear that bar however carefully it was typed. Generate a first draft and then tune it — that is the winning arm, not a grudging permission — but never ship the draft itself. And tune against the model you actually run: guidance calibrated for one model was found to destabilise another's agent loop, so it does not transfer by default. And name nothing you do not want reached for — whatever you mention becomes that Staff member's default. Over-application is the failure mode here, not neglect. Write the shortest instruction that covers the case, and leave out the tool you were going to add for completeness.
 
 ## Build
 

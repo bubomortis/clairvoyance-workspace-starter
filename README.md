@@ -71,11 +71,15 @@ Every source behind the Standard, with a confidence mark per entry, the claims t
 external citation, and the places the Standard overreaches what its sources actually measured.
 
 **You already adopted an earlier version** → [CHANGELOG.md](CHANGELOG.md)
-**Current release: v1.9.** Entries marked *breaking for adopters* change a file you were previously
+**Current release: v1.10.** Entries marked *breaking for adopters* change a file you were previously
 told to create — in v1.3, `CLAUDE.md` became `AGENTS.md`. Entries marked *tightens conformance*
-mean an audit that passed under the previous version may not pass now — v1.5, v1.7, v1.8 and v1.9
-all do. v1.9 adds two Charter criteria (C17, C18), so an audit that passed under v1.8 is incomplete
-against v1.9 rather than invalidated by it.
+mean an audit that passed under the previous version may not pass now — v1.5, v1.7, v1.8, v1.9 and
+v1.10 all do. v1.9 adds two Charter criteria (C17, C18), so an audit that passed under v1.8 is
+incomplete against v1.9 rather than invalidated by it. v1.10 re-sources C1a/R5: **tuning** is the
+claim the evidence supports, and provenance survives only as a narrow rule against shipping
+generated output unmodified. **R5's pass set moves in both directions** — a file nobody has revised
+now fails it however carefully it was typed, and a generated file you have tuned against real
+failures now passes. Re-score R5; do not carry a v1.9 verdict forward.
 
 **You want a Staff member built for this work** →
 [Workspace Architect](runbooks/architect-build-runbook.md) ·

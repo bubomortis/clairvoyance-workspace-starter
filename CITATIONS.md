@@ -39,18 +39,153 @@ most of what was gathered did not survive verification.
    Coding Agents?"** arXiv:2602.11988, 12 Feb 2026. `https://arxiv.org/abs/2602.11988`
    *Supplies:* the >20% inference-cost increase, no general improvement in task success, and the
    load-bearing breakdown — instructions followed, repository overviews not.
+   🔑 **Design, recorded in full because omitting it caused two successive defects.** The paper runs
+   **two** settings — SWE-bench tasks with **LLM-generated** context files, and **CTXBENCH**, a
+   purpose-built benchmark of **138 instances across 12 repositories carrying developer-committed
+   context files.** CTXBENCH is evaluated in **three** conditions on a **common corpus**: no context
+   file, LLM-generated, developer-written. **It therefore contains a head-to-head on provenance.**
 
-### C1a — Do not auto-generate your instruction file
+   | Contrast | Effect | Significance |
+   |---|---|---|
+   | Developer-written vs none | +2.4% | **not significant**, p = 0.21 |
+   | LLM-generated vs none | marginal negative | **not significant** |
+   | **Developer-written vs LLM-generated** | developer-written higher | **SIGNIFICANT, p = 0.038** |
+
+   §6: *"LLM-generated context files have a marginal negative effect on task success rates, while
+   developer-written ones provide a marginal performance gain, neither statistically significant."*
+   §1 recommends *"omitting LLM-generated context files for the time being … Human-written context
+   files should … be rigorously evaluated before adoption."*
+
+   ⚠️ **Cite the §4 / Table 3 figures (2.4%, p = 0.038), not §1's "7% on average"** — the latter
+   appears to be a relative framing of the same result, and quoting it unqualified is the next
+   paraphrase trap in this file.
+
+   ⚠️ **Boundary condition (appendix):** when **all documentation-related files are removed** from
+   the codebase, LLM-generated context files improve performance by ~2.7% and **outperform
+   developer-written ones**. The provenance advantage is **not unconditional** — in
+   documentation-poor repositories the generated file is the better artifact.
+
+   ❓ **Open methodological caveat, ours not the paper's.** The DEV arm is real files from live
+   repositories, which have plausibly been revised over time; the LLM arm is first-draft output by
+   construction. So the p = 0.038 contrast may **confound provenance with tuning**. We have not
+   resolved this and do not rely on the contrast for more than the **Generated output shipped
+   as-is** anti-pattern. It is deliberately not the basis of a scored criterion.
+
+### C1a — Do not ship an instruction file you have never tuned
 
 2. ● **Shepard, A. & Albrecht, J. — "Probe-and-Refine Tuning of Repository Guidance for Coding
    Agents."** arXiv:2606.20512, 18 Jun 2026. `https://arxiv.org/pdf/2606.20512`
-   *Supplies:* 33.0% tuned vs 28.3% static generated vs 25.5% unguided, p<0.001 both contrasts.
-3. ● arXiv:2602.11988 (above) — the "generated measured worse than no file" framing.
+   *Supplies:* 33.0% probe-and-refine tuned vs 28.3% static generated vs 25.5% unguided.
+   ⚠️ **The p<0.001 is scoped to the two PROBE-AND-REFINE contrasts** (33.0 vs 28.3 and 33.0 vs
+   25.5). The **28.3-vs-25.5 gap carries no p-value** and must not be argued in either direction.
+   Those two words are the scope of the statistic — do not drop them when paraphrasing. An earlier
+   paraphrase here read "p<0.001 both contrasts", and prose downstream then walked into the gap
+   that opened.
 
-> ⚠️ **Known defect, still live as of v1.3 — not fixed, only recorded.** Neither source has a
-> hand-authored arm. They measure **tuning**, not **authorship**. C1a's advice to "write yours by
-> hand" and R5's "hand-authored, not generated" both overreach these citations. When arguing from
-> these, argue tuning.
+   🔑 **The 33.0% arm is GENERATED-THEN-TUNED, not hand-written.** §3.1 describes the static
+   condition as "tree-sitter-assisted parsing of the repository structure **and one-shot
+   LLM-generated generic guidance**"; the abstract calls it "the static knowledge base **used to
+   initialize** it"; contribution 1 says probe-and-refine "**refines a statically generated**
+   repository knowledge base". **§4 decomposes the gain: 7.5pp total from no-context to
+   probe-and-refine — 2.8pp from the generated layer, 4.7pp from the iterative refinement** (the
+   structural layer ≈ 37% of the improvement). So this study does not merely permit
+   generate-then-tune; it *is* generate-then-tune.
+
+   ⚠️ **The authors disclaim the absolute numbers.** §3.1: a 16k-token context window is "**a hard
+   truncation we impose** … These constraints result in **absolute resolve rates well below what
+   larger-context configurations achieve. Thus the main contribution of our work in this space is
+   the relative comparison across conditions, not the absolute numbers.**" Quote 33.0/28.3/25.5 as
+   *between-condition* evidence only; they are not a benchmark to measure yourself against.
+
+   ⚠️ **The advantage is budget-dependent.** §6/Fig. 7: "**At 25 steps, all conditions are
+   equivalent.**" The unguided baseline is flat at 25% regardless of budget; probe-and-refine is
+   the only condition still improving beyond 100 steps. Every headline number is at **200 steps**.
+   §4 narrows it further: of 500 instances, 342 are a hard core where guidance does not help and 65
+   an easy core — "**the middle 93 instances are where guidance matters**."
+
+   🚨 **Guidance is not portable across models.** §1 contribution 4 / §7: "a capacity-constrained
+   model cannot sustain the tuning loop, and **guidance calibrated for one model's behavioral
+   profile actively destabilizes a different model's agent loop**." This is a live hazard for any
+   Workspace pointing several models at one instruction file, which is the common case here.
+3. ● arXiv:2602.11988 (above) — **re-scoped, not withdrawn.** Supplies C1a's two non-tuning facts:
+   that an untuned file of **either** provenance fails to significantly beat having no file, and
+   that **among files shipped untuned, developer-written beat LLM-generated (p = 0.038)** — the
+   only provenance contrast in either source that reached significance. The **Generated output
+   shipped as-is** anti-pattern rests on that contrast and on nothing wider. **R5 does not**: R5 is
+   scored on tuning alone, because that contrast does not reach significance against the no-file
+   baseline and cannot carry a scored row.
+
+   🚧 **Scope note — where we knowingly stop short of the source.** §1 recommends omitting
+   LLM-generated context files outright. We do **not** adopt that, and the reason is measured
+   rather than asserted: the arm that failed here was generated-**and-shipped**, whereas
+   generated-**and-tuned** is the best-performing condition in either source (2606.20512's 33.0%
+   arm initialises from one-shot LLM-generated guidance; see its entry above). So the blanket form
+   would forbid the winning path. **This is a deliberate narrowing of a source's recommendation to
+   its tested scope, not an oversight** — do not "restore" the stronger form.
+   📝 Benchmark naming: 2606.20512 refers to this benchmark as **AGENTBENCH**; the current version
+   of 2602.11988 calls it **CTXBENCH**. We use the primary source's name.
+
+   ⚠️ Two withdrawn framings, recorded so neither returns. **(a)** *"…as found in the wild, which
+   are overwhelmingly first drafts"* — withdrawn: this paper measures no tuning and says nothing
+   about file maturity. **(b)** *"hand-authoring was measured and did not separate"* — withdrawn
+   as **false**: it separated at p = 0.038. Both were attempts to make this paper reach a
+   conclusion it does not support; they failed in opposite directions.
+
+> ✅ **Defect fixed in v1.10 (open v1.3–v1.9).** C1a and R5 were phrased around *authorship* —
+> "write yours by hand", "hand-authored, not generated" — and cited **2606.20512** for it, which
+> has no hand-authored arm and cannot carry an authorship claim. The **direction** turned out to be
+> defensible; the **citation** was wrong, and the supporting claim that generated files measured
+> *worse than no file at all* overstated a result that is **not statistically significant**.
+>
+> The corrected position, in order of confidence: **(1)** tuning is the only thing that
+> significantly beats having no context file (p<0.001); **(2)** an untuned file of either
+> provenance does **not** significantly beat having none; **(3)** among untuned files,
+> developer-written beat LLM-generated (p = 0.038). **R5 is scored on (1) alone**; (3) is carried
+> by an anti-pattern, not by a criterion, because it does not reach significance against the
+> no-file baseline. **When arguing from C1a or R5, lead with tuning and treat provenance as the
+> secondary, narrower claim it is.**
+>
+> **Rules bought by getting this fix wrong.** Four of them came from a wrong draft of this very
+> entry; rule (3) came from watching one source paraphrase another. Rule first, incident as its
+> evidence.
+>
+> **(1) Record a source's full design, including arms no criterion currently cites.** *Draft 2
+> asserted that no study behind C1a had a hand-authored arm — four lines below re-listing the study
+> whose developer-committed arm is exactly that. False, load-bearing, and it survived four sweeps.
+> The cause was this file: entry 1's supply line recorded findings but never the two-setting
+> design, so every later reader — including the ones auditing for overreach — inherited an evidence
+> base with an arm missing.* A citation record that under-describes a source manufactures confident
+> false claims downstream.
+>
+> **(2) For any claim a rule is scored against, read the section reporting the contrast — not the
+> abstract, and not this file.** *Draft 3 fixed (1) by asserting authorship "was measured and did
+> not separate" — false in the opposite direction. It came from the abstract, whose "holds for
+> both" sentence is scoped to the comparison against no file; the head-to-head sits in §4 and
+> reaches significance.* An abstract is a citation record too, and it omits arms exactly the way
+> ours did.
+>
+> **(3) Do not inherit a secondary source's characterisation of a primary one.** *2606.20512
+> describes 2602.11988 as finding generated files "reduce resolve rates by 3%" — a direction stated
+> without the non-significance the primary source reports.* That is trusting an abstract, one
+> citation removed.
+>
+> **(4) Under-claiming is the same defect as over-claiming.** *Draft 4 asserted "no arm tested
+> generate-then-tune" — false, but this one cost a claim rather than inventing one:
+> generate-then-tune is 2606.20512's winning arm, and the Standard was hedging a position the
+> evidence actively supports.* Both directions are the record failing to match the source; only one
+> of them feels like caution, which is why it survived a round longer than the rest.
+>
+> **(5) Retiring an untested claim does not license asserting its reverse.** *Draft 1 replaced the
+> authorship claim with "the generated file still beat no file at all" — reversing an untested
+> contrast instead of retiring it.* C1a now states that contrast is untested in **both** directions.
+>
+> **Deliberate wording, not drift:** C1a opens *"whether the guidance has been tuned is the decisive
+> variable"* rather than the source's own *"how the guidance is produced…"* — an intentional
+> narrowing, because the source's phrasing is broad enough to re-admit the authorship reading.
+> **Do not restore the original wording.**
+>
+> Four drafts, four different wrong shapes, one root: **characterising a study from a summary of
+> it.**
 
 ### C1b — Anything you name will be over-applied
 
@@ -363,7 +498,7 @@ from mechanism and one recorded case, and the Standard says so.
    bounded by the sentence *after* it, which prescribes careful assessment: **the ACM's limit is on
    the groundedness of a report, not its frequency.** Quoting it for a *count* is arguing from a
    passage that measures *quality of basis* — the same move as C1a/R5's authorship-from-tuning
-   overread recorded above. **Do not cite the ACM for the one-round bound.** That bound now rests on
+   overread recorded and corrected above. **Do not cite the ACM for the one-round bound.** That bound now rests on
    entry 5's authority allocation and the absence of a chain of command above the owner.
 7. ○ **Bezos, J. — 2016 Letter to Shareholders.** Amazon.com Inc., filed as Exhibit 99.1.
    `https://www.sec.gov/Archives/edgar/data/1018724/000119312517120198/d373368dex991.htm`
@@ -413,8 +548,8 @@ from mechanism and one recorded case, and the Standard says so.
    Technique."** *JPSP* 4(2), 1966. `doi:10.1037/h0023552`
    **Dropped on fit, not availability.** Foot-in-the-door concerns a small request preceding a
    larger one. C18's failure was a mitigation **misdescribed as a prerequisite** — a different
-   mechanism. Citing it would repeat the C1a/R5 overread this file already records: arguing from
-   data that measures something adjacent to the claim.
+   mechanism. Citing it would repeat the C1a/R5 overread this file records and corrects above:
+   arguing from data that measures something adjacent to the claim.
 10. ⚠️ **Staw, B. M. — "Knee-Deep in the Big Muddy: A Study of Escalating Commitment to a Chosen
    Course of Action."** *OBHP* 16(1), 1976. `doi:10.1016/0030-5073(76)90005-2`
    Apt for the ratchet, and **not used.** No open-access copy exists via Unpaywall, OpenAlex or

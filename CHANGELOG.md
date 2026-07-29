@@ -11,6 +11,118 @@ version.
 
 ---
 
+## [v1.10] — 2026-07-29
+
+### Tightens conformance — C1a/R5 re-sourced; the direction was defensible, the citation was not
+
+Not breaking for adopters: no artifact changes name or location. But **R5's pass set moves in both
+directions**, so a v1.9 verdict must be re-scored rather than carried forward:
+
+- A file **nobody has revised now fails R5**, however carefully it was typed. We expect that to be
+  the common case — a hand-written `AGENTS.md` never touched since — though that is our judgement
+  about adopters' repositories, not something we have measured.
+- A **generated file you have tuned** against real failures now **passes**, where the authorship
+  phrasing previously failed it. That half is good news, and earlier drafts of this entry buried it.
+- **Generated output shipped unmodified still fails**, and now does so for a stated reason.
+
+### Changed — C1a states three findings in order of confidence
+
+The old C1a hung an authorship criterion on a **tuning** study that has no hand-authored arm, and
+supported it with a claim ("generated measured worse than no file at all") that overstates a result
+which is **not statistically significant**. Both are fixed. What replaces them is not the retirement
+of authorship — an earlier draft of this release did that, and it was wrong — but a correctly
+ordered reading of two sources:
+
+1. **Tuning is the only thing measured to significantly beat having no context file** — 33.0% vs
+   25.5%, p<0.001. This leads, because it is the strongest result either paper reports.
+2. **An untuned file does not significantly beat having none, whatever wrote it.** Developer-written
+   vs no file is +2.4% at p = 0.21; LLM-generated vs no file trends mildly negative. Neither
+   reaches significance. C1a now states this outright rather than omitting the uncomfortable half.
+3. **Among files shipped untuned, provenance did separate** — developer-written over LLM-generated,
+   **p = 0.038**, the only provenance contrast in either source to reach significance.
+
+- **Generate-then-tune is the winning arm, and C1a now says so.** arXiv:2602.11988 advises omitting
+  LLM-generated context files outright; we deliberately do not adopt that, because the arm that
+  failed was generated-**and-shipped**. The 33.0% condition in the tuning study *is* a one-shot
+  LLM-generated knowledge base that was then refined, and §4 decomposes the 7.5pp gain into
+  **2.8pp from the generated layer and 4.7pp from the refinement**. An earlier draft of this
+  release hedged this as "no arm tested it" — false, and it cost us the strongest claim available.
+- **Two conditions now stated in C1a**, both from the tuning study and neither previously recorded:
+  the gains are measured at a **200-step agent budget** (at 25 steps no condition separates), and
+  **guidance calibrated for one model actively destabilises a different model's agent loop.** The
+  second is a live hazard for Workspaces running several models against one instruction file.
+- The practical instruction survives all of this intact: draft it however you like, then refine it
+  against failures you actually observed. **A file produced once and never revised is the artifact
+  C1a warns about, whatever produced it.**
+
+### Changed — R5 and the anti-pattern that carried the same error
+
+- **R5** now reads *"tuned against observed failures"* — previously *"hand-authored, not
+  generated"*, which converted a tuning result into an authorship criterion that anything citing R5
+  faithfully inherited. A drafted second clause forbidding unmodified generated output was cut as
+  redundant: a file tuned against observed failures cannot also be unmodified generated output, so
+  scoring both asks the auditor to check one property twice (C1b, R4). The provenance finding is
+  carried by an anti-pattern instead, where naming a failure shape belongs.
+- A second anti-pattern, **Generated output shipped as-is**, now names the specific artifact that
+  measured worst, alongside the broader **Untuned instructions**.
+- The **Auto-generated instructions** anti-pattern is renamed **Untuned instructions**, and now
+  names hand-written first drafts as the same defect. Its description was already correct; its
+  title was doing the overreaching.
+
+### Changed — propagated to every dependent, which was most of the fix
+
+The defect had spread past the two lines previously recorded:
+
+- `IMPLEMENTATION.md`'s honest caveat asserted C1a says *"generated guidance measured worse than
+  hand-authored guidance"* — a comparison **no cited study ran**. Rewritten to rest on tuning, and
+  it now states explicitly that being derived is not the defect; staying untuned is.
+- `IMPLEMENTATION.md`'s pre-flight rule *"Do not auto-generate instruction files. Hand-author them.
+  This is the one place the research is unambiguous"* was wrong twice over — the research is
+  visibly not unambiguous on this point, which is how the contradiction survived seven releases.
+- The **Workspace Architect persona** carried the original claim verbatim and would have kept
+  propagating it into new Workspaces.
+- `CITATIONS.md` flips its ⚠️ known-defect note to ✅ fixed and **records arXiv:2602.11988's design
+  in full** — CTXBENCH, 138 instances, three conditions on a common corpus, with the contrast table
+  and significance for each. It also now carries two things an adopter would otherwise discover the
+  hard way: the **boundary condition** (with documentation stripped from the repository,
+  LLM-generated files *outperform* developer-written ones), and an open **confound caveat** of our
+  own — the developer-written arm is real files from live repositories, which may have been revised,
+  so p = 0.038 could be a tuning effect wearing an authorship label. The p-value paraphrase now
+  carries the words **probe-and-refine**, which scope the statistic and had been dropped.
+
+### Known future consideration — not actioned
+
+**C1a now does more work than several full criteria**, at roughly three times the length of C1, the
+criterion it is a corollary *of*. The honest end state may be to promote it. Deliberately not done
+in this release: R5, two anti-pattern rows and this changelog all cite `C1a` by name, and
+renumbering is new surface for no benefit today. Revisit when something else forces a renumber.
+
+### Note
+
+Found by sweeping for the *concept* in prose rather than the recorded line numbers. The two lines
+on file were a third of the real surface.
+
+The deeper cause sat in `CITATIONS.md` itself. Its supply line for arXiv:2602.11988 recorded the
+paper's findings but never recorded its **design** — two settings, LLM-generated *and*
+developer-committed context files. With an arm missing from the record, "no study behind C1a has a
+hand-authored arm" read as obviously true to every reader for seven releases, including the sweeps
+looking for exactly this class of error. **A citation record that under-describes a source
+manufactures confident false claims downstream.** The supply line now names both settings, and the
+standing rule is to record a source's full design even where no criterion currently cites it.
+
+**This release took five drafts, and each was wrong in a different direction.** The first reversed
+an untested contrast; the second asserted no study had a hand-authored arm, four lines below
+re-listing the study that has one; the third asserted authorship "was measured and did not
+separate", the opposite of what the paper found; the fourth asserted no arm had tested
+generate-then-tune, when it is the winning arm. All five came from one root: **characterising a
+study from a summary of it.** Two came from the papers' own abstracts, which omit arms exactly the
+way our citation record did. The fifth is the one worth remembering, because it went the other way:
+**under-claiming is the same defect as over-claiming** — both are the record failing to match the
+source, and only one of them feels like caution. For any claim a rule is scored against, read the
+section reporting the contrast.
+
+---
+
 ## [v1.9] — 2026-07-28
 
 ### Tightens conformance — two new Charter criteria, C17 and C18

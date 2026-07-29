@@ -164,15 +164,24 @@ why. Do not begin changing Workspaces in the same turn.
 
 ### The honest caveat on this step
 
-The Standard's own C1a says **generated guidance measured worse than hand-authored guidance**, and a
-Criteria Card is derived rather than hand-written. That tension is real and you should not pretend
-otherwise.
+The Standard's own C1a warns against **guidance that has never been tuned against observed
+failures**, and a Criteria Card starts life exactly there: derived in one pass, tested against
+nothing. That tension is real and you should not pretend otherwise.
 
-Three things make it defensible: you are **compressing a hand-authored source**, not inventing
-guidance from scratch; the card is a **checklist and index**, not a persona or instruction file; and
-C1a's own resolution is that *tuned* guidance beat both generated and unguided baselines. So the
-card is only sound if you actually tune it — see §5. **A card derived once and never revised is the
-exact artifact C1a warns about.**
+Two things make it defensible, and one obligation makes it sound. It is a **compression of a source
+that has itself been tuned**, not guidance invented from scratch; and it is a **checklist and
+index**, not a persona or instruction file. (Earlier versions listed a third defence — that C1a
+resolves to tuning. It is not dropped; it is promoted below, because it is an obligation rather
+than a defence.) Neither of the two earns it the 33.0% arm — only tuning does. So the card is only
+sound if you actually tune it against what goes wrong here — see §5. **A card derived once and
+never revised is the exact artifact C1a warns about.**
+
+Note what does and does not carry weight here. C1a's strongest finding is about **tuning**, not
+authorship: an untuned file does not significantly beat having no file at all, however it was
+written. So being machine-derived is not by itself the defect — **staying untuned is.** The one
+provenance rule C1a does keep is narrow and it applies to you: a card **committed exactly as
+generated** is the artifact that measured worst. Derive it, then tune it — that sequence is the
+best-performing condition measured, not a compromise.
 
 ---
 
@@ -218,8 +227,10 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
 
 - **Do not create artifacts whose trigger has not fired.** Absence is the correct state, and the
   person least equipped to push back is the one most likely to accept a scaffold they will never use.
-- **Do not auto-generate instruction files** (`AGENTS.md`, `library.md`) from a template. Hand-author
-  them. This is the one place the research is unambiguous.
+- **Do not leave instruction files** (`AGENTS.md`, `library.md`) **at their first draft** — whether
+  you generated them from a template or typed them yourself. Tune them against failures you have
+  actually seen here. Generating a starting point is not the defect; **committing it exactly as
+  generated is**, and that is the one provenance result that reached significance.
 - **Do not report success you have not verified** by opening the file and reading it.
 - **Do not apply this to a scratch or two-day Workspace.** Say it does not need it.
 
@@ -231,8 +242,9 @@ Pick one Workspace. Do **not** apply the card everywhere at once.
 
 When something goes wrong in a Workspace — a criterion you scored `yes` that turned out hollow, a
 recommendation that wasted the user's time, a gap the card did not catch — **revise the card and
-note what changed it.** Tuning against observed failure is the difference between the guidance that
-measured best and the guidance that measured worse than nothing.
+note what changed it.** Tuning against observed failure is what separated the guidance that measured
+best (33.0%) from the untuned baselines, which sat close together and untested against each other
+(28.3% static, 25.5% no guidance at all).
 
 Re-derive from the Standard only when the Standard itself changes. Otherwise, refine in place.
 
