@@ -4,7 +4,11 @@
 **Status:** Free to copy, adapt, and share.
 
 Sources actually used in [STANDARD.md](STANDARD.md), including SOP-1 through SOP-6.
-Compiled 2026-07-25.
+Compiled 2026-07-25; extended for v1.11 on 2026-08-03.
+
+⚠️ **One exception to "actually used":** §5 records two sources that were read in full and
+**deliberately not used**, with the reasons. They are kept because a decline is evidence too — and
+because the next reader to find them will otherwise repeat the assessment.
 
 ## How this was built, and what to distrust
 
@@ -673,6 +677,238 @@ arXiv:2602.11988 measured **correctness** and found success rates fell while cos
 reconciliation the Standard offers is that context files **reduce wandering without improving the
 destination.** C1 and C1a are written to survive both results. Anyone citing one alone is giving
 you half the picture.
+
+🔑 **UPDATE 2026-08-03 — the efficiency study is now identifiable, and a controlled study has
+resolved the disagreement in the Standard's favour.** The efficiency arm is **Lulla et al.,
+arXiv:2601.20404** (§5 entry 3). **Khatri, arXiv:2607.27250** (§5 entry 1) ran the ablation neither
+original study performed — same tasks, both agent families, injection strategy as the independent
+variable — and reports:
+
+- **The correctness null holds on both agent families**, with a manipulation probe showing the real
+  `AGENTS.md` never converts a near-miss to a pass.
+- **The efficiency gain is injection mechanics, not capability.** Note the two studies report
+  *opposite signs* on cost (Lulla −16.6% output tokens; arXiv:2602.11988 +20% inference cost),
+  which is what you expect if delivery overhead rather than agent capability drives the number.
+- **A third cause of the disagreement:** borderline task difficulty is agent-specific (ρ=0.75), so
+  for ~40% of tasks the agent that would reveal a context effect is not the same agent. Single-agent
+  studies draw from different informative bands and reach opposite conclusions honestly.
+
+**The Standard's reconciliation survives and is now the better-supported reading**, with one
+refinement: the only *measured* wandering reduction is a dose-dependent drop in blind full-suite
+test runs, on the one repository whose file carries an explicit operational warning. **Do not
+upgrade that from exploratory** — see the trap on §5 entry 1.
+
+---
+
+## 5. v1.11 sources — read in full
+
+**Five of these eight are load-bearing in v1.11**; each entry names where. They are kept together
+rather than split across §1's criterion sections because one source serves four criteria at once and
+its caveats are shared — splitting them would fragment the limits that matter most.
+
+⚠️ **Provenance note, recorded because this file's whole value is that its provenance claims are
+true.** These were gathered and read *before* any criterion was drafted against them — the reverse
+order is how C1a acquired the defect v1.10 had to fix. An earlier draft of this section therefore
+described all eight as "candidates, not yet cited." That was accurate when written and false by the
+time the diff landed; the wording has been corrected rather than quietly dropped.
+
+**Used in v1.11:** entries 1 (§0), 2 (C1a, C3, C4, C5), 3 (§15 disagreement), 4 (SOP-5, R31),
+5 (SOP-5), and 8 **in part only** — see its entry. **Not used:** entries 6 and 7.
+
+**Verification differs from the rest of this file.** These were not checked via `livecheck.tsv`.
+Each PDF was fetched from arXiv, verified by `%PDF-` magic bytes, converted with `pdftotext`, and
+**read in full** — not by abstract, which is the failure mode recorded at C1a. Where a paper was
+read only in part, the entry says so. Read 2026-08-03.
+
+⚠️ **Trap found while gathering these:** `export.arxiv.org/api/query` answers **HTTP 301 with zero
+bytes**. Without `curl -L` every query returns a silent empty result that reads as "no such
+literature exists." Three searches were reported empty before a positive control caught it. Same
+class as the §15 dead-link failure.
+
+---
+
+1. ● **Khatri, P. — "Do Context Files Help Coding Agents? A Two-Agent Ablation Study on Real
+   Repositories."** arXiv:2607.27250, 28 Jul 2026. `https://arxiv.org/abs/2607.27250`
+   *Would supply:* the controlled reconciliation of the two headline studies (see that section
+   above); the **mechanism** behind the correctness null — near-miss failures are implementation
+   skill (feature design, pattern selection, exact wiring), not missing repository knowledge; and a
+   36-cell pre-registered manipulation probe showing the real `AGENTS.md` **never converts a
+   near-miss to a pass on either agent**.
+   *Design:* 288 evaluated runs, 17 tasks, 3 Python repos, gold-test (SWE-bench Tier-C) scoring,
+   `claude-sonnet-4-6` and `gpt-5.5`, three injection strategies × 3 repeats.
+   🔑 **The one result that supports C1 at mechanism level:** on `opshin` — the only file carrying an
+   explicit operational warning (*"the full test suite takes >20 minutes"*) — blind full-suite
+   pytest runs fell monotonically **3.67 → 2.44 → 1.67** with wall-clock down 24%. Directive content
+   changed behaviour; descriptive content did not.
+   ⚠️ **That result is exploratory and must ship labelled.** Post-hoc, n=4–5, sign-flip p=0.125,
+   excluded from the authors' own Holm-corrected family, and **the opposite direction on `firebase`**.
+   ⚠️ **Do not quote "bounded to 10–15pp" as an equivalence claim.** The authors state twice that the
+   TOST is **descriptive, not powered**: MDE >30pp at n=17, a 30pp effect caught 57% of the time,
+   and 120–200 tasks needed for 80% power at 10pp.
+   ⚠️ **It does not test tuning**, so it does not bear on C1a. Files are naturalistic; the authors
+   list purpose-built task-specific context as an open question.
+   ❓ *Ours, not the paper's:* the SELECTIVE arm is content-matched for only one of three repos
+   (10×/18× larger corpora elsewhere), so it confounds channel with corpus. The authors flag it and
+   argue it only strengthens the null; we accept that for the null and not for the cache result.
+
+2. ● **dos Santos, H. V. F., Costa, V., Montandon, J. E., Silva, L. L. & Valente, M. T. —
+   "Configuration Smells in AGENTS.md Files: Common Mistakes in Configuring Coding Agents."**
+   arXiv:2606.15828v5, 30 Jul 2026. `https://arxiv.org/abs/2606.15828`
+   Dataset: `https://doi.org/10.5281/zenodo.20600327`
+   *Would supply, across four criteria:*
+   - **C3** — **Blind Reference** (16 detected, 14 confirmed, 87%): a path cited without purpose or
+     scope. Quotable: *"If you just mention the path, Claude will often ignore it. You have to pitch
+     the agent on why and when to read the file."* **This validates C3's existing IF-route form** —
+     a bare path is the smell, a condition-first route is the remedy.
+   - **C4** — **Lint Leakage** (62 detected, 58 confirmed, 93%; the most common smell): instruction
+     budget spent on rules a linter already enforces deterministically. Not currently a rule in the
+     Standard. And **Context Bloat** supplies C4 a threshold — Anthropic's *"target under 200 lines;
+     longer files consume more context and reduce adherence"* — with **42%** exceeding it, largest
+     observed 1,477 lines.
+   - **C1a** — **Init Fossilization**: generated by `/init`, never revised, **24%**. Prevalence data
+     for the exact population C1a addresses. They checked and excluded the dormancy confound: no
+     such project had zero commits after file creation; two had >1,500.
+   - **C5** — **Conflicting Instructions** (28 detected, 16 confirmed): empirical support, with
+     mechanism from Anthropic's docs — *"if two rules contradict each other, Claude may pick one
+     arbitrarily."*
+   *Scale:* 100 popular OSS repos (39 `AGENTS.md`, 61 `CLAUDE.md`); **91 of 100 carry ≥1 smell**.
+   ⚠️ **Prevalence is measured; harm is asserted.** The catalogue derives from a grey-literature
+   review of 14 documents plus vendor docs — not experiments. Given entry 1's correctness null, the
+   Standard must not claim bloat harms *correctness*. Defensible joint claim: *bloat is prevalent,
+   vendor guidance says it reduces adherence, and no controlled study shows context files move
+   correctness in either direction.*
+   ⚠️ Conflicting Instructions detection ran at **57% precision** — the weakest heuristic in the
+   paper. Cite the confirmed count (16), never the detected count (28).
+
+3. ● **Lulla, J. L., Mohsenimofidi, S., Galster, M., Zhang, J. M., Baltes, S. & Treude, C. — "On
+   the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents."** arXiv:2601.20404v2,
+   ICSE JAWs 2026. `https://arxiv.org/abs/2601.20404`
+   *Would supply:* a name for the efficiency arm of the disagreement recorded above — median
+   wall-clock **−28.64%**, median output tokens **−16.58%**, Wilcoxon signed-rank p<0.05.
+   ⚠️ **Scope it or do not cite it.** (a) It **does not measure correctness at all** — explicitly
+   "beyond the scope of this paper," with only a manual sanity check on 50 sampled tasks confirming
+   output was non-empty. (b) **Codex only** (`gpt-5.2-codex`), 10 repos, 124 PRs. (c) **Median
+   input, cached and total tokens are null or adverse** (−3.41%, −0.99%, −1.29% — i.e. *higher* with
+   the file); only output tokens and wall-clock move. (d) The mechanism is speculation; the authors
+   list trace analysis as future work. **"AGENTS.md files improve agent efficiency" overstates it.**
+
+4. ● **Mao, Y. & Chen, C. (TU Munich) — "IFHierBench: Hierarchical Instruction Following for Large
+   Language Models."** arXiv:2607.27912, 30 Jul 2026. `https://arxiv.org/abs/2607.27912`
+   *Would supply:* the evidence for re-scoping **R31** from *hosting* (local vs hosted) to
+   *capability versus structural complexity*, and mechanism for C4.
+   🔑 **The cliff is at the first level of nesting.** Every model loses **37–53 absolute points** from
+   depth 0 to depth 1, including the strongest (GPT-5.5 86.7→49.3; Claude Opus 4.6 78.7→42.0).
+   Flat instruction-following is near-saturated — sub-10B models exceed 80% on IFEval — and nested
+   is not. **Corollary: adding a conditional to fix a failure deepens the tree the model already
+   cannot hold.**
+   🔑 **Capability separation widens with depth.** At d=3 the top two hold 35.3% / 22.7% while the
+   other five collapse to ≤6.0%. Model choice matters far more under nesting than flat.
+   🔑 **Real prompts are hierarchical** — of 606 format-bearing prompts mined from 1,232 real GitHub
+   LLM-app templates, **67.8% carry ≥1 nested scope**, 28.2% mix formats, and constraint
+   specifications occupy **46.4% of prompt text** on average. That last figure is direct support for
+   C4's "attention is a budget."
+   *Method strength:* 600 prompts, 35 constraint types, **deterministic Python checkers at every
+   scope** — no LLM judging.
+   ❓ *Ours, not the paper's:* the two open-weight models ran **4-bit quantized on a single 4090**
+   while proprietary models ran full-precision via hosted APIs. Quantization degrades constraint
+   adherence, so the open-weight arm confounds capability with quantization. **The headline is
+   unaffected** — the cliff appears in every model including the strongest — but the paper cannot
+   cleanly support "small models are worse" as stated, and we should not lean on it for that.
+
+5. ● **Zhang, Y., Bei, Y., Ravi, J. & Garbacki, P. (Columbia / Fireworks AI) — "FireBench:
+   Evaluating Instruction Following in Enterprise and API-Driven LLM Applications."**
+   arXiv:2603.04857, 5 Mar 2026. `https://arxiv.org/abs/2603.04857`
+   *Would supply:* three things, all bearing on model selection for a seat.
+   - **Overall scores mask category-level weakness.** No model exceeds **75%** overall; cross-category
+     σ reaches **25.5pp** (GPT-4.1: 86.9% Format, 94.5% Content, but 32.5% Ranking, 38.6%
+     Overconfidence). Rankings reshuffle between categories. **Select per capability, not per
+     leaderboard.**
+   - **Appropriate refusal is broadly weak**, not a property of small models: the Overconfidence
+     dimension spans **32.8%–86.0%** across 11 frontier models.
+   - **Format compliance is memorisation, not generalisation:** two models score **100% on standard
+     `\boxed{}`** and drop to **53% / 73%** on a syntactically similar adversarial variant. Bears on
+     any Workspace inventing its own formats — fluency with a familiar convention does not predict
+     compliance with yours.
+   ⚠️ **The two Content Requirements categories are scored by GPT-4.1 as judge, and GPT-4.1 is the
+   top scorer on exactly those two categories (94.5 / 94.5).** Self-preference confound; the file
+   already cites Wataoka on this. The other four categories are programmatically verified — cite
+   those freely, those two only with the caveat.
+
+6. ○ **Yu, Z. et al. (UCSD) — "Multi-Agent Memory from a Computer Architecture Perspective: Visions
+   and Challenges Ahead."** arXiv:2603.10062v2, Architecture 2.0 '26.
+   `https://arxiv.org/abs/2603.10062`
+   *Would supply:* **vocabulary only**, for correcting the Standard's claim at `STANDARD.md:355`
+   that per-agent memory is *"invisible to every other Staff member."* Shared vs distributed
+   paradigms; coherence; *"without coordination, agents overwrite each other, read stale
+   information, or rely on inconsistent versions of shared facts."* Their **"Missing piece 2: agent
+   memory access protocol"** — permissions, scope, granularity *"remains under-specified"* — is the
+   gap precisely.
+   ⚠️ **Position paper. Three pages, zero measurements.** Citable for framing and for the claim that
+   **no formalism or detection framework exists**; never for harm magnitude. Cited otherwise it is
+   the C1a overread wearing a workshop badge.
+
+7. ○ **Solozobov, O. — "DEMM-Bench: A Cross-Regime Benchmark for Agent-Runtime Governance-Evidence
+   Sufficiency."** arXiv:2606.20634, Jun 2026. `https://arxiv.org/abs/2606.20634`
+   Package: `https://doi.org/10.5281/zenodo.20426092`
+   🔴 **AUTHOR CONCENTRATION — read before adding.** C2's **container fallacy** already cites
+   **arXiv:2605.04093, the same author's method paper**, which this benchmark cites throughout as
+   its own companion. Adding this **does not corroborate C2; it deepens a single-author
+   dependency.** That is a decision for the maintainer, not a default.
+   *Would supply, if added, structure and not concept:*
+   - **Degradation taxonomy** — which evidence gaps actually drive overclaim: `missing-delegation`,
+     `missing-policy` and `conflicting-identity` at 8-of-8 across every overclaiming baseline;
+     complete cases at zero. And **`artifact-only`** — retain post-hoc documentation, remove runtime
+     records — is where schema-shaped checks overclaim 8-of-8.
+   - **Property difficulty ordering** — `action-boundary` is the hardest property to evidence
+     (0.25), far below actor identity (0.75). *What the operation did* is harder to establish than
+     *who ran it*.
+   ⚠️ **Cite no prevalence or performance figure.** 64 synthetic cases with construction-oracle
+   labels; the authors state it "does not measure production prevalence."
+   ⚠️ **The candidate scorer's zero Overclaim Rate is a construction property, not a finding** —
+   its config table reads *default fallback INSUFFICIENT … no overclaim by construction* — and it is
+   **case-level indistinguishable from two of the five baselines**. The paper says both.
+   ✅ Credit where due: threats T1–T5 are unusually candid, ground truth is executable from a
+   versioned rule file fixed before the result fold, and §5.3 names the self-favouring risk itself.
+
+8. ○ **Zietsman, C. (Nuphirho Research) — "Structural Quality Gaps in Practitioner AI Governance
+   Prompts: An Empirical Study Using a Five-Principle Evaluation Framework."** arXiv:2604.21090,
+   22 Apr 2026. `https://arxiv.org/abs/2604.21090`
+   *Would supply, **qualitative findings only**:*
+   - **The dominant archetype is a direct hit on C1** — the *operational guide*: files that
+     *"tell the agent how to work but not how to judge whether the work is complete or correct."*
+     Observed as the majority pattern across 34 repos (Langflow, Grafana, Prisma, Biome).
+   - **Redirect displacement** — pure-pointer files score 0 standalone, 2.0–3.5 resolved:
+     *"the governance content exists in the repository but not in the location where agents are
+     instructed to read it."* One route (`mark3labs/mcp-go`) **returns 404** and nothing detected it.
+   - **The artefact classification gap** — `AGENTS.md` is used as the governance document, as a
+     pointer, or as a hybrid, with no community consensus (open issue `agentsmd/agents.md #66`).
+     **The Standard already resolves this** via C1 and C3; worth saying so.
+   ✅ **USED AT C3, structurally and in part only** — the 34-file corpus and the confirmed 404. That
+   use survives every objection below, because **a cited route resolving to nothing is a binary fact
+   about a repository**: it does not depend on a score, an evaluator, or which file ranks highest.
+   The distinction is the point — *decline the scoring results, keep the structural finding.*
+   🔴 **Cite no score from this paper.** (a) The **highest-scoring file in the corpus is the
+   framework author's own** (`czietsman/nuphirho.dev`, 4.67) and the only one approaching
+   completeness — disclosed, but not neutralised. (b) The headline "37% below threshold" **swings
+   between 15% and 50%** depending on evaluator (Gemini 3.68 vs Claude 2.24 mean). (c) No formal
+   inter-rater study — the panel is a "diversity mechanism," explicitly not a kappa calculation.
+   ✅ The **rank ordering of principles was stable across all three evaluators** and is the paper's
+   own defensible boundary: Quality Gate 0.70 > Scope Boundary 0.60 = Assessment Rubric 0.60 >
+   Success Definition 0.57 > **Data Classification 0.34**.
+   ⚠️ They excluded tool-generated files "identifiable by formulaic structure" — removing exactly
+   the population entry 2 measures at 24%. **The two corpora are not comparable on that axis.**
+
+### Local findings with no external support — belongs with §3
+
+Two are now used in the Standard and are **marked inline as local measurements at the point of
+claim**, not as citations. The third is unused.
+
+| Finding | Used | Basis |
+|---|---|---|
+| A routing index placed in a **hidden directory** is invisible to default `rg` (0 hits vs 1 with `--hidden`) | **C3** | Local, measured 2026-08-03. Entries 2 and 8 support *bare paths get ignored*; **neither covers invisibility to search** |
+| A route added **mid-session** never reaches an agent that already loaded the index | **C3** | Local, measured — one agent's read returned lines 1–49, stopping short of a route added at line 51 |
+| A **cwd-keyed shared memory store** — 25 agents, 5 stores, 7 sharing one; found by mtime | **C9** | One install, observed once. Entry 6 supplies vocabulary only and is **not** evidence for cwd-keying |
+| A ruling that supersedes a premise **leaves stale operator text downstream** in checklists and runbooks | — | One local instance. No literature located. Not used in v1.11 |
 
 ---
 

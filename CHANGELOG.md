@@ -11,6 +11,142 @@ version.
 
 ---
 
+## [v1.11] — 2026-08-03
+
+### Fixes a two-release labelling defect, corrects a factual error in C9, and widens R31
+
+**Not breaking for adopters: no artifact changes name or location.** One rubric criterion widens
+(R31), so a prior verdict on that row must be re-scored rather than carried forward. Everything else
+adds evidence to criteria that already existed.
+
+### Fixed — the document under-reported its own version by two releases
+
+`STANDARD.md` carried **`Version: 1.8`** while the repository was tagged **v1.10**. The string was
+bumped faithfully for every release from v1.3 through v1.8, then missed at **v1.9 and again at
+v1.10** — both of which changed Charter criteria. Anyone auditing against "v1.8" was reading v1.10
+content.
+
+Nothing was retagged; v1.9 and v1.10 remain as published. This release sets the string to 1.11 and
+records the discrepancy rather than erasing it. **Root cause is the absence of a release
+post-condition asserting that the document says what the tag says** — which is C7 turned on this
+project, and the same class of defect C7 exists to catch.
+
+### Changed — C9 stated the wrong reason, and the wrong reason was the dangerous one
+
+C9 previously read: *"Private per-agent memory is not a decision record — it is invisible to every
+other Staff member."* **The conclusion is right and the reason is backwards.**
+
+On several runtimes the per-agent memory store is **keyed to the working directory, not to the
+agent**, so every agent started in the same directory silently shares one store. Measured on one
+install: 25 agents across 5 stores, 7 sharing a single one, with a reviewer's ruling found written
+into an engineer's file — discovered by file mtime, because nothing announces it.
+
+An operator who believed "invisible to everyone else" would treat that store as private. C9 now
+states both readings and the test that survives either: **a store that is not reliably private and
+not reliably shared, carrying no author on any entry, cannot serve as a decision record.** Two
+practical consequences are added — attribute in the text rather than a header, because a copied
+first-person pronoun re-points at whoever reads it and can invert an instruction in transit; and
+never blind-write a memory file where a read-then-edit path fails loudly, because that failure is
+often the only collision detection present.
+
+### Changed — R31 widens from hosting to capability *(re-score this row)*
+
+R31 was *"Local-model Staff are not on unattended paths."* The local-model clause is retained and
+still supported. But hosting was the narrower half: the load-bearing variable is **model capability
+against the instruction structure of the seat.**
+
+**Which way the pass set moves:** R31 gains a second requirement while keeping the first, so its pass
+set **narrows in one direction only**. A Workspace that passed under v1.10 by keeping local models
+off unattended paths **can now fail without changing anything**, if its model was never matched to
+the seat's instruction structure. **Nothing that failed v1.10's R31 passes v1.11's.**
+
+A 600-prompt benchmark with deterministic checkers at every scope found **every** model losing
+**37–53 absolute points** between a flat constraint list and a single level of nesting, including the
+strongest two (86.7→49.3 and 78.7→42.0). At three levels the top two retained 35.3% and 22.7% while
+five others fell to 6% or below. In a corpus of 1,232 real production prompts, **67.8%** of
+format-bearing prompts carried at least one nested scope.
+
+SOP-5 gains the corollary that gets this backwards in practice: **the reflex after an unattended
+failure is to add a rule, and every added conditional deepens the tree the model already could not
+hold.** Flatten instead — move what is mechanically decidable into code. It also gains the warning
+that overall benchmark scores hide this: across 11 models, cross-category spread reached 25.5 points
+and rankings reshuffled entirely between capabilities.
+
+### Added — C3: a route only routes if it can be found
+
+C3's `IF <situation> →` form now has external support and two documented failure modes.
+
+A repository-mining study of 100 projects names the **blind reference** — a path cited without
+purpose or scope — and reports that mentioning a path is not enough; the agent has to be told *why
+and when* to read it. A corpus study of 34 governance files found the mirror case: content present in
+the repository but **not where agents are instructed to read**, including a route pointing at a file
+that returns 404 with nothing detecting it. **`- see docs/auth.md` is the smell; the condition is the
+remedy.**
+
+Two failure modes are added as local findings, neither covered by those studies: **a router in a
+hidden directory is invisible to the default recursive search** (measured: zero matches until hidden
+files were explicitly included), and **a route added mid-session never reaches an agent that already
+loaded the index** (measured: a read returning lines 1–49, stopping short of a route appended at line
+51). If a rule must apply now, deliver the rule text, not a pointer.
+
+### Added — C4: two measured ways the budget is wasted
+
+**Lint leakage** — rules restating what a linter or formatter already enforces — was the single most
+common defect across 100 repositories, in **62%** of files. Deterministic problems have deterministic
+solutions; a pre-commit hook does that work with perfect consistency, and every line spent on it
+competes with the constraint that needs the model's attention.
+
+**Length has a published ceiling most files exceed:** vendor guidance of *under 200 lines* against
+**42%** over it, largest 1,477 lines. Treated as a review trigger, not a hard limit.
+
+⚠️ Both figures measure **prevalence and adherence, not correctness** — see §0.
+
+### Added — C1a: the untuned file is about a quarter of the population
+
+**24% of 100 surveyed repositories had an agent instruction file with exactly one commit** —
+`/init`-generated and never revised. The study checked the dormancy objection and dismissed it: none
+of those projects were inactive, and two had over 1,500 commits *after* the file was created.
+
+### Added — §0 now states the limit that constrains the whole document
+
+**No controlled study has shown a *generic* repository context file moving task correctness in
+either direction.** The strongest evidence is a two-agent ablation over 288 evaluated runs with
+hidden gold-test scoring: no measurable correctness effect on either agent, and a pre-registered
+probe in which a real, good-quality context file **never converted a near-miss failure into a pass**.
+
+**The qualifier is load-bearing** — that study varied delivery, not tuning ("the injection channel
+rather than content"), which is why C1a stands unchanged. Without it the sentence contradicts C1a's
+own 33.0%-vs-25.5% resolve rate a hundred lines below, since a resolve rate *is* correctness. §0
+also now carries the authors' own bound: descriptive not powered, three Python repositories, MDE
+above 30pp, a 10pp effect undetectable, and purpose-built context explicitly not ruled out.
+
+What is measured is **process and adherence** — fewer wasted actions, lower latency and token cost,
+better compliance with stated constraints. That is sufficient reason to write these documents well
+and is not a claim that they make the work correct. **C1a survives intact**, because tuning is
+precisely what that ablation did not test.
+
+This also resolves the disagreement recorded in §15 and in `CITATIONS.md`: the efficiency study is
+now identifiable, the opposite-signed cost results are explained by injection mechanics rather than
+capability, and borderline task difficulty is agent-specific — so two single-agent studies could
+reach opposite conclusions honestly. **The Standard's existing reading survives and is now the
+better-supported one:** context files reduce wandering without improving the destination.
+
+### Evidence
+
+Eight sources were read in full and are recorded in `CITATIONS.md` with per-entry limits, including
+what must **not** be cited from each. Five are load-bearing in this release.
+
+**Two were declined for load-bearing use:** one concentrates an existing single-author dependency
+already carried by C2 — correlated sources do not corroborate — and one is a three-page position
+paper citable for vocabulary only.
+
+A third source is used **selectively**: its *scoring* results are set aside (the framework author's
+own file tops its corpus, and headline figures swing 15–50% by evaluator), while one **structural**
+finding is used at C3 — a cited route resolving to a 404 — because a broken path is a binary fact
+about a repository, unaffected by evaluator variance or by which file ranks highest.
+
+---
+
 ## [v1.10] — 2026-07-29
 
 ### Tightens conformance — C1a/R5 re-sourced; the direction was defensible, the citation was not
